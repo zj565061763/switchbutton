@@ -65,10 +65,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private GestureDetector mGestureDetector;
     private boolean mIsNeedProcess;
     /**
-     * 手柄view布局参数
-     */
-    private LayoutParams mParamsHandleView;
-    /**
      * 是否是透明度模式来显示隐藏view的
      */
     private boolean mIsAlphaMode = true;
@@ -117,8 +113,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
         mViewHandle = new View(getContext());
         mViewHandle.setBackgroundResource(R.drawable.lib_sb_layer_bg_handle_view);
-        mParamsHandleView = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-        addView(mViewHandle, mParamsHandleView);
+        addView(mViewHandle, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 
         setChecked(mIsChecked, false, false);
     }
@@ -263,7 +258,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      */
     private int getLeftNormal()
     {
-        return mParamsHandleView.leftMargin;
+        return mMarginLeft;
     }
 
     /**
@@ -273,7 +268,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      */
     private int getLeftChecked()
     {
-        return getWidth() - mViewHandle.getWidth() - mParamsHandleView.rightMargin;
+        return getWidth() - mViewHandle.getWidth() - mMarginRight;
     }
 
     /**
@@ -294,6 +289,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private int getScrollDistance()
     {
         return mViewHandle.getLeft() - getLeftNormal();
+    }
+
+    /**
+     * 返回手柄view布局参数
+     */
+    private LayoutParams getParamsHandleView()
+    {
+        return (LayoutParams) mViewHandle.getLayoutParams();
     }
 
     @Override
@@ -360,7 +363,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         if (replaceOldView(mViewHandle, viewHandle))
         {
             mViewHandle = viewHandle;
-            mParamsHandleView = (LayoutParams) mViewHandle.getLayoutParams();
             mIsViewHandleCustom = true;
         }
     }
@@ -512,7 +514,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private void updateHandlerViewParams()
     {
         boolean needUpdate = false;
-        LayoutParams params = (LayoutParams) mViewHandle.getLayoutParams();
+        LayoutParams params = getParamsHandleView();
 
         //----------margins----------
         if (!mIsViewHandleCustom)
