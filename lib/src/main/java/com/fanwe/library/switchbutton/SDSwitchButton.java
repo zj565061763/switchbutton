@@ -207,30 +207,37 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             showCheckedView(true);
             showNormalView(false);
-            if (anim)
+
+            final int left = getLeftChecked();
+            if (mViewHandle.getLeft() != left)
             {
-                mDragHelper.smoothSlideViewTo(mViewHandle, getLeftChecked(), mViewHandle.getTop());
-            } else
-            {
-                final int left = getLeftChecked();
-                final int right = left + mViewHandle.getMeasuredWidth();
-                mViewHandle.layout(left, mViewHandle.getTop(), right, mViewHandle.getBottom());
+                if (anim)
+                {
+                    mDragHelper.smoothSlideViewTo(mViewHandle, getLeftChecked(), mViewHandle.getTop());
+                } else
+                {
+                    mViewHandle.layout(left, mViewHandle.getTop(), left + mViewHandle.getMeasuredWidth(), mViewHandle.getBottom());
+                }
+                invalidate();
             }
         } else
         {
             showCheckedView(false);
             showNormalView(true);
-            if (anim)
+
+            final int left = getLeftNormal();
+            if (mViewHandle.getLeft() != left)
             {
-                mDragHelper.smoothSlideViewTo(mViewHandle, getLeftNormal(), mViewHandle.getTop());
-            } else
-            {
-                final int left = getLeftNormal();
-                final int right = left + mViewHandle.getMeasuredWidth();
-                mViewHandle.layout(left, mViewHandle.getTop(), right, mViewHandle.getBottom());
+                if (anim)
+                {
+                    mDragHelper.smoothSlideViewTo(mViewHandle, getLeftNormal(), mViewHandle.getTop());
+                } else
+                {
+                    mViewHandle.layout(left, mViewHandle.getTop(), left + mViewHandle.getMeasuredWidth(), mViewHandle.getBottom());
+                }
+                invalidate();
             }
         }
-        invalidate();
     }
 
     private void showCheckedView(boolean show)

@@ -31,15 +31,15 @@ public class MainActivity extends SDBaseActivity
         });
 
 
-//        SDHandlerManager.postDelayed(new Runnable()
-//        {
-//            @Override
-//            public void run()
-//            {
-//                sb.setChecked(true, false, false);
-//            }
-//        }, 3000);
+        SDHandlerManager.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                sb.setChecked(true, false, false);
+            }
+        }, 3000);
 
-        sb.setChecked(true, false, false);
+//        sb.setChecked(true, false, false);
     }
 }
