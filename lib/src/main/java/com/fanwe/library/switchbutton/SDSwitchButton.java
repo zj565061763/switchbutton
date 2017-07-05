@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -34,6 +35,8 @@ public class SDSwitchButton extends FrameLayout
         init();
     }
 
+    private static final String TAG = "SDSwitchButton";
+
     private boolean mIsChecked;
 
     private View mNormalView;
@@ -41,6 +44,9 @@ public class SDSwitchButton extends FrameLayout
     private View mHandleView;
 
     private ViewDragHelper mDragHelper;
+    private boolean mIsNeedProcess;
+
+    private boolean mIsDebug;
 
     private OnCheckedChangedCallback mOnCheckedChangedCallback;
 
@@ -112,10 +118,6 @@ public class SDSwitchButton extends FrameLayout
             @Override
             public boolean tryCaptureView(View child, int pointerId)
             {
-                if (mDragHelper.getViewDragState() == ViewDragHelper.STATE_SETTLING)
-                {
-                    return false;
-                }
                 return child == mHandleView;
             }
 
@@ -186,11 +188,21 @@ public class SDSwitchButton extends FrameLayout
         }
     }
 
+    /**
+     * 返回normal状态下的left值
+     *
+     * @return
+     */
     private int getLeftNormal()
     {
         return getLeft() + getPaddingLeft();
     }
 
+    /**
+     * 返回checked状态下的left值
+     *
+     * @return
+     */
     private int getLeftChecked()
     {
         return getWidth() - mHandleView.getWidth() - getPaddingRight();
@@ -203,12 +215,24 @@ public class SDSwitchButton extends FrameLayout
 
     private void showNormalView(boolean show)
     {
-
+        if (show)
+        {
+            mNormalView.setVisibility(View.VISIBLE);
+        } else
+        {
+            mNormalView.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void showCheckedView(boolean show)
     {
-
+        if (show)
+        {
+            mCheckedView.setVisibility(View.VISIBLE);
+        } else
+        {
+            mCheckedView.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
@@ -227,20 +251,112 @@ public class SDSwitchButton extends FrameLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev)
     {
+        if (mIsDebug)
+        {
+            if (ev.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                Log.i(TAG, "onInterceptTouchEvent:" + ev.getAction() + "--------------------");
+            } else
+            {
+                Log.i(TAG, "onInterceptTouchEvent:" + ev.getAction());
+            }
+        }
+        if (mTouchHelper.isNeedConsume())
+        {
+            if (mIsDebug)
+            {
+                Log.e(TAG, "onInterceptTouchEvent Intercept success because isNeedConsume is true with action----------" + ev.getAction());
+            }
+            return true;
+        }
 
         mTouchHelper.processTouchEvent(ev);
         switch (ev.getAction())
         {
-
-
+            case MotionEvent.ACTION_DOWN:
+                mTouchHelper.setNeedConsume(false);
+                mDragHelper.processTouchEvent(ev);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (isViewCaptured() && checkMoveParams())
+                {
+                    mTouchHelper.setNeedConsume(true);
+                }
+                break;
+            default:
+                mDragHelper.processTouchEvent(ev);
+                break;
         }
         return mTouchHelper.isNeedConsume();
+    }
+
+    private boolean isViewCaptured()
+    {
+        return mDragHelper.getViewDragState() == ViewDragHelper.STATE_DRAGGING;
+    }
+
+    private boolean checkMoveParams()
+    {
+        return mTouchHelper.getDegreeX() < 30;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        return super.onTouchEvent(event);
+
+        mTouchHelper.processTouchEvent(event);
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                if (!isViewCaptured())
+                {
+                    //触发ViewDragHelper的尝试捕捉
+                    mDragHelper.processTouchEvent(event);
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (mIsNeedProcess)
+                {
+                    if (isViewCaptured())
+                    {
+                        mDragHelper.processTouchEvent(event);
+                    }
+                } else
+                {
+                    if (isViewCaptured() && checkMoveParams())
+                    {
+                        setNeedProcess(true, event);
+                    }
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                setNeedProcess(false, event);
+                mDragHelper.processTouchEvent(event);
+                if (mIsDebug)
+                {
+                    if (mTouchHelper.isNeedConsume())
+                    {
+                        Log.e(TAG, "onTouchEvent Intercept released with action " + event.getAction());
+                    }
+                }
+                mTouchHelper.setNeedConsume(false);
+                break;
+            default:
+                mDragHelper.processTouchEvent(event);
+                break;
+        }
+
+        boolean result = super.onTouchEvent(event) || mIsNeedProcess || event.getAction() == MotionEvent.ACTION_DOWN;
+        return result;
+    }
+
+    private void setNeedProcess(boolean needProcess, MotionEvent event)
+    {
+        if (mIsNeedProcess != needProcess)
+        {
+            mIsNeedProcess = needProcess;
+        }
     }
 
     public interface OnCheckedChangedCallback
