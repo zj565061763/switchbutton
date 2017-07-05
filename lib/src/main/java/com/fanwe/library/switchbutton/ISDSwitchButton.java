@@ -69,6 +69,12 @@ public interface ISDSwitchButton
 
     interface OnCheckedChangedCallback
     {
+        /**
+         * 选中状态变化回调
+         *
+         * @param checked
+         * @param view
+         */
         void onCheckedChanged(boolean checked, SDSwitchButton view);
     }
 }
