@@ -245,11 +245,9 @@ public class SDSwitchButton extends FrameLayout
      */
     public void setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
-        mIsChecked = checked;
-        changeViewByCheckedState(anim);
-
         if (mIsChecked != checked)
         {
+            mIsChecked = checked;
             if (notifyCallback)
             {
                 if (mOnCheckedChangedCallback != null)
@@ -258,6 +256,8 @@ public class SDSwitchButton extends FrameLayout
                 }
             }
         }
+
+        changeViewByCheckedState(anim);
     }
 
     private void changeViewByCheckedState(boolean anim)
