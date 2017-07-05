@@ -32,5 +32,7 @@ public class MainActivity extends SDBaseActivity
                 SDToast.showToast("" + checked);
             }
         });
+
+        sb.setChecked(true, false, false);
     }
 }

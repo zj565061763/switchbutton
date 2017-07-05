@@ -240,7 +240,7 @@ public class SDSwitchButton extends FrameLayout
                 mDragHelper.smoothSlideViewTo(mHandleView, getLeftChecked(), mHandleView.getTop());
             } else
             {
-
+                mHandleView.setLeft(getLeftChecked());
             }
         } else
         {
@@ -251,7 +251,7 @@ public class SDSwitchButton extends FrameLayout
                 mDragHelper.smoothSlideViewTo(mHandleView, getLeftNormal(), mHandleView.getTop());
             } else
             {
-
+                mHandleView.setLeft(getLeftNormal());
             }
         }
         invalidate();
@@ -274,7 +274,7 @@ public class SDSwitchButton extends FrameLayout
      */
     private int getLeftChecked()
     {
-        return getWidth() - mHandleView.getWidth() - mHandleParams.rightMargin;
+        return getMeasuredWidth() - mHandleView.getMeasuredWidth() - mHandleParams.rightMargin;
     }
 
     public int getScrollDistance()
