@@ -212,7 +212,9 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 mDragHelper.smoothSlideViewTo(mViewHandle, getLeftChecked(), mViewHandle.getTop());
             } else
             {
-                mViewHandle.setLeft(getLeftChecked());
+                final int left = getLeftChecked();
+                final int right = left + mViewHandle.getMeasuredWidth();
+                mViewHandle.layout(left, mViewHandle.getTop(), right, mViewHandle.getBottom());
             }
         } else
         {
@@ -223,7 +225,9 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 mDragHelper.smoothSlideViewTo(mViewHandle, getLeftNormal(), mViewHandle.getTop());
             } else
             {
-                mViewHandle.setLeft(getLeftNormal());
+                final int left = getLeftNormal();
+                final int right = left + mViewHandle.getMeasuredWidth();
+                mViewHandle.layout(left, mViewHandle.getTop(), right, mViewHandle.getBottom());
             }
         }
         invalidate();
@@ -268,7 +272,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      */
     private int getLeftChecked()
     {
-        return getWidth() - mViewHandle.getWidth() - mMarginRight;
+        return getMeasuredWidth() - mViewHandle.getMeasuredWidth() - mMarginRight;
     }
 
     /**
