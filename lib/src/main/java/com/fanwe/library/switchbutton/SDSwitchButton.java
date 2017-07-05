@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 /**
@@ -40,14 +41,15 @@ public class SDSwitchButton extends FrameLayout
 
     private boolean mIsChecked;
 
-    private View mNormalView;
-    private View mCheckedView;
-    private View mHandleView;
+    private View mViewNormal;
+    private View mViewChecked;
+    private View mViewHandle;
 
     private ViewDragHelper mDragHelper;
     private boolean mIsNeedProcess;
     private int mMargins = -1;
-    private LayoutParams mHandleParams;
+    private LayoutParams mParamsHandleView;
+    private boolean mIsAlphaMode = true;
 
     private boolean mIsDebug;
 
@@ -71,15 +73,15 @@ public class SDSwitchButton extends FrameLayout
 
     private void addDefaultViews()
     {
-        mNormalView = new View(getContext());
-        addView(mNormalView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        mViewNormal = new View(getContext());
+        addView(mViewNormal, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        mCheckedView = new View(getContext());
-        addView(mCheckedView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        mViewChecked = new View(getContext());
+        addView(mViewChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        mHandleParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-        mHandleView = new View(getContext());
-        addView(mHandleView, mHandleParams);
+        mParamsHandleView = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        mViewHandle = new View(getContext());
+        addView(mViewHandle, mParamsHandleView);
 
         setChecked(mIsChecked, false, false);
     }
@@ -99,53 +101,60 @@ public class SDSwitchButton extends FrameLayout
         }
     };
 
-    public View getNormalView()
+    public View getViewNormal()
     {
-        return mNormalView;
+        return mViewNormal;
     }
 
-    public View getCheckedView()
+    public View getViewChecked()
     {
-        return mCheckedView;
+        return mViewChecked;
     }
 
-    public View getHandleView()
+    public View getViewHandle()
     {
-        return mHandleView;
+        return mViewHandle;
     }
 
-    public void setNormalView(View normalView)
+    public void setViewNormal(View viewNormal)
     {
-        if (replaceOldView(mNormalView, normalView))
+        if (replaceOldView(mViewNormal, viewNormal))
         {
-            mNormalView = normalView;
+            mViewNormal = viewNormal;
         }
     }
 
-    public void setCheckedView(View checkedView)
+    public void setViewChecked(View viewChecked)
     {
-        if (replaceOldView(mCheckedView, checkedView))
+        if (replaceOldView(mViewChecked, viewChecked))
         {
-            mCheckedView = checkedView;
+            mViewChecked = viewChecked;
         }
     }
 
-    public void setHandleView(View handleView)
+    public void setViewHandle(View viewHandle)
     {
-        if (replaceOldView(mHandleView, handleView))
+        if (replaceOldView(mViewHandle, viewHandle))
         {
-            mHandleView = handleView;
-            mHandleParams = (LayoutParams) mHandleView.getLayoutParams();
+            mViewHandle = viewHandle;
+            mParamsHandleView = (LayoutParams) mViewHandle.getLayoutParams();
         }
     }
 
-    private boolean replaceOldView(View oldView, View newView)
+    private boolean replaceOldView(View viewOld, View viewNew)
     {
-        if (newView != null && oldView != newView)
+        if (viewNew != null && viewOld != viewNew)
         {
-            int index = indexOfChild(oldView);
-            removeView(oldView);
-            addView(newView, index);
+            int index = indexOfChild(viewOld);
+            ViewGroup.LayoutParams params = viewOld.getLayoutParams();
+            removeView(viewOld);
+
+            if (viewNew.getLayoutParams() != null)
+            {
+                params = viewNew.getLayoutParams();
+            }
+
+            addView(viewNew, index, params);
             return true;
         } else
         {
@@ -160,7 +169,7 @@ public class SDSwitchButton extends FrameLayout
             @Override
             public boolean tryCaptureView(View child, int pointerId)
             {
-                return child == mHandleView;
+                return child == mViewHandle;
             }
 
             @Override
@@ -181,8 +190,11 @@ public class SDSwitchButton extends FrameLayout
                 super.onViewPositionChanged(changedView, left, top, dx, dy);
                 float percent = getScrollDistance() / (float) getAvailableWidth();
 
-                ViewCompat.setAlpha(mCheckedView, percent);
-                ViewCompat.setAlpha(mNormalView, 1 - percent);
+                if (mIsAlphaMode)
+                {
+                    ViewCompat.setAlpha(mViewChecked, percent);
+                    ViewCompat.setAlpha(mViewNormal, 1 - percent);
+                }
             }
 
             @Override
@@ -253,28 +265,50 @@ public class SDSwitchButton extends FrameLayout
     {
         if (mIsChecked)
         {
-            ViewCompat.setAlpha(mCheckedView, 1.0f);
-            ViewCompat.setAlpha(mNormalView, 0f);
+            showCheckedView(true);
+            showNormalView(false);
             if (anim)
             {
-                mDragHelper.smoothSlideViewTo(mHandleView, getLeftChecked(), mHandleView.getTop());
+                mDragHelper.smoothSlideViewTo(mViewHandle, getLeftChecked(), mViewHandle.getTop());
             } else
             {
-                mHandleView.setLeft(getLeftChecked());
+                mViewHandle.setLeft(getLeftChecked());
             }
         } else
         {
-            ViewCompat.setAlpha(mCheckedView, 0f);
-            ViewCompat.setAlpha(mNormalView, 1.0f);
+            showCheckedView(false);
+            showNormalView(true);
             if (anim)
             {
-                mDragHelper.smoothSlideViewTo(mHandleView, getLeftNormal(), mHandleView.getTop());
+                mDragHelper.smoothSlideViewTo(mViewHandle, getLeftNormal(), mViewHandle.getTop());
             } else
             {
-                mHandleView.setLeft(getLeftNormal());
+                mViewHandle.setLeft(getLeftNormal());
             }
         }
         invalidate();
+    }
+
+    private void showCheckedView(boolean show)
+    {
+        if (mIsAlphaMode)
+        {
+            ViewCompat.setAlpha(mViewChecked, show ? 1.0f : 0f);
+        } else
+        {
+            mViewChecked.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        }
+    }
+
+    private void showNormalView(boolean show)
+    {
+        if (mIsAlphaMode)
+        {
+            ViewCompat.setAlpha(mViewNormal, show ? 1.0f : 0f);
+        } else
+        {
+            mViewNormal.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 
     /**
@@ -284,7 +318,7 @@ public class SDSwitchButton extends FrameLayout
      */
     private int getLeftNormal()
     {
-        return mHandleParams.leftMargin;
+        return mParamsHandleView.leftMargin;
     }
 
     /**
@@ -294,7 +328,7 @@ public class SDSwitchButton extends FrameLayout
      */
     private int getLeftChecked()
     {
-        return getWidth() - mHandleView.getWidth() - mHandleParams.rightMargin;
+        return getWidth() - mViewHandle.getWidth() - mParamsHandleView.rightMargin;
     }
 
     /**
@@ -314,7 +348,7 @@ public class SDSwitchButton extends FrameLayout
      */
     public int getScrollDistance()
     {
-        return mHandleView.getLeft() - getLeftNormal();
+        return mViewHandle.getLeft() - getLeftNormal();
     }
 
     public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
@@ -366,7 +400,7 @@ public class SDSwitchButton extends FrameLayout
         {
             case MotionEvent.ACTION_DOWN:
                 mTouchHelper.setNeedConsume(false);
-                if (mDragHelper.isViewUnder(mHandleView, (int) ev.getRawX(), (int) ev.getRawY()))
+                if (mDragHelper.isViewUnder(mViewHandle, (int) ev.getRawX(), (int) ev.getRawY()))
                 {
                     mTouchHelper.setNeedConsume(true);
                     mDragHelper.processTouchEvent(ev);
@@ -474,7 +508,7 @@ public class SDSwitchButton extends FrameLayout
     private void updateHandlerViewParams()
     {
         boolean needUpdate = false;
-        LayoutParams params = (LayoutParams) mHandleView.getLayoutParams();
+        LayoutParams params = (LayoutParams) mViewHandle.getLayoutParams();
 
         //----------margins----------
         if (mMargins < 0)
@@ -500,7 +534,7 @@ public class SDSwitchButton extends FrameLayout
 
         if (needUpdate)
         {
-            mHandleView.setLayoutParams(params);
+            mViewHandle.setLayoutParams(params);
         }
     }
 

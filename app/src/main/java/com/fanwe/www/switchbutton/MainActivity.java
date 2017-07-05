@@ -20,9 +20,9 @@ public class MainActivity extends SDBaseActivity
 
         sb.setDebug(true);
 
-        sb.getNormalView().setBackgroundResource(R.drawable.switch_setting_white_corner_track);
-        sb.getCheckedView().setBackgroundResource(R.drawable.switch_setting_main_color_corner_track);
-        sb.getHandleView().setBackgroundResource(R.drawable.switch_setting_white_round_thumb);
+        sb.getViewNormal().setBackgroundResource(R.drawable.switch_setting_white_corner_track);
+        sb.getViewChecked().setBackgroundResource(R.drawable.switch_setting_main_color_corner_track);
+        sb.getViewHandle().setBackgroundResource(R.drawable.switch_setting_white_round_thumb);
 
         sb.setOnCheckedChangedCallback(new SDSwitchButton.OnCheckedChangedCallback()
         {
@@ -33,6 +33,6 @@ public class MainActivity extends SDBaseActivity
             }
         });
 
-        sb.setChecked(true, false, false);
+//        sb.setChecked(true, false, false);
     }
 }
