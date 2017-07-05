@@ -258,6 +258,11 @@ public class SDSwitchButton extends FrameLayout
         return getLeftChecked() - getLeftNormal();
     }
 
+    public int getScrollDistance()
+    {
+        return mHandleView.getLeft() - getLeftNormal();
+    }
+
     private void showNormalView(boolean show)
     {
         if (show)

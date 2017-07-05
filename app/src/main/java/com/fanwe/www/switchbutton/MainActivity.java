@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.activity.SDBaseActivity;
 import com.fanwe.library.switchbutton.SDSwitchButton;
+import com.fanwe.library.utils.SDToast;
 
 public class MainActivity extends SDBaseActivity
 {
@@ -22,5 +23,14 @@ public class MainActivity extends SDBaseActivity
         sb.getNormalView().setBackgroundResource(R.drawable.switch_setting_white_corner_track);
         sb.getCheckedView().setBackgroundResource(R.drawable.switch_setting_main_color_corner_track);
         sb.getHandleView().setBackgroundResource(R.drawable.switch_setting_white_round_thumb);
+
+        sb.setOnCheckedChangedCallback(new SDSwitchButton.OnCheckedChangedCallback()
+        {
+            @Override
+            public void onCheckedChanged(boolean checked, SDSwitchButton view)
+            {
+                SDToast.showToast("" + checked);
+            }
+        });
     }
 }
