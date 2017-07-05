@@ -1,0 +1,8 @@
+<resources>
+
+    <!-- 圆角半径 -->
+    <dimen name="lib_sb_corner">50dp</dimen>
+    <!-- 边框大小 -->
+    <dimen name="lib_sb_stroke_width">1px</dimen>
+
+</resources>

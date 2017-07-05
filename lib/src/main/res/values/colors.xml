@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 正常view的背景颜色 -->
+    <color name="lib_sb_bg_normal_view">#E3E3E3</color>
+    <!-- 正常view的边框颜色 -->
+    <color name="lib_sb_stroke_normal_view">#D2D2D2</color>
+
+    <!-- 选中view的背景颜色 -->
+    <color name="lib_sb_bg_checked_view">#FB6F08</color>
+    <!-- 选中view的边框颜色 -->
+    <color name="lib_sb_stroke_checked_view">@color/lib_sb_bg_checked_view</color>
+
+    <!-- 手柄view的背景颜色 -->
+    <color name="lib_sb_bg_handle_view">#FFFFFF</color>
+    <!-- 手柄view的边框颜色 -->
+    <color name="lib_sb_stroke_handle_view">@color/lib_sb_bg_handle_view</color>
+
+</resources>

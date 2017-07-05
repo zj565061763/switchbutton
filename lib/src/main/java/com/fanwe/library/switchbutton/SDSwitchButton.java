@@ -57,10 +57,6 @@ public class SDSwitchButton extends FrameLayout
 
     private void init()
     {
-        if (getBackground() == null)
-        {
-            setBackgroundResource(R.drawable.layer_bg);
-        }
         addDefaultViews();
         initViewDragHelper();
         setOnClickListener(mOnClickListenerDefault);
@@ -74,13 +70,16 @@ public class SDSwitchButton extends FrameLayout
     private void addDefaultViews()
     {
         mViewNormal = new View(getContext());
+        mViewNormal.setBackgroundResource(R.drawable.lib_sb_layer_bg_normal_view);
         addView(mViewNormal, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         mViewChecked = new View(getContext());
+        mViewChecked.setBackgroundResource(R.drawable.lib_sb_layer_bg_checked_view);
         addView(mViewChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        mParamsHandleView = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         mViewHandle = new View(getContext());
+        mViewHandle.setBackgroundResource(R.drawable.lib_sb_layer_bg_handle_view);
+        mParamsHandleView = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         addView(mViewHandle, mParamsHandleView);
 
         setChecked(mIsChecked, false, false);

@@ -20,10 +20,6 @@ public class MainActivity extends SDBaseActivity
 
         sb.setDebug(true);
 
-        sb.getViewNormal().setBackgroundResource(R.drawable.switch_setting_white_corner_track);
-        sb.getViewChecked().setBackgroundResource(R.drawable.switch_setting_main_color_corner_track);
-        sb.getViewHandle().setBackgroundResource(R.drawable.switch_setting_white_round_thumb);
-
         sb.setOnCheckedChangedCallback(new SDSwitchButton.OnCheckedChangedCallback()
         {
             @Override
