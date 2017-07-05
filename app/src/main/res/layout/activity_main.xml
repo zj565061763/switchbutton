@@ -10,7 +10,7 @@
     <com.fanwe.library.switchbutton.SDSwitchButton
         android:id="@+id/sb"
         android:layout_width="50dp"
-        android:layout_height="30dp">
+        android:layout_height="25dp">
 
     </com.fanwe.library.switchbutton.SDSwitchButton>
 
