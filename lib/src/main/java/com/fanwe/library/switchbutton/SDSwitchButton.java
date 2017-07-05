@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 /**
@@ -46,6 +45,8 @@ public class SDSwitchButton extends FrameLayout
 
     private ViewDragHelper mDragHelper;
     private boolean mIsNeedProcess;
+    private int mMargins = -1;
+    private LayoutParams mHandleParams;
 
     private boolean mIsDebug;
 
@@ -74,9 +75,9 @@ public class SDSwitchButton extends FrameLayout
         mCheckedView = new View(getContext());
         addView(mCheckedView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        LayoutParams paramsHandle = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        mHandleParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         mHandleView = new View(getContext());
-        addView(mHandleView, paramsHandle);
+        addView(mHandleView, mHandleParams);
 
         setChecked(mIsChecked, false, false);
     }
@@ -117,6 +118,7 @@ public class SDSwitchButton extends FrameLayout
         if (replaceOldView(mHandleView, handleView))
         {
             mHandleView = handleView;
+            mHandleParams = (LayoutParams) mHandleView.getLayoutParams();
         }
     }
 
@@ -142,6 +144,12 @@ public class SDSwitchButton extends FrameLayout
             public boolean tryCaptureView(View child, int pointerId)
             {
                 return child == mHandleView;
+            }
+
+            @Override
+            public int clampViewPositionVertical(View child, int top, int dy)
+            {
+                return child.getTop();
             }
 
             @Override
@@ -232,7 +240,7 @@ public class SDSwitchButton extends FrameLayout
      */
     private int getLeftNormal()
     {
-        return getLeft() + getPaddingLeft();
+        return mHandleParams.leftMargin;
     }
 
     /**
@@ -242,7 +250,7 @@ public class SDSwitchButton extends FrameLayout
      */
     private int getLeftChecked()
     {
-        return getWidth() - mHandleView.getWidth() - getPaddingRight();
+        return getWidth() - mHandleView.getWidth() - mHandleParams.rightMargin;
     }
 
     private int getAvailableWidth()
@@ -347,7 +355,7 @@ public class SDSwitchButton extends FrameLayout
 
     private boolean checkMoveParams()
     {
-        return mTouchHelper.getDegreeX() < 30;
+        return mTouchHelper.getDegreeX() < 45;
     }
 
     @Override
@@ -419,25 +427,38 @@ public class SDSwitchButton extends FrameLayout
     {
         super.onLayout(changed, left, top, right, bottom);
 
-        updateHandlerViewWidth();
+        updateHandlerViewParams();
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh)
+    private void updateHandlerViewParams()
     {
-        super.onSizeChanged(w, h, oldw, oldh);
-        if (h != oldh)
+        boolean needUpdate = false;
+        LayoutParams params = (LayoutParams) mHandleView.getLayoutParams();
+
+        //----------margins----------
+        if (mMargins < 0)
         {
-            updateHandlerViewWidth();
+            mMargins = getHeight() / 15;
         }
-    }
-
-    private void updateHandlerViewWidth()
-    {
-        ViewGroup.LayoutParams params = mHandleView.getLayoutParams();
-        if (params.width != getHeight())
+        if (mMargins != params.leftMargin)
         {
-            params.width = getHeight();
+            params.leftMargin = mMargins;
+            params.topMargin = mMargins;
+            params.rightMargin = mMargins;
+            params.bottomMargin = mMargins;
+            needUpdate = true;
+        }
+
+        //----------width----------
+        int width = getHeight() - 2 * mMargins;
+        if (params.width != width)
+        {
+            params.width = width;
+            needUpdate = true;
+        }
+
+        if (needUpdate)
+        {
             mHandleView.setLayoutParams(params);
         }
     }

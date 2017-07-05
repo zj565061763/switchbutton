@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context="com.fanwe.www.switchbutton.MainActivity">
 
     <com.fanwe.library.switchbutton.SDSwitchButton
