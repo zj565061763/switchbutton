@@ -196,12 +196,32 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         });
     }
 
+    private void updateViewByState(final boolean anim)
+    {
+        if (getLeftChecked() > 0)
+        {
+            updateViewByStateReal(anim);
+        } else
+        {
+            mRunnableUpdateView = new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    updateViewByStateReal(anim);
+                }
+            };
+        }
+    }
+
+    private Runnable mRunnableUpdateView;
+
     /**
      * 根据状态改变view
      *
      * @param anim
      */
-    private void changeViewByCheckedState(boolean anim)
+    private void updateViewByStateReal(boolean anim)
     {
         if (mIsChecked)
         {
@@ -335,7 +355,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             removeView(handle);
             setViewHandle(handle);
         }
-        changeViewByCheckedState(false);
+        updateViewByState(false);
     }
 
     /**
@@ -514,6 +534,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         super.onLayout(changed, left, top, right, bottom);
 
         updateHandlerViewParams();
+
+        if (mRunnableUpdateView != null && getLeftChecked() > 0)
+        {
+            mRunnableUpdateView.run();
+            mRunnableUpdateView = null;
+        }
     }
 
     /**
@@ -612,7 +638,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             }
         }
 
-        changeViewByCheckedState(anim);
+        updateViewByState(anim);
     }
 
     @Override
