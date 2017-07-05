@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -175,6 +176,16 @@ public class SDSwitchButton extends FrameLayout
             }
 
             @Override
+            public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy)
+            {
+                super.onViewPositionChanged(changedView, left, top, dx, dy);
+                float percent = getScrollDistance() / (float) getAvailableWidth();
+
+                ViewCompat.setAlpha(mCheckedView, percent);
+                ViewCompat.setAlpha(mNormalView, 1 - percent);
+            }
+
+            @Override
             public void onViewCaptured(View capturedChild, int activePointerId)
             {
                 super.onViewCaptured(capturedChild, activePointerId);
@@ -192,7 +203,7 @@ public class SDSwitchButton extends FrameLayout
                 {
                     Log.i(TAG, "onViewReleased");
                 }
-                if (releasedChild.getLeft() >= (getWidth() / 2))
+                if (releasedChild.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2))
                 {
                     setChecked(true, true);
                 } else
@@ -233,8 +244,8 @@ public class SDSwitchButton extends FrameLayout
     {
         if (mIsChecked)
         {
-            showNormalView(false);
-            showCheckedView(true);
+            ViewCompat.setAlpha(mCheckedView, 1.0f);
+            ViewCompat.setAlpha(mNormalView, 0f);
             if (anim)
             {
                 mDragHelper.smoothSlideViewTo(mHandleView, getLeftChecked(), mHandleView.getTop());
@@ -244,8 +255,8 @@ public class SDSwitchButton extends FrameLayout
             }
         } else
         {
-            showNormalView(true);
-            showCheckedView(false);
+            ViewCompat.setAlpha(mCheckedView, 0f);
+            ViewCompat.setAlpha(mNormalView, 1.0f);
             if (anim)
             {
                 mDragHelper.smoothSlideViewTo(mHandleView, getLeftNormal(), mHandleView.getTop());
@@ -258,7 +269,7 @@ public class SDSwitchButton extends FrameLayout
     }
 
     /**
-     * 返回normal状态下的left值
+     * 返回normal状态下HandleView的left值
      *
      * @return
      */
@@ -268,15 +279,30 @@ public class SDSwitchButton extends FrameLayout
     }
 
     /**
-     * 返回checked状态下的left值
+     * 返回checked状态下HandleView的left值
      *
      * @return
      */
     private int getLeftChecked()
     {
-        return getMeasuredWidth() - mHandleView.getMeasuredWidth() - mHandleParams.rightMargin;
+        return getWidth() - mHandleView.getWidth() - mHandleParams.rightMargin;
     }
 
+    /**
+     * 返回HandleView可以移动的宽度大小
+     *
+     * @return
+     */
+    private int getAvailableWidth()
+    {
+        return getLeftChecked() - getLeftNormal();
+    }
+
+    /**
+     * 返回HandleView滚动的距离
+     *
+     * @return
+     */
     public int getScrollDistance()
     {
         return mHandleView.getLeft() - getLeftNormal();
