@@ -517,10 +517,22 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         //----------margins----------
         if (!mIsViewHandleCustom)
         {
-            mMarginLeft = getHeight() / 15;
-            mMarginTop = mMarginLeft;
-            mMarginRight = mMarginLeft;
-            mMarginBottom = mMarginLeft;
+            if (mMarginLeft == 0)
+            {
+                mMarginLeft = getHeight() / 15;
+            }
+            if (mMarginTop == 0)
+            {
+                mMarginTop = getHeight() / 15;
+            }
+            if (mMarginRight == 0)
+            {
+                mMarginRight = getHeight() / 15;
+            }
+            if (mMarginBottom == 0)
+            {
+                mMarginBottom = getHeight() / 15;
+            }
         } else
         {
             mMarginLeft = params.leftMargin;
