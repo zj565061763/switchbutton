@@ -123,73 +123,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         setChecked(mIsChecked, false, false);
     }
 
-    //----------ISDSwitchButton implements start----------
-
-    @Override
-    public void setChecked(boolean checked, boolean anim, boolean notifyCallback)
-    {
-        if (mIsChecked != checked)
-        {
-            mIsChecked = checked;
-            if (notifyCallback)
-            {
-                if (mOnCheckedChangedCallback != null)
-                {
-                    mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
-                }
-            }
-        }
-
-        changeViewByCheckedState(anim);
-    }
-
-    @Override
-    public void toggleChecked(boolean anim, boolean notifyCallback)
-    {
-        setChecked(!mIsChecked, anim, notifyCallback);
-    }
-
-    @Override
-    public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
-    {
-        mOnCheckedChangedCallback = onCheckedChangedCallback;
-    }
-
-    @Override
-    public void setMarginLeft(int marginLeft)
-    {
-        mMarginLeft = marginLeft;
-        updateHandlerViewParams();
-    }
-
-    @Override
-    public void setMarginTop(int marginTop)
-    {
-        mMarginTop = marginTop;
-        updateHandlerViewParams();
-    }
-
-    @Override
-    public void setMarginRight(int marginRight)
-    {
-        mMarginRight = marginRight;
-        updateHandlerViewParams();
-    }
-
-    @Override
-    public void setMarginBottom(int marginBottom)
-    {
-        mMarginBottom = marginBottom;
-        updateHandlerViewParams();
-    }
-
-    @Override
-    public void setAlphaMode(boolean alphaMode)
-    {
-        mIsAlphaMode = alphaMode;
-    }
-
-    //----------ISDSwitchButton implements end----------
 
     private void initGestureDetector()
     {
@@ -639,5 +572,73 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             mViewHandle.setLayoutParams(params);
         }
     }
+
+    //----------ISDSwitchButton implements start----------
+
+    @Override
+    public void setChecked(boolean checked, boolean anim, boolean notifyCallback)
+    {
+        if (mIsChecked != checked)
+        {
+            mIsChecked = checked;
+            if (notifyCallback)
+            {
+                if (mOnCheckedChangedCallback != null)
+                {
+                    mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
+                }
+            }
+        }
+
+        changeViewByCheckedState(anim);
+    }
+
+    @Override
+    public void toggleChecked(boolean anim, boolean notifyCallback)
+    {
+        setChecked(!mIsChecked, anim, notifyCallback);
+    }
+
+    @Override
+    public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
+    {
+        mOnCheckedChangedCallback = onCheckedChangedCallback;
+    }
+
+    @Override
+    public void setMarginLeft(int marginLeft)
+    {
+        mMarginLeft = marginLeft;
+        updateHandlerViewParams();
+    }
+
+    @Override
+    public void setMarginTop(int marginTop)
+    {
+        mMarginTop = marginTop;
+        updateHandlerViewParams();
+    }
+
+    @Override
+    public void setMarginRight(int marginRight)
+    {
+        mMarginRight = marginRight;
+        updateHandlerViewParams();
+    }
+
+    @Override
+    public void setMarginBottom(int marginBottom)
+    {
+        mMarginBottom = marginBottom;
+        updateHandlerViewParams();
+    }
+
+    @Override
+    public void setAlphaMode(boolean alphaMode)
+    {
+        mIsAlphaMode = alphaMode;
+    }
+
+    //----------ISDSwitchButton implements end----------
 
 }
