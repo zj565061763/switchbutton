@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
  * Created by Administrator on 2017/7/5.
  */
 
-public class SDSwitchButton extends FrameLayout
+public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 {
     public SDSwitchButton(@NonNull Context context)
     {
@@ -72,10 +72,21 @@ public class SDSwitchButton extends FrameLayout
      * 是否是透明度模式来显示隐藏view的
      */
     private boolean mIsAlphaMode = true;
-
+    /**
+     * 手柄view左边间距
+     */
     private int mMarginLeft;
+    /**
+     * 手柄view顶部间距
+     */
     private int mMarginTop;
+    /**
+     * 手柄view右边间距
+     */
     private int mMarginRight;
+    /**
+     * 手柄view底部间距
+     */
     private int mMarginBottom;
 
     private boolean mIsDebug;
@@ -112,77 +123,73 @@ public class SDSwitchButton extends FrameLayout
         setChecked(mIsChecked, false, false);
     }
 
-    /**
-     * 设置是否是透明度模式来显示隐藏view的
-     *
-     * @param alphaMode
-     */
+    //----------ISDSwitchButton implements start----------
+
+    @Override
+    public void setChecked(boolean checked, boolean anim, boolean notifyCallback)
+    {
+        if (mIsChecked != checked)
+        {
+            mIsChecked = checked;
+            if (notifyCallback)
+            {
+                if (mOnCheckedChangedCallback != null)
+                {
+                    mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
+                }
+            }
+        }
+
+        changeViewByCheckedState(anim);
+    }
+
+    @Override
+    public void toggleChecked(boolean anim, boolean notifyCallback)
+    {
+        setChecked(!mIsChecked, anim, notifyCallback);
+    }
+
+    @Override
+    public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
+    {
+        mOnCheckedChangedCallback = onCheckedChangedCallback;
+    }
+
+    @Override
+    public void setMarginLeft(int marginLeft)
+    {
+        mMarginLeft = marginLeft;
+        updateHandlerViewParams();
+    }
+
+    @Override
+    public void setMarginTop(int marginTop)
+    {
+        mMarginTop = marginTop;
+        updateHandlerViewParams();
+    }
+
+    @Override
+    public void setMarginRight(int marginRight)
+    {
+        mMarginRight = marginRight;
+        updateHandlerViewParams();
+    }
+
+    @Override
+    public void setMarginBottom(int marginBottom)
+    {
+        mMarginBottom = marginBottom;
+        updateHandlerViewParams();
+    }
+
+    @Override
     public void setAlphaMode(boolean alphaMode)
     {
         mIsAlphaMode = alphaMode;
     }
 
-    public View getViewNormal()
-    {
-        return mViewNormal;
-    }
-
-    public View getViewChecked()
-    {
-        return mViewChecked;
-    }
-
-    public View getViewHandle()
-    {
-        return mViewHandle;
-    }
-
-    public void setViewNormal(View viewNormal)
-    {
-        if (replaceOldView(mViewNormal, viewNormal))
-        {
-            mViewNormal = viewNormal;
-        }
-    }
-
-    public void setViewChecked(View viewChecked)
-    {
-        if (replaceOldView(mViewChecked, viewChecked))
-        {
-            mViewChecked = viewChecked;
-        }
-    }
-
-    public void setViewHandle(View viewHandle)
-    {
-        if (replaceOldView(mViewHandle, viewHandle))
-        {
-            mViewHandle = viewHandle;
-            mParamsHandleView = (LayoutParams) mViewHandle.getLayoutParams();
-            mIsViewHandleCustom = true;
-        }
-    }
-
-    private boolean replaceOldView(View viewOld, View viewNew)
-    {
-        if (viewNew != null && viewOld != viewNew)
-        {
-            int index = indexOfChild(viewOld);
-            ViewGroup.LayoutParams params = viewOld.getLayoutParams();
-            removeView(viewOld);
-
-            if (viewNew.getLayoutParams() != null)
-            {
-                params = viewNew.getLayoutParams();
-            }
-
-            addView(viewNew, index, params);
-            return true;
-        } else
-        {
-            return false;
-        }
-    }
+    //----------ISDSwitchButton implements end----------
 
     private void initGestureDetector()
     {
@@ -262,40 +269,10 @@ public class SDSwitchButton extends FrameLayout
     }
 
     /**
-     * 切换选中状态
+     * 根据状态改变view
      *
-     * @param anim           是否需要动画
-     * @param notifyCallback 是否需要通知回调
+     * @param anim
      */
-    public void toggleChecked(boolean anim, boolean notifyCallback)
-    {
-        setChecked(!mIsChecked, anim, notifyCallback);
-    }
-
-    /**
-     * 设置选中状态
-     *
-     * @param checked        true-选中，false-未选中
-     * @param anim           是否需要动画
-     * @param notifyCallback 是否需要通知回调
-     */
-    public void setChecked(boolean checked, boolean anim, boolean notifyCallback)
-    {
-        if (mIsChecked != checked)
-        {
-            mIsChecked = checked;
-            if (notifyCallback)
-            {
-                if (mOnCheckedChangedCallback != null)
-                {
-                    mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
-                }
-            }
-        }
-
-        changeViewByCheckedState(anim);
-    }
-
     private void changeViewByCheckedState(boolean anim)
     {
         if (mIsChecked)
@@ -381,14 +358,9 @@ public class SDSwitchButton extends FrameLayout
      *
      * @return
      */
-    public int getScrollDistance()
+    private int getScrollDistance()
     {
         return mViewHandle.getLeft() - getLeftNormal();
-    }
-
-    public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
-    {
-        mOnCheckedChangedCallback = onCheckedChangedCallback;
     }
 
     @Override
@@ -415,6 +387,69 @@ public class SDSwitchButton extends FrameLayout
         {
             removeView(handle);
             setViewHandle(handle);
+        }
+        changeViewByCheckedState(false);
+    }
+
+    /**
+     * 设置正常view
+     *
+     * @param viewNormal
+     */
+    private void setViewNormal(View viewNormal)
+    {
+        if (replaceOldView(mViewNormal, viewNormal))
+        {
+            mViewNormal = viewNormal;
+        }
+    }
+
+    /**
+     * 设置选中view
+     *
+     * @param viewChecked
+     */
+    private void setViewChecked(View viewChecked)
+    {
+        if (replaceOldView(mViewChecked, viewChecked))
+        {
+            mViewChecked = viewChecked;
+        }
+    }
+
+    /**
+     * 设置手柄view
+     *
+     * @param viewHandle
+     */
+    private void setViewHandle(View viewHandle)
+    {
+        if (replaceOldView(mViewHandle, viewHandle))
+        {
+            mViewHandle = viewHandle;
+            mParamsHandleView = (LayoutParams) mViewHandle.getLayoutParams();
+            mIsViewHandleCustom = true;
+        }
+    }
+
+    private boolean replaceOldView(View viewOld, View viewNew)
+    {
+        if (viewNew != null && viewOld != viewNew)
+        {
+            int index = indexOfChild(viewOld);
+            ViewGroup.LayoutParams params = viewOld.getLayoutParams();
+            removeView(viewOld);
+
+            if (viewNew.getLayoutParams() != null)
+            {
+                params = viewNew.getLayoutParams();
+            }
+
+            addView(viewNew, index, params);
+            return true;
+        } else
+        {
+            return false;
         }
     }
 
@@ -538,6 +573,9 @@ public class SDSwitchButton extends FrameLayout
         updateHandlerViewParams();
     }
 
+    /**
+     * 更新手柄view的布局参数
+     */
     private void updateHandlerViewParams()
     {
         boolean needUpdate = false;
@@ -602,8 +640,4 @@ public class SDSwitchButton extends FrameLayout
         }
     }
 
-    public interface OnCheckedChangedCallback
-    {
-        void onCheckedChanged(boolean checked, SDSwitchButton view);
-    }
 }
