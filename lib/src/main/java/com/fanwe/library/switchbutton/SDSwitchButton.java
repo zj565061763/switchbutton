@@ -126,7 +126,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             @Override
             public boolean onSingleTapUp(MotionEvent e)
             {
-                toggleChecked(true, true);
+                toggleChecked(true);
                 return super.onSingleTapUp(e);
             }
         });
@@ -623,8 +623,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     //----------ISDSwitchButton implements start----------
 
-    @Override
-    public void setChecked(boolean checked, boolean anim, boolean notifyCallback)
+    private void setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
         if (mIsChecked != checked)
         {
@@ -642,9 +641,15 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     }
 
     @Override
-    public void toggleChecked(boolean anim, boolean notifyCallback)
+    public void setChecked(boolean checked, boolean notifyCallback)
     {
-        setChecked(!mIsChecked, anim, notifyCallback);
+        setChecked(checked, true, notifyCallback);
+    }
+
+    @Override
+    public void toggleChecked(boolean notifyCallback)
+    {
+        setChecked(!mIsChecked, notifyCallback);
     }
 
     @Override
