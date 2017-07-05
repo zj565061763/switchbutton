@@ -203,6 +203,10 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      */
     private void updateViewByState(boolean anim)
     {
+        if (mIsDebug)
+        {
+            Log.i(TAG, "updateViewByState");
+        }
         if (mIsChecked)
         {
             showCheckedView(true);
