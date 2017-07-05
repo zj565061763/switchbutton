@@ -187,8 +187,8 @@ public class SDSwitchButton extends FrameLayout
             public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy)
             {
                 super.onViewPositionChanged(changedView, left, top, dx, dy);
+                
                 float percent = getScrollDistance() / (float) getAvailableWidth();
-
                 if (mIsAlphaMode)
                 {
                     ViewCompat.setAlpha(mViewChecked, percent);
@@ -431,11 +431,6 @@ public class SDSwitchButton extends FrameLayout
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-
-        if (mIsDebug)
-        {
-            Log.i(TAG, "onTouchEvent:" + event.getAction());
-        }
 
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
