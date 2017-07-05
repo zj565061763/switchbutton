@@ -70,7 +70,7 @@ public class SDSwitchButton extends FrameLayout
 
         LayoutParams paramsHandle = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         mHandleView = new View(getContext());
-        addView(mCheckedView, paramsHandle);
+        addView(mHandleView, paramsHandle);
     }
 
     public void setNormalView(View normalView)

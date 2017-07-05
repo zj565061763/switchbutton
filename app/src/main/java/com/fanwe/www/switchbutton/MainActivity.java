@@ -1,15 +1,19 @@
 package com.fanwe.www.switchbutton;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity
+import com.fanwe.library.SDLibrary;
+import com.fanwe.library.activity.SDBaseActivity;
+import com.fanwe.library.switchbutton.SDSwitchButton;
+
+public class MainActivity extends SDBaseActivity
 {
+    private SDSwitchButton sb;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    protected void init(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
+        SDLibrary.getInstance().init(getApplication());
         setContentView(R.layout.activity_main);
     }
 }
