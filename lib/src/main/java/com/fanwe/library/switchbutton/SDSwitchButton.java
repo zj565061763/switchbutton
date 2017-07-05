@@ -205,10 +205,10 @@ public class SDSwitchButton extends FrameLayout
                 }
                 if (releasedChild.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2))
                 {
-                    setChecked(true, true);
+                    setChecked(true, true, true);
                 } else
                 {
-                    setChecked(false, true);
+                    setChecked(false, true, true);
                 }
             }
         });
@@ -223,17 +223,6 @@ public class SDSwitchButton extends FrameLayout
     public void toggleChecked(boolean anim, boolean notifyCallback)
     {
         setChecked(!mIsChecked, anim, notifyCallback);
-    }
-
-    /**
-     * 设置选中状态
-     *
-     * @param checked true-选中，false-未选中
-     * @param anim    是否需要动画
-     */
-    public void setChecked(boolean checked, boolean anim)
-    {
-        setChecked(checked, anim, true);
     }
 
     /**
