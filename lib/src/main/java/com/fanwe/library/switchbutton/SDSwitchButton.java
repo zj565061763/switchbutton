@@ -319,21 +319,21 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     {
         super.onFinishInflate();
 
-        View normal = findViewById(R.id.view_normal);
+        View normal = findViewById(R.id.lib_sb_view_normal);
         if (normal != null)
         {
             removeView(normal);
             setViewNormal(normal);
         }
 
-        View checked = findViewById(R.id.view_checked);
+        View checked = findViewById(R.id.lib_sb_view_checked);
         if (checked != null)
         {
             removeView(checked);
             setViewChecked(checked);
         }
 
-        View handle = findViewById(R.id.view_handle);
+        View handle = findViewById(R.id.lib_sb_view_handle);
         if (handle != null)
         {
             removeView(handle);
