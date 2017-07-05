@@ -425,14 +425,13 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             case MotionEvent.ACTION_DOWN:
                 mTouchHelper.setNeedConsume(true);
+                if (getParent() != null)
+                {
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                }
                 break;
         }
         return mTouchHelper.isNeedConsume();
-    }
-
-    private boolean isViewCaptured()
-    {
-        return mDragHelper.getViewDragState() == ViewDragHelper.STATE_DRAGGING;
     }
 
     private boolean checkMoveParams()
@@ -449,22 +448,16 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                if (!isViewCaptured())
-                {
-                    //触发ViewDragHelper的尝试捕捉
-                    mDragHelper.processTouchEvent(event);
-                }
+                //触发ViewDragHelper的尝试捕捉
+                mDragHelper.processTouchEvent(event);
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (mIsNeedProcess)
                 {
-                    if (isViewCaptured())
-                    {
-                        mDragHelper.processTouchEvent(event);
-                    }
+                    mDragHelper.processTouchEvent(event);
                 } else
                 {
-                    if (isViewCaptured() && checkMoveParams())
+                    if (checkMoveParams())
                     {
                         setNeedProcess(true, event);
                     }
@@ -472,6 +465,10 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                if (getParent() != null)
+                {
+                    getParent().requestDisallowInterceptTouchEvent(false);
+                }
                 setNeedProcess(false, event);
                 mDragHelper.processTouchEvent(event);
                 if (mIsDebug)
