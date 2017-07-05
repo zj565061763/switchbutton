@@ -8,6 +8,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class SDSwitchButton extends FrameLayout
     private View mViewHandle;
 
     private ViewDragHelper mDragHelper;
+    private GestureDetector mGestureDetector;
     private boolean mIsNeedProcess;
     private int mMargins = -1;
     private LayoutParams mParamsHandleView;
@@ -58,8 +60,8 @@ public class SDSwitchButton extends FrameLayout
     private void init()
     {
         addDefaultViews();
+        initGestureDetector();
         initViewDragHelper();
-        setOnClickListener(mOnClickListenerDefault);
     }
 
     public void setDebug(boolean debug)
@@ -84,21 +86,6 @@ public class SDSwitchButton extends FrameLayout
 
         setChecked(mIsChecked, false, false);
     }
-
-    @Override
-    public void setOnClickListener(@Nullable OnClickListener l)
-    {
-        super.setOnClickListener(null);
-    }
-
-    private View.OnClickListener mOnClickListenerDefault = new OnClickListener()
-    {
-        @Override
-        public void onClick(View v)
-        {
-            toggleChecked(true, true);
-        }
-    };
 
     public View getViewNormal()
     {
@@ -161,6 +148,19 @@ public class SDSwitchButton extends FrameLayout
         }
     }
 
+    private void initGestureDetector()
+    {
+        mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener()
+        {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e)
+            {
+                toggleChecked(true, true);
+                return super.onSingleTapUp(e);
+            }
+        });
+    }
+
     private void initViewDragHelper()
     {
         mDragHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback()
@@ -187,7 +187,7 @@ public class SDSwitchButton extends FrameLayout
             public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy)
             {
                 super.onViewPositionChanged(changedView, left, top, dx, dy);
-                
+
                 float percent = getScrollDistance() / (float) getAvailableWidth();
                 if (mIsAlphaMode)
                 {
@@ -359,6 +359,27 @@ public class SDSwitchButton extends FrameLayout
     protected void onFinishInflate()
     {
         super.onFinishInflate();
+
+        View normal = findViewById(R.id.view_normal);
+        if (normal != null)
+        {
+            removeView(normal);
+            setViewNormal(normal);
+        }
+
+        View checked = findViewById(R.id.view_checked);
+        if (checked != null)
+        {
+            removeView(checked);
+            setViewChecked(checked);
+        }
+
+        View handle = findViewById(R.id.view_handle);
+        if (handle != null)
+        {
+            removeView(handle);
+            setViewHandle(handle);
+        }
     }
 
     @Override
@@ -394,25 +415,10 @@ public class SDSwitchButton extends FrameLayout
             return true;
         }
 
-        mTouchHelper.processTouchEvent(ev);
         switch (ev.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                mTouchHelper.setNeedConsume(false);
-                if (mDragHelper.isViewUnder(mViewHandle, (int) ev.getRawX(), (int) ev.getRawY()))
-                {
-                    mTouchHelper.setNeedConsume(true);
-                    mDragHelper.processTouchEvent(ev);
-                }
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (isViewCaptured() && checkMoveParams())
-                {
-                    mTouchHelper.setNeedConsume(true);
-                }
-                break;
-            default:
-                mDragHelper.processTouchEvent(ev);
+                mTouchHelper.setNeedConsume(true);
                 break;
         }
         return mTouchHelper.isNeedConsume();
@@ -432,6 +438,7 @@ public class SDSwitchButton extends FrameLayout
     public boolean onTouchEvent(MotionEvent event)
     {
 
+        mGestureDetector.onTouchEvent(event);
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
         {
@@ -458,10 +465,6 @@ public class SDSwitchButton extends FrameLayout
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (mTouchHelper.getUpTime() - mTouchHelper.getDownTime() < 100)
-                {
-                    mOnClickListenerDefault.onClick(this);
-                }
             case MotionEvent.ACTION_CANCEL:
                 setNeedProcess(false, event);
                 mDragHelper.processTouchEvent(event);
