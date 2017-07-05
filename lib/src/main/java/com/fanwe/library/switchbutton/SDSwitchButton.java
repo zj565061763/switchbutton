@@ -40,18 +40,43 @@ public class SDSwitchButton extends FrameLayout
 
     private static final String TAG = "SDSwitchButton";
 
+    /**
+     * 是否选中
+     */
     private boolean mIsChecked;
-
+    /**
+     * 正常view
+     */
     private View mViewNormal;
+    /**
+     * 选中view
+     */
     private View mViewChecked;
+    /**
+     * 手柄view
+     */
     private View mViewHandle;
+    /**
+     * 手柄view是否被自定义
+     */
+    private boolean mIsViewHandleCustom;
 
     private ViewDragHelper mDragHelper;
     private GestureDetector mGestureDetector;
     private boolean mIsNeedProcess;
-    private int mMargins = -1;
+    /**
+     * 手柄view布局参数
+     */
     private LayoutParams mParamsHandleView;
+    /**
+     * 是否是透明度模式来显示隐藏view的
+     */
     private boolean mIsAlphaMode = true;
+
+    private int mMarginLeft;
+    private int mMarginTop;
+    private int mMarginRight;
+    private int mMarginBottom;
 
     private boolean mIsDebug;
 
@@ -85,6 +110,16 @@ public class SDSwitchButton extends FrameLayout
         addView(mViewHandle, mParamsHandleView);
 
         setChecked(mIsChecked, false, false);
+    }
+
+    /**
+     * 设置是否是透明度模式来显示隐藏view的
+     *
+     * @param alphaMode
+     */
+    public void setAlphaMode(boolean alphaMode)
+    {
+        mIsAlphaMode = alphaMode;
     }
 
     public View getViewNormal()
@@ -124,6 +159,7 @@ public class SDSwitchButton extends FrameLayout
         {
             mViewHandle = viewHandle;
             mParamsHandleView = (LayoutParams) mViewHandle.getLayoutParams();
+            mIsViewHandleCustom = true;
         }
     }
 
@@ -508,25 +544,56 @@ public class SDSwitchButton extends FrameLayout
         LayoutParams params = (LayoutParams) mViewHandle.getLayoutParams();
 
         //----------margins----------
-        if (mMargins < 0)
+        if (!mIsViewHandleCustom)
         {
-            mMargins = getHeight() / 15;
+            mMarginLeft = getHeight() / 15;
+            mMarginTop = mMarginLeft;
+            mMarginRight = mMarginLeft;
+            mMarginBottom = mMarginLeft;
+        } else
+        {
+            mMarginLeft = params.leftMargin;
+            mMarginTop = params.topMargin;
+            mMarginRight = params.rightMargin;
+            mMarginBottom = params.bottomMargin;
         }
-        if (mMargins != params.leftMargin)
+
+        if (params.leftMargin != mMarginLeft)
         {
-            params.leftMargin = mMargins;
-            params.topMargin = mMargins;
-            params.rightMargin = mMargins;
-            params.bottomMargin = mMargins;
+            params.leftMargin = mMarginLeft;
+            needUpdate = true;
+        }
+        if (params.topMargin != mMarginTop)
+        {
+            params.topMargin = mMarginTop;
+            needUpdate = true;
+        }
+        if (params.rightMargin != mMarginRight)
+        {
+            params.rightMargin = mMarginRight;
+            needUpdate = true;
+        }
+        if (params.bottomMargin != mMarginBottom)
+        {
+            params.bottomMargin = mMarginBottom;
             needUpdate = true;
         }
 
-        //----------width----------
-        int width = getHeight() - 2 * mMargins;
-        if (params.width != width)
+        //----------height----------
+        if (params.height == ViewGroup.LayoutParams.WRAP_CONTENT)
         {
-            params.width = width;
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
             needUpdate = true;
+        }
+        //----------width----------
+        if (params.width < 0)
+        {
+            int width = getHeight() - mMarginTop - mMarginBottom;
+            if (params.width != width)
+            {
+                params.width = width;
+                needUpdate = true;
+            }
         }
 
         if (needUpdate)
