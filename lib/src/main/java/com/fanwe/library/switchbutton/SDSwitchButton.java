@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 /**
@@ -60,6 +61,11 @@ public class SDSwitchButton extends FrameLayout
         initViewDragHelper();
     }
 
+    public void setDebug(boolean debug)
+    {
+        mIsDebug = debug;
+    }
+
     private void addDefaultViews()
     {
         mNormalView = new View(getContext());
@@ -68,9 +74,26 @@ public class SDSwitchButton extends FrameLayout
         mCheckedView = new View(getContext());
         addView(mCheckedView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        LayoutParams paramsHandle = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LayoutParams paramsHandle = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         mHandleView = new View(getContext());
         addView(mHandleView, paramsHandle);
+
+        setChecked(mIsChecked, false, false);
+    }
+
+    public View getNormalView()
+    {
+        return mNormalView;
+    }
+
+    public View getCheckedView()
+    {
+        return mCheckedView;
+    }
+
+    public View getHandleView()
+    {
+        return mHandleView;
     }
 
     public void setNormalView(View normalView)
@@ -128,11 +151,24 @@ public class SDSwitchButton extends FrameLayout
             }
 
             @Override
+            public void onViewCaptured(View capturedChild, int activePointerId)
+            {
+                super.onViewCaptured(capturedChild, activePointerId);
+                if (mIsDebug)
+                {
+                    Log.i(TAG, "onViewCaptured");
+                }
+            }
+
+            @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel)
             {
                 super.onViewReleased(releasedChild, xvel, yvel);
-
-                if (getLeft() >= getAvailableWidth() / 2)
+                if (mIsDebug)
+                {
+                    Log.i(TAG, "onViewReleased");
+                }
+                if (releasedChild.getLeft() >= getAvailableWidth() / 2)
                 {
                     setChecked(true, true);
                 } else
@@ -186,6 +222,7 @@ public class SDSwitchButton extends FrameLayout
 
             }
         }
+        invalidate();
     }
 
     /**
@@ -246,6 +283,15 @@ public class SDSwitchButton extends FrameLayout
         super.onFinishInflate();
     }
 
+    @Override
+    public void computeScroll()
+    {
+        if (mDragHelper.continueSettling(true))
+        {
+            invalidate();
+        }
+    }
+
     private SDTouchEventHelper mTouchHelper = new SDTouchEventHelper();
 
     @Override
@@ -275,7 +321,11 @@ public class SDSwitchButton extends FrameLayout
         {
             case MotionEvent.ACTION_DOWN:
                 mTouchHelper.setNeedConsume(false);
-                mDragHelper.processTouchEvent(ev);
+                if (mDragHelper.isViewUnder(mHandleView, (int) ev.getRawX(), (int) ev.getRawY()))
+                {
+                    mTouchHelper.setNeedConsume(true);
+                    mDragHelper.processTouchEvent(ev);
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (isViewCaptured() && checkMoveParams())
@@ -303,6 +353,11 @@ public class SDSwitchButton extends FrameLayout
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+
+        if (mIsDebug)
+        {
+            Log.i(TAG, "onTouchEvent:" + event.getAction());
+        }
 
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
@@ -357,6 +412,21 @@ public class SDSwitchButton extends FrameLayout
         {
             mIsNeedProcess = needProcess;
         }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom)
+    {
+        super.onLayout(changed, left, top, right, bottom);
+
+        updateHandlerViewWidth();
+    }
+
+    private void updateHandlerViewWidth()
+    {
+        ViewGroup.LayoutParams params = mHandleView.getLayoutParams();
+        params.width = getHeight();
+        mHandleView.setLayoutParams(params);
     }
 
     public interface OnCheckedChangedCallback
