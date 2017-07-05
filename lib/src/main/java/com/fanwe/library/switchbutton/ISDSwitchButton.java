@@ -6,7 +6,6 @@ package com.fanwe.library.switchbutton;
 
 public interface ISDSwitchButton
 {
-
     /**
      * 设置选中状态
      *
@@ -65,7 +64,6 @@ public interface ISDSwitchButton
      * @param alphaMode
      */
     void setAlphaMode(boolean alphaMode);
-
 
     interface OnCheckedChangedCallback
     {
