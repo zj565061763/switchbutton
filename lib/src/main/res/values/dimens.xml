@@ -2,7 +2,11 @@
 
     <!-- 圆角半径 -->
     <dimen name="lib_sb_corner">50dp</dimen>
-    <!-- 边框大小 -->
-    <dimen name="lib_sb_stroke_width">1px</dimen>
+    <!-- 正常view边框大小 -->
+    <dimen name="lib_sb_stroke_width_normal_view">1px</dimen>
+    <!-- 选中view边框大小 -->
+    <dimen name="lib_sb_stroke_width_checked_view">1px</dimen>
+    <!-- 手柄view边框大小 -->
+    <dimen name="lib_sb_stroke_width_handle_view">1px</dimen>
 
 </resources>

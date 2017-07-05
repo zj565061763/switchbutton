@@ -5,6 +5,6 @@
 
     <corners android:radius="@dimen/lib_sb_corner"/>
 
-    <stroke android:width="@dimen/lib_sb_stroke_width"
+    <stroke android:width="@dimen/lib_sb_stroke_width_normal_view"
             android:color="@color/lib_sb_stroke_normal_view"/>
 </shape>
