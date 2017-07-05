@@ -571,7 +571,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             needUpdate = true;
         }
         //----------width----------
-        if (params.width < 0)
+        if (params.width <= 0)
         {
             int width = getHeight() - mMarginTop - mMarginBottom;
             if (params.width != width)
