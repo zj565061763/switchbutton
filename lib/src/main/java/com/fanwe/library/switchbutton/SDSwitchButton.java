@@ -422,11 +422,24 @@ public class SDSwitchButton extends FrameLayout
         updateHandlerViewWidth();
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh)
+    {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (h != oldh)
+        {
+            updateHandlerViewWidth();
+        }
+    }
+
     private void updateHandlerViewWidth()
     {
         ViewGroup.LayoutParams params = mHandleView.getLayoutParams();
-        params.width = getHeight();
-        mHandleView.setLayoutParams(params);
+        if (params.width != getHeight())
+        {
+            params.width = getHeight();
+            mHandleView.setLayoutParams(params);
+        }
     }
 
     public interface OnCheckedChangedCallback
