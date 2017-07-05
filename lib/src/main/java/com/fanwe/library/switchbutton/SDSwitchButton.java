@@ -214,22 +214,43 @@ public class SDSwitchButton extends FrameLayout
         });
     }
 
-    public void toggleChecked(boolean anim, boolean notifyEvent)
+    /**
+     * 切换选中状态
+     *
+     * @param anim           是否需要动画
+     * @param notifyCallback 是否需要通知回调
+     */
+    public void toggleChecked(boolean anim, boolean notifyCallback)
     {
-        setChecked(!mIsChecked, anim, notifyEvent);
+        setChecked(!mIsChecked, anim, notifyCallback);
     }
 
+    /**
+     * 设置选中状态
+     *
+     * @param checked true-选中，false-未选中
+     * @param anim    是否需要动画
+     */
     public void setChecked(boolean checked, boolean anim)
     {
         setChecked(checked, anim, true);
     }
 
-    public void setChecked(boolean checked, boolean anim, boolean notifyEvent)
+    /**
+     * 设置选中状态
+     *
+     * @param checked        true-选中，false-未选中
+     * @param anim           是否需要动画
+     * @param notifyCallback 是否需要通知回调
+     */
+    public void setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
+        mIsChecked = checked;
+        changeViewByCheckedState(anim);
+
         if (mIsChecked != checked)
         {
-            mIsChecked = checked;
-            if (notifyEvent)
+            if (notifyCallback)
             {
                 if (mOnCheckedChangedCallback != null)
                 {
@@ -237,7 +258,6 @@ public class SDSwitchButton extends FrameLayout
                 }
             }
         }
-        changeViewByCheckedState(anim);
     }
 
     private void changeViewByCheckedState(boolean anim)
@@ -306,28 +326,6 @@ public class SDSwitchButton extends FrameLayout
     public int getScrollDistance()
     {
         return mHandleView.getLeft() - getLeftNormal();
-    }
-
-    private void showNormalView(boolean show)
-    {
-        if (show)
-        {
-            mNormalView.setVisibility(View.VISIBLE);
-        } else
-        {
-            mNormalView.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void showCheckedView(boolean show)
-    {
-        if (show)
-        {
-            mCheckedView.setVisibility(View.VISIBLE);
-        } else
-        {
-            mCheckedView.setVisibility(View.INVISIBLE);
-        }
     }
 
     public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
