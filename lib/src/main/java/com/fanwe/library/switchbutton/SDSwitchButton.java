@@ -60,6 +60,7 @@ public class SDSwitchButton extends FrameLayout
         }
         addDefaultViews();
         initViewDragHelper();
+        setOnClickListener(mOnClickListenerDefault);
     }
 
     public void setDebug(boolean debug)
@@ -81,6 +82,21 @@ public class SDSwitchButton extends FrameLayout
 
         setChecked(mIsChecked, false, false);
     }
+
+    @Override
+    public void setOnClickListener(@Nullable OnClickListener l)
+    {
+        super.setOnClickListener(null);
+    }
+
+    private View.OnClickListener mOnClickListenerDefault = new OnClickListener()
+    {
+        @Override
+        public void onClick(View v)
+        {
+            toggleChecked(true, true);
+        }
+    };
 
     public View getNormalView()
     {
@@ -176,7 +192,7 @@ public class SDSwitchButton extends FrameLayout
                 {
                     Log.i(TAG, "onViewReleased");
                 }
-                if (releasedChild.getLeft() >= getAvailableWidth() / 2)
+                if (releasedChild.getLeft() >= (getWidth() / 2))
                 {
                     setChecked(true, true);
                 } else
@@ -187,6 +203,11 @@ public class SDSwitchButton extends FrameLayout
         });
     }
 
+    public void toggleChecked(boolean anim, boolean notifyEvent)
+    {
+        setChecked(!mIsChecked, anim, notifyEvent);
+    }
+
     public void setChecked(boolean checked, boolean anim)
     {
         setChecked(checked, anim, true);
@@ -194,15 +215,18 @@ public class SDSwitchButton extends FrameLayout
 
     public void setChecked(boolean checked, boolean anim, boolean notifyEvent)
     {
-        mIsChecked = checked;
-        changeViewByCheckedState(anim);
-        if (notifyEvent)
+        if (mIsChecked != checked)
         {
-            if (mOnCheckedChangedCallback != null)
+            mIsChecked = checked;
+            if (notifyEvent)
             {
-                mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
+                if (mOnCheckedChangedCallback != null)
+                {
+                    mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
+                }
             }
         }
+        changeViewByCheckedState(anim);
     }
 
     private void changeViewByCheckedState(boolean anim)
@@ -251,11 +275,6 @@ public class SDSwitchButton extends FrameLayout
     private int getLeftChecked()
     {
         return getWidth() - mHandleView.getWidth() - mHandleParams.rightMargin;
-    }
-
-    private int getAvailableWidth()
-    {
-        return getLeftChecked() - getLeftNormal();
     }
 
     public int getScrollDistance()
@@ -398,6 +417,10 @@ public class SDSwitchButton extends FrameLayout
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                if (mTouchHelper.getUpTime() - mTouchHelper.getDownTime() < 100)
+                {
+                    mOnClickListenerDefault.onClick(this);
+                }
             case MotionEvent.ACTION_CANCEL:
                 setNeedProcess(false, event);
                 mDragHelper.processTouchEvent(event);

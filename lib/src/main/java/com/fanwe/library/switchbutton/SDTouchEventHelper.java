@@ -26,6 +26,9 @@ class SDTouchEventHelper
     private double mDegreeX;
     private double mDegreeY;
 
+    private long mDownTime;
+    private long mUpTime;
+
     /**
      * 处理触摸事件
      *
@@ -36,6 +39,7 @@ class SDTouchEventHelper
         switch (ev.getAction())
         {
             case MotionEvent.ACTION_DOWN:
+                mDownTime = System.currentTimeMillis();
                 mDownX = ev.getRawX();
                 mDownY = ev.getRawY();
 
@@ -62,6 +66,7 @@ class SDTouchEventHelper
                 mLastMoveY = mMoveY;
                 break;
             case MotionEvent.ACTION_UP:
+                mUpTime = System.currentTimeMillis();
                 break;
             default:
                 break;
@@ -230,6 +235,26 @@ class SDTouchEventHelper
     public double getDegreeY()
     {
         return mDegreeY;
+    }
+
+    /**
+     * 返回ACTION_DOWN的时间戳
+     *
+     * @return
+     */
+    public long getDownTime()
+    {
+        return mDownTime;
+    }
+
+    /**
+     * 返回ACTION_UP的时间戳
+     *
+     * @return
+     */
+    public long getUpTime()
+    {
+        return mUpTime;
     }
 
     @Override
