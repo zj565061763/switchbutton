@@ -28,12 +28,11 @@ public class SDThumbImageView extends ImageView
         super(context, attrs, defStyleAttr);
     }
 
-
     @Override
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-        if (getWidth() != getHeight())
+        if (getHeight() > 0 && getHeight() != getWidth())
         {
             ViewGroup.LayoutParams params = getLayoutParams();
             params.width = getHeight();
