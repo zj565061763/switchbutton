@@ -6,6 +6,14 @@ package com.fanwe.library.switchbutton;
 
 public interface ISDSwitchButton
 {
+
+    /**
+     * 是否处于选中状态
+     *
+     * @return
+     */
+    boolean isChecked();
+
     /**
      * 设置选中状态
      *

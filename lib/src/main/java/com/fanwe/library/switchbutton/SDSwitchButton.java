@@ -602,6 +602,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     //----------ISDSwitchButton implements start----------
 
     @Override
+    public boolean isChecked()
+    {
+        return mIsChecked;
+    }
+
+    @Override
     public void setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
         if (mIsChecked != checked)
