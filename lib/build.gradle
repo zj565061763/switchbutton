@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 25
@@ -7,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 17070601
+        versionName "1.0.0"
     }
     buildTypes {
         release {
@@ -16,9 +17,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:25.2.0'
+}
+
+publish {
+    userOrg = 'zj565061763'
+    groupId = 'com.fanwe.android'
+    artifactId = 'switchbutton'
+    publishVersion = '1.0.0'
+    desc = 'android switchbutton library'
+    website = 'https://github.com/zj565061763/SwitchButton'
+}
+
+tasks.withType(Javadoc) {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        failOnError false
+    }
 }
