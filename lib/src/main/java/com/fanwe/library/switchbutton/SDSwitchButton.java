@@ -545,19 +545,19 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         //----------margins----------
         if (!mIsViewThumbCustom)
         {
-            if (mAttrModel.getMarginLeft() == 0)
+            if (mAttrModel.getMarginLeft() < 0)
             {
                 mAttrModel.setMarginLeft(getHeight() / 15);
             }
-            if (mAttrModel.getMarginTop() == 0)
+            if (mAttrModel.getMarginTop() < 0)
             {
                 mAttrModel.setMarginTop(getHeight() / 15);
             }
-            if (mAttrModel.getMarginRight() == 0)
+            if (mAttrModel.getMarginRight() < 0)
             {
                 mAttrModel.setMarginRight(getHeight() / 15);
             }
-            if (mAttrModel.getMarginBottom() == 0)
+            if (mAttrModel.getMarginBottom() < 0)
             {
                 mAttrModel.setMarginBottom(getHeight() / 15);
             }
