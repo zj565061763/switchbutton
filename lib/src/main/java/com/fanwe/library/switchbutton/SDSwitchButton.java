@@ -23,19 +23,20 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     public SDSwitchButton(@NonNull Context context)
     {
         super(context);
-        init();
+        init(context, null);
     }
 
     public SDSwitchButton(@NonNull Context context, @Nullable AttributeSet attrs)
     {
         super(context, attrs);
-        init();
+
+        init(context, attrs);
     }
 
     public SDSwitchButton(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context, attrs);
     }
 
     private static final String TAG = "SDSwitchButton";
@@ -68,29 +69,16 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      * 是否是透明度模式来显示隐藏view的
      */
     private boolean mIsAlphaMode = true;
-    /**
-     * 手柄view左边间距
-     */
-    private int mMarginLeft;
-    /**
-     * 手柄view顶部间距
-     */
-    private int mMarginTop;
-    /**
-     * 手柄view右边间距
-     */
-    private int mMarginRight;
-    /**
-     * 手柄view底部间距
-     */
-    private int mMarginBottom;
+
+    private SBAttrModel mAttrModel = new SBAttrModel();
 
     private boolean mIsDebug;
 
     private OnCheckedChangedCallback mOnCheckedChangedCallback;
 
-    private void init()
+    private void init(Context context, AttributeSet attrs)
     {
+        mAttrModel.parse(context, attrs);
         addDefaultViews();
         initGestureDetector();
         initViewDragHelper();
@@ -104,18 +92,23 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private void addDefaultViews()
     {
         mViewNormal = new View(getContext());
-        mViewNormal.setBackgroundResource(R.drawable.lib_sb_layer_normal_view);
+        mViewNormal.setBackgroundResource(mAttrModel.getImageNormalResId());
         addView(mViewNormal, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         mViewChecked = new View(getContext());
-        mViewChecked.setBackgroundResource(R.drawable.lib_sb_layer_checked_view);
+        mViewChecked.setBackgroundResource(mAttrModel.getImageCheckedResId());
         addView(mViewChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         mViewThumb = new View(getContext());
-        mViewThumb.setBackgroundResource(R.drawable.lib_sb_layer_thumb_view);
-        addView(mViewThumb, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+        mViewThumb.setBackgroundResource(mAttrModel.getImageThumbResId());
+        LayoutParams pThumb = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        pThumb.leftMargin = mAttrModel.getMarginLeft();
+        pThumb.topMargin = mAttrModel.getMarginTop();
+        pThumb.rightMargin = mAttrModel.getMarginRight();
+        pThumb.bottomMargin = mAttrModel.getMarginBottom();
+        addView(mViewThumb, pThumb);
 
-        setChecked(mIsChecked, false, false);
+        setChecked(mAttrModel.isChecked(), false, false);
     }
 
 
@@ -273,7 +266,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      */
     private int getLeftNormal()
     {
-        return mMarginLeft;
+        return getParamsThumbView().leftMargin;
     }
 
     /**
@@ -283,7 +276,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      */
     private int getLeftChecked()
     {
-        return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - mMarginRight;
+        return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - getParamsThumbView().rightMargin;
     }
 
     /**
@@ -531,48 +524,48 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         //----------margins----------
         if (!mIsViewThumbCustom)
         {
-            if (mMarginLeft == 0)
+            if (mAttrModel.getMarginLeft() == 0)
             {
-                mMarginLeft = getHeight() / 15;
+                mAttrModel.setMarginLeft(getHeight() / 15);
             }
-            if (mMarginTop == 0)
+            if (mAttrModel.getMarginTop() == 0)
             {
-                mMarginTop = getHeight() / 15;
+                mAttrModel.setMarginTop(getHeight() / 15);
             }
-            if (mMarginRight == 0)
+            if (mAttrModel.getMarginRight() == 0)
             {
-                mMarginRight = getHeight() / 15;
+                mAttrModel.setMarginRight(getHeight() / 15);
             }
-            if (mMarginBottom == 0)
+            if (mAttrModel.getMarginBottom() == 0)
             {
-                mMarginBottom = getHeight() / 15;
+                mAttrModel.setMarginBottom(getHeight() / 15);
             }
         } else
         {
-            mMarginLeft = params.leftMargin;
-            mMarginTop = params.topMargin;
-            mMarginRight = params.rightMargin;
-            mMarginBottom = params.bottomMargin;
+            mAttrModel.setMarginLeft(params.leftMargin);
+            mAttrModel.setMarginTop(params.topMargin);
+            mAttrModel.setMarginRight(params.rightMargin);
+            mAttrModel.setMarginBottom(params.bottomMargin);
         }
 
-        if (params.leftMargin != mMarginLeft)
+        if (params.leftMargin != mAttrModel.getMarginLeft())
         {
-            params.leftMargin = mMarginLeft;
+            params.leftMargin = mAttrModel.getMarginLeft();
             needUpdate = true;
         }
-        if (params.topMargin != mMarginTop)
+        if (params.topMargin != mAttrModel.getMarginTop())
         {
-            params.topMargin = mMarginTop;
+            params.topMargin = mAttrModel.getMarginTop();
             needUpdate = true;
         }
-        if (params.rightMargin != mMarginRight)
+        if (params.rightMargin != mAttrModel.getMarginRight())
         {
-            params.rightMargin = mMarginRight;
+            params.rightMargin = mAttrModel.getMarginRight();
             needUpdate = true;
         }
-        if (params.bottomMargin != mMarginBottom)
+        if (params.bottomMargin != mAttrModel.getMarginBottom())
         {
-            params.bottomMargin = mMarginBottom;
+            params.bottomMargin = mAttrModel.getMarginBottom();
             needUpdate = true;
         }
 
@@ -585,7 +578,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         //----------width----------
         if (params.width <= 0)
         {
-            int width = getHeight() - mMarginTop - mMarginBottom;
+            int width = getHeight() - mAttrModel.getMarginTop() - mAttrModel.getMarginBottom();
             if (params.width != width)
             {
                 params.width = width;
@@ -635,34 +628,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
     {
         mOnCheckedChangedCallback = onCheckedChangedCallback;
-    }
-
-    @Override
-    public void setMarginLeft(int marginLeft)
-    {
-        mMarginLeft = marginLeft;
-        updateThumbViewParams();
-    }
-
-    @Override
-    public void setMarginTop(int marginTop)
-    {
-        mMarginTop = marginTop;
-        updateThumbViewParams();
-    }
-
-    @Override
-    public void setMarginRight(int marginRight)
-    {
-        mMarginRight = marginRight;
-        updateThumbViewParams();
-    }
-
-    @Override
-    public void setMarginBottom(int marginBottom)
-    {
-        mMarginBottom = marginBottom;
-        updateThumbViewParams();
     }
 
     @Override

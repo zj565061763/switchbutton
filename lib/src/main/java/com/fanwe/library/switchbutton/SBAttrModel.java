@@ -8,7 +8,7 @@ import android.util.AttributeSet;
  * Created by Administrator on 2017/7/6.
  */
 
-public class SBAttrModel
+class SBAttrModel
 {
     /**
      * 正常view图片id
@@ -43,6 +43,12 @@ public class SBAttrModel
      */
     private boolean isChecked;
 
+    /**
+     * 解析xml属性
+     *
+     * @param context
+     * @param attrs
+     */
     public void parse(Context context, AttributeSet attrs)
     {
         if (attrs == null)
@@ -58,10 +64,28 @@ public class SBAttrModel
             imageCheckedResId = a.getResourceId(R.styleable.LibSwitchButton_sbImageChecked, R.drawable.lib_sb_layer_checked_view);
             imageThumbResId = a.getResourceId(R.styleable.LibSwitchButton_sbImageThumb, R.drawable.lib_sb_layer_thumb_view);
 
-            marginLeft = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginLeft, 0);
-            marginTop = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginTop, 0);
-            marginRight = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginRight, 0);
-            marginBottom = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginBottom, 0);
+            int margins = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMargins, 0);
+            marginLeft = margins;
+            marginTop = margins;
+            marginRight = margins;
+            marginBottom = margins;
+
+            if (a.hasValue(R.styleable.LibSwitchButton_sbMarginLeft))
+            {
+                marginLeft = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginLeft, 0);
+            }
+            if (a.hasValue(R.styleable.LibSwitchButton_sbMarginTop))
+            {
+                marginTop = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginTop, 0);
+            }
+            if (a.hasValue(R.styleable.LibSwitchButton_sbMarginRight))
+            {
+                marginRight = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginRight, 0);
+            }
+            if (a.hasValue(R.styleable.LibSwitchButton_sbMarginBottom))
+            {
+                marginBottom = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginBottom, 0);
+            }
 
             isChecked = a.getBoolean(R.styleable.LibSwitchButton_sbIsChecked, false);
         }
@@ -72,9 +96,19 @@ public class SBAttrModel
         return imageNormalResId;
     }
 
+    public void setImageNormalResId(int imageNormalResId)
+    {
+        this.imageNormalResId = imageNormalResId;
+    }
+
     public int getImageCheckedResId()
     {
         return imageCheckedResId;
+    }
+
+    public void setImageCheckedResId(int imageCheckedResId)
+    {
+        this.imageCheckedResId = imageCheckedResId;
     }
 
     public int getImageThumbResId()
@@ -82,9 +116,19 @@ public class SBAttrModel
         return imageThumbResId;
     }
 
+    public void setImageThumbResId(int imageThumbResId)
+    {
+        this.imageThumbResId = imageThumbResId;
+    }
+
     public int getMarginLeft()
     {
         return marginLeft;
+    }
+
+    public void setMarginLeft(int marginLeft)
+    {
+        this.marginLeft = marginLeft;
     }
 
     public int getMarginTop()
@@ -92,9 +136,19 @@ public class SBAttrModel
         return marginTop;
     }
 
+    public void setMarginTop(int marginTop)
+    {
+        this.marginTop = marginTop;
+    }
+
     public int getMarginRight()
     {
         return marginRight;
+    }
+
+    public void setMarginRight(int marginRight)
+    {
+        this.marginRight = marginRight;
     }
 
     public int getMarginBottom()
@@ -102,8 +156,18 @@ public class SBAttrModel
         return marginBottom;
     }
 
+    public void setMarginBottom(int marginBottom)
+    {
+        this.marginBottom = marginBottom;
+    }
+
     public boolean isChecked()
     {
         return isChecked;
+    }
+
+    public void setChecked(boolean checked)
+    {
+        isChecked = checked;
     }
 }

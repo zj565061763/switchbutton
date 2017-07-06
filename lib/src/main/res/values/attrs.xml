@@ -15,6 +15,9 @@
         <!-- 是否选中 -->
         <attr name="sbIsChecked" format="boolean"/>
 
+        <!-- 手柄view上下左右间距 -->
+        <attr name="sbMargins" format="dimension"/>
+
         <!-- 手柄view左边间距 -->
         <attr name="sbMarginLeft" format="dimension"/>
 
