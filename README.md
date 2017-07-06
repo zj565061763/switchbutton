@@ -37,9 +37,14 @@ xml中布局：<br>
 指定view的id为库中的默认id即可完全自定义view的展示效果，定义任何你想要的效果，可以指定其中一个id或者全部id<br>
 <br>
 库中支持的id如下：
-* 正常view的id：`lib_sb_view_normal`<br>
-* 选中view的id：`lib_sb_view_checked`<br>
-* 手柄view的id：`lib_sb_view_thumb`<br>
+```Xml
+    <!--正常view的id-->
+    <item name="lib_sb_view_normal" type="id"/>
+    <!--选中view的id-->
+    <item name="lib_sb_view_checked" type="id"/>
+    <!--手柄view的id-->
+    <item name="lib_sb_view_thumb" type="id"/>
+```
 
 ## 支持的方法
 ```Java
