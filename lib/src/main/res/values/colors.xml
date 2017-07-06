@@ -7,7 +7,7 @@
     <color name="lib_sb_stroke_color_normal_view">#D2D2D2</color>
 
     <!-- 选中view颜色 -->
-    <color name="lib_sb_color_checked_view">#FB6F08</color>
+    <color name="lib_sb_color_checked_view">#4AD863</color>
     <!-- 选中view边框颜色 -->
     <color name="lib_sb_stroke_color_checked_view">@color/lib_sb_color_checked_view</color>
 
