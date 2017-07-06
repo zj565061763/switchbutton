@@ -112,7 +112,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         addView(mViewChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         mViewThumb = new View(getContext());
-        mViewThumb.setBackgroundResource(R.drawable.lib_sb_layer_bg_handle_view);
+        mViewThumb.setBackgroundResource(R.drawable.lib_sb_layer_bg_thumb_view);
         addView(mViewThumb, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 
         setChecked(mIsChecked, false, false);
@@ -333,7 +333,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             setViewChecked(checked);
         }
 
-        View thumb = findViewById(R.id.lib_sb_view_handle);
+        View thumb = findViewById(R.id.lib_sb_view_thumb);
         if (thumb != null)
         {
             removeView(thumb);

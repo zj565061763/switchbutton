@@ -12,8 +12,8 @@
     <color name="lib_sb_stroke_checked_view">@color/lib_sb_bg_checked_view</color>
 
     <!-- 手柄view的背景颜色 -->
-    <color name="lib_sb_bg_handle_view">#FFFFFF</color>
+    <color name="lib_sb_bg_thumb_view">#FFFFFF</color>
     <!-- 手柄view的边框颜色 -->
-    <color name="lib_sb_stroke_handle_view">@color/lib_sb_bg_handle_view</color>
+    <color name="lib_sb_stroke_thumb_view">@color/lib_sb_bg_thumb_view</color>
 
 </resources>

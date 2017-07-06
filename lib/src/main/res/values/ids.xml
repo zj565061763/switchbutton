@@ -3,6 +3,6 @@
 
     <item name="lib_sb_view_normal" type="id"/>
     <item name="lib_sb_view_checked" type="id"/>
-    <item name="lib_sb_view_handle" type="id"/>
+    <item name="lib_sb_view_thumb" type="id"/>
 
 </resources>
