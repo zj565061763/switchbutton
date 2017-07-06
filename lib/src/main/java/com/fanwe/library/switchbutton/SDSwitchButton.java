@@ -102,14 +102,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
         ImageView imageChecked = new ImageView(getContext());
         imageChecked.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        imageChecked.setBackgroundResource(mAttrModel.getImageCheckedResId());
+        imageChecked.setImageResource(mAttrModel.getImageCheckedResId());
         addView(imageChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         mViewChecked = imageChecked;
 
         ImageView imageThumb = new SDThumbImageView(getContext());
         imageThumb.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        imageThumb.setBackgroundResource(mAttrModel.getImageThumbResId());
-        LayoutParams pThumb = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        imageThumb.setImageResource(mAttrModel.getImageThumbResId());
+        LayoutParams pThumb = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         pThumb.gravity = Gravity.CENTER_VERTICAL;
         pThumb.leftMargin = mAttrModel.getMarginLeft();
         pThumb.topMargin = mAttrModel.getMarginTop();
