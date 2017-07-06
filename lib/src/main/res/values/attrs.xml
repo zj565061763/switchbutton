@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LibSwitchButton">
+
+        <!-- 正常view图片 -->
+        <attr name="sbImageNormal" format="reference"/>
+
+        <!-- 选中view图片 -->
+        <attr name="sbImageChecked" format="reference"/>
+
+        <!-- 手柄view图片 -->
+        <attr name="sbImageThumb" format="reference"/>
+
+        <!-- 是否选中 -->
+        <attr name="sbIsChecked" format="boolean"/>
+
+        <!-- 手柄view左边间距 -->
+        <attr name="sbMarginLeft" format="dimension"/>
+
+        <!-- 手柄view顶部间距 -->
+        <attr name="sbMarginTop" format="dimension"/>
+
+        <!-- 手柄view右边间距 -->
+        <attr name="sbMarginRight" format="dimension"/>
+
+        <!-- 手柄view底部间距 -->
+        <attr name="sbMarginBottom" format="dimension"/>
+
+    </declare-styleable>
+
+</resources>
