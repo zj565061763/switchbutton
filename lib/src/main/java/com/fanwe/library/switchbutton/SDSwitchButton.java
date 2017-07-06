@@ -55,11 +55,11 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     /**
      * 手柄view
      */
-    private View mViewHandle;
+    private View mViewThumb;
     /**
      * 手柄view是否被自定义
      */
-    private boolean mIsViewHandleCustom;
+    private boolean mIsViewThumbCustom;
 
     private ViewDragHelper mDragHelper;
     private GestureDetector mGestureDetector;
@@ -111,9 +111,9 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         mViewChecked.setBackgroundResource(R.drawable.lib_sb_layer_bg_checked_view);
         addView(mViewChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        mViewHandle = new View(getContext());
-        mViewHandle.setBackgroundResource(R.drawable.lib_sb_layer_bg_handle_view);
-        addView(mViewHandle, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+        mViewThumb = new View(getContext());
+        mViewThumb.setBackgroundResource(R.drawable.lib_sb_layer_bg_handle_view);
+        addView(mViewThumb, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 
         setChecked(mIsChecked, false, false);
     }
@@ -139,7 +139,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             @Override
             public boolean tryCaptureView(View child, int pointerId)
             {
-                return child == mViewHandle;
+                return child == mViewThumb;
             }
 
             @Override
@@ -213,14 +213,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             showNormalView(false);
 
             final int left = getLeftChecked();
-            if (mViewHandle.getLeft() != left)
+            if (mViewThumb.getLeft() != left)
             {
                 if (anim)
                 {
-                    mDragHelper.smoothSlideViewTo(mViewHandle, getLeftChecked(), mViewHandle.getTop());
+                    mDragHelper.smoothSlideViewTo(mViewThumb, left, mViewThumb.getTop());
                 } else
                 {
-                    mViewHandle.layout(left, mViewHandle.getTop(), left + mViewHandle.getMeasuredWidth(), mViewHandle.getBottom());
+                    mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
                 }
                 invalidate();
             }
@@ -230,14 +230,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             showNormalView(true);
 
             final int left = getLeftNormal();
-            if (mViewHandle.getLeft() != left)
+            if (mViewThumb.getLeft() != left)
             {
                 if (anim)
                 {
-                    mDragHelper.smoothSlideViewTo(mViewHandle, getLeftNormal(), mViewHandle.getTop());
+                    mDragHelper.smoothSlideViewTo(mViewThumb, left, mViewThumb.getTop());
                 } else
                 {
-                    mViewHandle.layout(left, mViewHandle.getTop(), left + mViewHandle.getMeasuredWidth(), mViewHandle.getBottom());
+                    mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
                 }
                 invalidate();
             }
@@ -267,7 +267,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     }
 
     /**
-     * 返回normal状态下HandleView的left值
+     * 返回normal状态下手柄view的left值
      *
      * @return
      */
@@ -277,17 +277,17 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     }
 
     /**
-     * 返回checked状态下HandleView的left值
+     * 返回checked状态下手柄view的left值
      *
      * @return
      */
     private int getLeftChecked()
     {
-        return getMeasuredWidth() - mViewHandle.getMeasuredWidth() - mMarginRight;
+        return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - mMarginRight;
     }
 
     /**
-     * 返回HandleView可以移动的宽度大小
+     * 返回手柄view可以移动的宽度大小
      *
      * @return
      */
@@ -297,21 +297,21 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     }
 
     /**
-     * 返回HandleView滚动的距离
+     * 返回手柄view滚动的距离
      *
      * @return
      */
     private int getScrollDistance()
     {
-        return mViewHandle.getLeft() - getLeftNormal();
+        return mViewThumb.getLeft() - getLeftNormal();
     }
 
     /**
      * 返回手柄view布局参数
      */
-    private LayoutParams getParamsHandleView()
+    private LayoutParams getParamsThumbView()
     {
-        return (LayoutParams) mViewHandle.getLayoutParams();
+        return (LayoutParams) mViewThumb.getLayoutParams();
     }
 
     @Override
@@ -333,11 +333,11 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             setViewChecked(checked);
         }
 
-        View handle = findViewById(R.id.lib_sb_view_handle);
-        if (handle != null)
+        View thumb = findViewById(R.id.lib_sb_view_handle);
+        if (thumb != null)
         {
-            removeView(handle);
-            setViewHandle(handle);
+            removeView(thumb);
+            setViewThumb(thumb);
         }
     }
 
@@ -370,14 +370,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     /**
      * 设置手柄view
      *
-     * @param viewHandle
+     * @param viewThumb
      */
-    private void setViewHandle(View viewHandle)
+    private void setViewThumb(View viewThumb)
     {
-        if (replaceOldView(mViewHandle, viewHandle))
+        if (replaceOldView(mViewThumb, viewThumb))
         {
-            mViewHandle = viewHandle;
-            mIsViewHandleCustom = true;
+            mViewThumb = viewThumb;
+            mIsViewThumbCustom = true;
         }
     }
 
@@ -516,20 +516,20 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     {
         super.onLayout(changed, left, top, right, bottom);
 
-        updateHandlerViewParams();
+        updateThumbViewParams();
         updateViewByState(false);
     }
 
     /**
      * 更新手柄view的布局参数
      */
-    private void updateHandlerViewParams()
+    private void updateThumbViewParams()
     {
         boolean needUpdate = false;
-        LayoutParams params = getParamsHandleView();
+        LayoutParams params = getParamsThumbView();
 
         //----------margins----------
-        if (!mIsViewHandleCustom)
+        if (!mIsViewThumbCustom)
         {
             if (mMarginLeft == 0)
             {
@@ -595,7 +595,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
         if (needUpdate)
         {
-            mViewHandle.setLayoutParams(params);
+            mViewThumb.setLayoutParams(params);
         }
     }
 
@@ -641,34 +641,52 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     public void setMarginLeft(int marginLeft)
     {
         mMarginLeft = marginLeft;
-        updateHandlerViewParams();
+        updateThumbViewParams();
     }
 
     @Override
     public void setMarginTop(int marginTop)
     {
         mMarginTop = marginTop;
-        updateHandlerViewParams();
+        updateThumbViewParams();
     }
 
     @Override
     public void setMarginRight(int marginRight)
     {
         mMarginRight = marginRight;
-        updateHandlerViewParams();
+        updateThumbViewParams();
     }
 
     @Override
     public void setMarginBottom(int marginBottom)
     {
         mMarginBottom = marginBottom;
-        updateHandlerViewParams();
+        updateThumbViewParams();
     }
 
     @Override
     public void setAlphaMode(boolean alphaMode)
     {
         mIsAlphaMode = alphaMode;
+    }
+
+    @Override
+    public View getViewNormal()
+    {
+        return mViewNormal;
+    }
+
+    @Override
+    public View getViewChecked()
+    {
+        return mViewChecked;
+    }
+
+    @Override
+    public View getViewThumb()
+    {
+        return mViewThumb;
     }
 
     //----------ISDSwitchButton implements end----------

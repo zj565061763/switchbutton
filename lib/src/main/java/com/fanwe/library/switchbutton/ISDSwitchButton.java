@@ -1,5 +1,7 @@
 package com.fanwe.library.switchbutton;
 
+import android.view.View;
+
 /**
  * Created by Administrator on 2017/7/5.
  */
@@ -72,6 +74,27 @@ public interface ISDSwitchButton
      * @param alphaMode
      */
     void setAlphaMode(boolean alphaMode);
+
+    /**
+     * 返回正常状态view
+     *
+     * @return
+     */
+    View getViewNormal();
+
+    /**
+     * 返回选中状态view
+     *
+     * @return
+     */
+    View getViewChecked();
+
+    /**
+     * 返回手柄view
+     *
+     * @return
+     */
+    View getViewThumb();
 
     interface OnCheckedChangedCallback
     {
