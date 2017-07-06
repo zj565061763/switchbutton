@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 /**
  * Created by Administrator on 2017/7/5.
@@ -91,22 +92,26 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private void addDefaultViews()
     {
-        mViewNormal = new View(getContext());
-        mViewNormal.setBackgroundResource(mAttrModel.getImageNormalResId());
-        addView(mViewNormal, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        ImageView imageNormal = new ImageView(getContext());
+        imageNormal.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageNormal.setImageResource(mAttrModel.getImageNormalResId());
+        addView(imageNormal, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        mViewNormal = imageNormal;
 
-        mViewChecked = new View(getContext());
-        mViewChecked.setBackgroundResource(mAttrModel.getImageCheckedResId());
-        addView(mViewChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        ImageView imageChecked = new ImageView(getContext());
+        imageChecked.setBackgroundResource(mAttrModel.getImageCheckedResId());
+        addView(imageChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        mViewChecked = imageChecked;
 
-        mViewThumb = new View(getContext());
-        mViewThumb.setBackgroundResource(mAttrModel.getImageThumbResId());
+        ImageView imageThumb = new ImageView(getContext());
+        imageThumb.setBackgroundResource(mAttrModel.getImageThumbResId());
         LayoutParams pThumb = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         pThumb.leftMargin = mAttrModel.getMarginLeft();
         pThumb.topMargin = mAttrModel.getMarginTop();
         pThumb.rightMargin = mAttrModel.getMarginRight();
         pThumb.bottomMargin = mAttrModel.getMarginBottom();
-        addView(mViewThumb, pThumb);
+        addView(imageThumb, pThumb);
+        mViewThumb = imageThumb;
 
         setChecked(mAttrModel.isChecked(), false, false);
     }

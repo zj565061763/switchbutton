@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.activity.SDBaseActivity;
-import com.fanwe.library.common.SDHandlerManager;
 import com.fanwe.library.switchbutton.SDSwitchButton;
 import com.fanwe.library.utils.SDToast;
 
@@ -29,16 +28,6 @@ public class MainActivity extends SDBaseActivity
                 SDToast.showToast("" + checked);
             }
         });
-
-
-        SDHandlerManager.postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                sb.setChecked(true, false, false);
-            }
-        }, 3000);
 
 //        sb.setChecked(true, false, false);
     }
