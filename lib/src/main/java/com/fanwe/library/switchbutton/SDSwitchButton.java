@@ -229,10 +229,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 } else
                 {
                     mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
-                    if (mOnViewPositionChangedCallback != null)
-                    {
-                        mOnViewPositionChangedCallback.onViewPositionChanged(SDSwitchButton.this);
-                    }
                 }
                 invalidate();
             }
@@ -250,13 +246,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 } else
                 {
                     mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
-                    if (mOnViewPositionChangedCallback != null)
-                    {
-                        mOnViewPositionChangedCallback.onViewPositionChanged(SDSwitchButton.this);
-                    }
                 }
                 invalidate();
             }
+        }
+
+        if (mOnViewPositionChangedCallback != null)
+        {
+            mOnViewPositionChangedCallback.onViewPositionChanged(SDSwitchButton.this);
         }
     }
 
