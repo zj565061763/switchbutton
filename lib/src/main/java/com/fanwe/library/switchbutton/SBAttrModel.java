@@ -93,6 +93,8 @@ class SBAttrModel
 
             isChecked = a.getBoolean(R.styleable.LibSwitchButton_sbIsChecked, false);
             isNeedToggleAnim = a.getBoolean(R.styleable.LibSwitchButton_sbIsNeedToggleAnim, true);
+
+            a.recycle();
         }
     }
 
