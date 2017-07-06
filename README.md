@@ -4,8 +4,8 @@ Android开关按钮
 ## 默认效果
 ![](http://thumbsnap.com/i/KBISOucv.gif?0705)
 
-## 修改全局默认效果
-支持修改的默认配置：<br>
+## 覆盖全局默认效果
+支持覆盖的默认配置：<br>
 * colors <br>
 可以在项目中定义colors覆盖库中的默认配置<br>
 ![](http://thumbsnap.com/i/VJIMDfDU.png?0706)
