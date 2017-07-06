@@ -106,7 +106,31 @@ sb_rect.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChang
 ## 完全自定义效果
 ![](http://thumbsnap.com/i/4jo7RqHa.gif?0706)<br>
 xml中布局：<br>
-![](http://thumbsnap.com/i/8Z9dbQ1f.png?0706)<br>
+```Xml
+<com.fanwe.library.switchbutton.SDSwitchButton
+    android:layout_width="50dp"
+    android:layout_height="25dp"
+    android:layout_marginTop="10dp">
+    <View
+        android:id="@id/lib_sb_view_normal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue"/>
+
+    <View
+        android:id="@id/lib_sb_view_checked"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"/>
+
+    <View
+        android:id="@id/lib_sb_view_thumb"
+        android:layout_width="25dp"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:background="@color/white"/>
+</com.fanwe.library.switchbutton.SDSwitchButton>
+```
 指定view的id为库中的默认id即可完全自定义view的展示效果，定义任何你想要的效果，可以指定其中一个id或者全部id<br>
 <br>
 库中支持的id如下：
