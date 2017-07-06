@@ -68,11 +68,14 @@ class SBAttrModel
             imageCheckedResId = a.getResourceId(R.styleable.LibSwitchButton_sbImageChecked, R.drawable.lib_sb_layer_checked_view);
             imageThumbResId = a.getResourceId(R.styleable.LibSwitchButton_sbImageThumb, R.drawable.lib_sb_layer_thumb_view);
 
-            int margins = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMargins, -1);
-            marginLeft = margins;
-            marginTop = margins;
-            marginRight = margins;
-            marginBottom = margins;
+            if (a.hasValue(R.styleable.LibSwitchButton_sbMargins))
+            {
+                int margins = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMargins, -1);
+                marginLeft = margins;
+                marginTop = margins;
+                marginRight = margins;
+                marginBottom = margins;
+            }
 
             if (a.hasValue(R.styleable.LibSwitchButton_sbMarginLeft))
             {
