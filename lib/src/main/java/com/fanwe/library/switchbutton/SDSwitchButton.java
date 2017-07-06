@@ -105,7 +105,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         addView(imageChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         mViewChecked = imageChecked;
 
-        ImageView imageThumb = new ImageView(getContext());
+        ImageView imageThumb = new SDThumbImageView(getContext());
         imageThumb.setBackgroundResource(mAttrModel.getImageThumbResId());
         LayoutParams pThumb = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         pThumb.gravity = Gravity.CENTER_VERTICAL;
@@ -547,19 +547,19 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             if (mAttrModel.getMarginLeft() < 0)
             {
-                mAttrModel.setMarginLeft(getHeight() / 15);
+                mAttrModel.setMarginLeft(getMeasuredHeight() / 15);
             }
             if (mAttrModel.getMarginTop() < 0)
             {
-                mAttrModel.setMarginTop(getHeight() / 15);
+                mAttrModel.setMarginTop(getMeasuredHeight() / 15);
             }
             if (mAttrModel.getMarginRight() < 0)
             {
-                mAttrModel.setMarginRight(getHeight() / 15);
+                mAttrModel.setMarginRight(getMeasuredHeight() / 15);
             }
             if (mAttrModel.getMarginBottom() < 0)
             {
-                mAttrModel.setMarginBottom(getHeight() / 15);
+                mAttrModel.setMarginBottom(getMeasuredHeight() / 15);
             }
         } else
         {
@@ -588,23 +588,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             params.bottomMargin = mAttrModel.getMarginBottom();
             needUpdate = true;
-        }
-
-        //----------height----------
-        if (params.height == ViewGroup.LayoutParams.WRAP_CONTENT)
-        {
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            needUpdate = true;
-        }
-        //----------width----------
-        if (params.width <= 0)
-        {
-            int width = getHeight() - mAttrModel.getMarginTop() - mAttrModel.getMarginBottom();
-            if (params.width != width)
-            {
-                params.width = width;
-                needUpdate = true;
-            }
         }
 
         if (needUpdate)
