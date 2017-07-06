@@ -109,7 +109,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         ImageView imageThumb = new SDThumbImageView(getContext());
         imageThumb.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         imageThumb.setBackgroundResource(mAttrModel.getImageThumbResId());
-        LayoutParams pThumb = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        LayoutParams pThumb = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         pThumb.gravity = Gravity.CENTER_VERTICAL;
         pThumb.leftMargin = mAttrModel.getMarginLeft();
         pThumb.topMargin = mAttrModel.getMarginTop();
@@ -250,6 +250,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 invalidate();
             }
         }
+        mViewThumb.setSelected(mIsChecked);
 
         if (mOnViewPositionChangedCallback != null)
         {
