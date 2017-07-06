@@ -28,4 +28,14 @@ Android开关按钮
 1. xml中布局：<br>
 ![](http://thumbsnap.com/i/GEdAFteT.png?0706)<br>
 2. java文件中：<br>
-![](http://thumbsnap.com/s/9xlaALzm.png?0706)
+![](http://thumbsnap.com/s/9xlaALzm.png?0706)<br>
+
+## 完全自定义效果
+![](http://thumbsnap.com/i/4jo7RqHa.gif?0706)<br>
+xml中布局：<br>
+![](http://thumbsnap.com/i/8Z9dbQ1f.png?0706)<br>
+指定view的id为库中的默认id即可完全自定义view的展示效果
+库中支持的id如下：
+* 正常view的id：`lib_sb_view_normal`<br>
+* 选中view的id：`lib_sb_view_checked`<br>
+* 手柄view的id：`lib_sb_view_thumb`<br>
