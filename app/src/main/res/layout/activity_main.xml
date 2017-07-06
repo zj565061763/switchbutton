@@ -11,11 +11,10 @@
     <com.fanwe.library.switchbutton.SDSwitchButton
         android:layout_width="50dp"
         android:layout_height="25dp"
-        app:sbIsNeedToggleAnim="true">
-    </com.fanwe.library.switchbutton.SDSwitchButton>
+        app:sbIsNeedToggleAnim="true"/>
 
     <com.fanwe.library.switchbutton.SDSwitchButton
-        android:id="@+id/sb"
+        android:id="@+id/sb_rect"
         android:layout_width="50dp"
         android:layout_height="25dp"
         android:layout_marginTop="10dp"
@@ -27,9 +26,7 @@
         app:sbMarginLeft="0dp"
         app:sbMarginRight="2dp"
         app:sbMarginTop="2dp"
-        app:sbMargins="1dp">
-
-    </com.fanwe.library.switchbutton.SDSwitchButton>
+        app:sbMargins="1dp"/>
 
     <com.fanwe.library.view.SDRecyclerView
         android:id="@+id/rv_content"

@@ -11,7 +11,6 @@ import com.fanwe.library.adapter.viewholder.SDRecyclerViewHolder;
 import com.fanwe.library.model.SelectableModel;
 import com.fanwe.library.switchbutton.ISDSwitchButton;
 import com.fanwe.library.switchbutton.SDSwitchButton;
-import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.view.SDRecyclerView;
 
@@ -20,7 +19,7 @@ import java.util.List;
 
 public class MainActivity extends SDBaseActivity
 {
-    private SDSwitchButton sb;
+    private SDSwitchButton sb_rect;
 
 
     @Override
@@ -28,12 +27,12 @@ public class MainActivity extends SDBaseActivity
     {
         SDLibrary.getInstance().init(getApplication());
         setContentView(R.layout.activity_main);
-        sb = (SDSwitchButton) findViewById(R.id.sb);
+        sb_rect = (SDSwitchButton) findViewById(R.id.sb_rect);
 
         testRecyclerView();
 
-        sb.setDebug(true);
-        sb.setOnCheckedChangedCallback(new SDSwitchButton.OnCheckedChangedCallback()
+        sb_rect.setDebug(true);
+        sb_rect.setOnCheckedChangedCallback(new SDSwitchButton.OnCheckedChangedCallback()
         {
             @Override
             public void onCheckedChanged(boolean checked, SDSwitchButton view)
@@ -41,22 +40,19 @@ public class MainActivity extends SDBaseActivity
                 SDToast.showToast("" + checked);
             }
         });
-        sb.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChangedCallback()
+        sb_rect.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChangedCallback()
         {
             @Override
             public void onViewPositionChanged(SDSwitchButton view)
             {
                 float percent = view.getScrollPercent() * 0.8f + 0.2f;
-
-
                 ViewCompat.setScaleY(view.getViewNormal(), percent);
                 ViewCompat.setScaleY(view.getViewChecked(), percent);
-                LogUtil.i("percent:" + view.getScrollPercent());
             }
         });
 
-//        sb.setChecked(true, false, false);
     }
+
 
     private SDRecyclerView rv_content;
 
