@@ -27,23 +27,34 @@ Android开关按钮
 
 1. xml中布局：<br>
 ```Xml
-    <com.fanwe.library.switchbutton.SDSwitchButton
-        android:id="@+id/sb_rect"
-        android:layout_width="50dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="10dp"
-        app:sbImageChecked="@drawable/layer_checked_view"
-        app:sbImageNormal="@drawable/layer_normal_view"
-        app:sbImageThumb="@drawable/layer_thumb_view"
-        app:sbIsChecked="true"
-        app:sbMarginBottom="2dp"
-        app:sbMarginLeft="0dp"
-        app:sbMarginRight="2dp"
-        app:sbMarginTop="2dp"
-        app:sbMargins="1dp"/>
+<com.fanwe.library.switchbutton.SDSwitchButton
+    android:id="@+id/sb_rect"
+    android:layout_width="50dp"
+    android:layout_height="25dp"
+    android:layout_marginTop="10dp"
+    app:sbImageChecked="@drawable/layer_checked_view"
+    app:sbImageNormal="@drawable/layer_normal_view"
+    app:sbImageThumb="@drawable/layer_thumb_view"
+    app:sbIsChecked="true"
+    app:sbMarginBottom="2dp"
+    app:sbMarginLeft="0dp"
+    app:sbMarginRight="2dp"
+    app:sbMarginTop="2dp"
+    app:sbMargins="1dp"/>
 ```
 2. java文件中：<br>
-![](http://thumbsnap.com/s/9xlaALzm.png?0706)<br>
+```Java
+sb_rect.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChangedCallback()
+{
+    @Override
+    public void onViewPositionChanged(SDSwitchButton view)
+    {
+        float percent = view.getScrollPercent() * 0.8f + 0.2f;
+        ViewCompat.setScaleY(view.getViewNormal(), percent);
+        ViewCompat.setScaleY(view.getViewChecked(), percent);
+    }
+});
+```
 
 ## 完全自定义效果
 ![](http://thumbsnap.com/i/4jo7RqHa.gif?0706)<br>
