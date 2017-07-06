@@ -488,6 +488,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                     if (checkMoveParams())
                     {
                         setNeedProcess(true, event);
+                    } else
+                    {
+                        if (getParent() != null)
+                        {
+                            getParent().requestDisallowInterceptTouchEvent(false);
+                        }
                     }
                 }
                 break;
