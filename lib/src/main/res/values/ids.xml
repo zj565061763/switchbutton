@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--正常view的id-->
     <item name="lib_sb_view_normal" type="id"/>
+    <!--选中view的id-->
     <item name="lib_sb_view_checked" type="id"/>
+    <!--手柄view的id-->
     <item name="lib_sb_view_thumb" type="id"/>
 
 </resources>
