@@ -6,6 +6,6 @@
     <corners android:radius="2dp"/>
 
     <stroke android:width="@dimen/lib_sb_stroke_width_thumb_view"
-            android:color="@color/lib_sb_stroke_color_thumb_view"/>
+            android:color="@color/lib_sb_stroke_color_normal_view"/>
 
 </shape>

@@ -10,7 +10,8 @@
 
     <com.fanwe.library.switchbutton.SDSwitchButton
         android:layout_width="50dp"
-        android:layout_height="25dp">
+        android:layout_height="25dp"
+        app:sbIsNeedToggleAnim="true">
     </com.fanwe.library.switchbutton.SDSwitchButton>
 
     <com.fanwe.library.switchbutton.SDSwitchButton
@@ -22,9 +23,8 @@
         app:sbImageNormal="@drawable/layer_normal_view"
         app:sbImageThumb="@drawable/layer_thumb_view"
         app:sbIsChecked="true"
-        app:sbIsNeedToggleAnim="false"
         app:sbMarginBottom="2dp"
-        app:sbMarginLeft="2dp"
+        app:sbMarginLeft="0dp"
         app:sbMarginRight="2dp"
         app:sbMarginTop="2dp"
         app:sbMargins="1dp">

@@ -1,6 +1,7 @@
 package com.fanwe.www.switchbutton;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.activity.SDBaseActivity;
@@ -35,6 +36,11 @@ public class MainActivity extends SDBaseActivity
             @Override
             public void onViewPositionChanged(SDSwitchButton view)
             {
+                float percent = view.getScrollPercent() * 0.8f + 0.2f;
+
+
+                ViewCompat.setScaleY(view.getViewNormal(), percent);
+                ViewCompat.setScaleY(view.getViewChecked(), percent);
                 LogUtil.i("percent:" + view.getScrollPercent());
             }
         });
