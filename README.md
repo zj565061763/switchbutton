@@ -8,11 +8,35 @@ Android开关按钮
 支持覆盖的默认配置：<br>
 * colors <br>
 可以在项目中定义colors覆盖库中的默认配置<br>
-![](http://thumbsnap.com/i/VJIMDfDU.png?0706)<br>
+```Xml
+<!-- 正常view颜色 -->
+<color name="lib_sb_color_normal_view">#E3E3E3</color>
+<!-- 正常view边框颜色 -->
+<color name="lib_sb_stroke_color_normal_view">#D2D2D2</color>
+
+<!-- 选中view颜色 -->
+<color name="lib_sb_color_checked_view">#4AD863</color>
+<!-- 选中view边框颜色 -->
+<color name="lib_sb_stroke_color_checked_view">@color/lib_sb_color_checked_view</color>
+
+<!-- 手柄view颜色 -->
+<color name="lib_sb_color_thumb_view">#FFFFFF</color>
+<!-- 手柄view边框颜色 -->
+<color name="lib_sb_stroke_color_thumb_view">@color/lib_sb_color_thumb_view</color>
+```
 
 * dimens <br>
 可以在项目中定义dimens覆盖库中的默认配置<br>
-![](http://thumbsnap.com/i/RoMc4bVA.png?0706)<br>
+```Xml
+<!-- 圆角半径 -->
+<dimen name="lib_sb_corner">50dp</dimen>
+<!-- 正常view边框大小 -->
+<dimen name="lib_sb_stroke_width_normal_view">1px</dimen>
+<!-- 选中view边框大小 -->
+<dimen name="lib_sb_stroke_width_checked_view">1px</dimen>
+<!-- 手柄view边框大小 -->
+<dimen name="lib_sb_stroke_width_thumb_view">1px</dimen>
+```
 
 * drawable <br>
 可以在项目中定义drawable覆盖库中的默认配置，覆盖drawable后以上的colors和dimens设置失效<br>
