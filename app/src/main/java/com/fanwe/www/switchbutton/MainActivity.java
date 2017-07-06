@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.activity.SDBaseActivity;
+import com.fanwe.library.switchbutton.ISDSwitchButton;
 import com.fanwe.library.switchbutton.SDSwitchButton;
+import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDToast;
 
 public class MainActivity extends SDBaseActivity
@@ -26,6 +28,14 @@ public class MainActivity extends SDBaseActivity
             public void onCheckedChanged(boolean checked, SDSwitchButton view)
             {
                 SDToast.showToast("" + checked);
+            }
+        });
+        sb.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChangedCallback()
+        {
+            @Override
+            public void onViewPositionChanged(SDSwitchButton view)
+            {
+                LogUtil.i("percent:" + view.getScrollPercent());
             }
         });
 
