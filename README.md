@@ -23,7 +23,7 @@ Android开关按钮
 ![](http://thumbsnap.com/i/4DrNGJt9.png?0706)<br>
 
 ## 自定义效果
-![](http://thumbsnap.com/i/x8D3pC2U.gif?0706)<br>
+![](http://thumbsnap.com/i/YS9spIQs.gif?0706)<br>
 
 1. xml中布局：<br>
 ![](http://thumbsnap.com/i/GEdAFteT.png?0706)<br>
