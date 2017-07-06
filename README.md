@@ -6,7 +6,9 @@ Android开关按钮
 
 ## 修改全局默认效果
 支持修改的默认配置：<br>
+* colors <br>
 ![](http://thumbsnap.com/i/VJIMDfDU.png?0706)
+* dimens <br>
 ![](http://thumbsnap.com/i/RoMc4bVA.png?0706)
 
 ## 自定义效果
