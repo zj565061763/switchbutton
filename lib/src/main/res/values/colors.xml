@@ -14,6 +14,6 @@
     <!-- 手柄view颜色 -->
     <color name="lib_sb_color_thumb_view">#FFFFFF</color>
     <!-- 手柄view边框颜色 -->
-    <color name="lib_sb_stroke_color_thumb_view">@color/lib_sb_color_thumb_view</color>
+    <color name="lib_sb_stroke_color_thumb_view">#D2D2D2</color>
 
 </resources>
