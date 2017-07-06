@@ -77,6 +77,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private boolean mIsDebug;
 
     private OnCheckedChangedCallback mOnCheckedChangedCallback;
+    private OnViewPositionChangedCallback mOnViewPositionChangedCallback;
 
     private void init(Context context, AttributeSet attrs)
     {
@@ -635,6 +636,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
     {
         mOnCheckedChangedCallback = onCheckedChangedCallback;
+    }
+
+    @Override
+    public void setOnViewPositionChangedCallback(OnViewPositionChangedCallback onViewPositionChangedCallback)
+    {
+        mOnViewPositionChangedCallback = onViewPositionChangedCallback;
     }
 
     @Override

@@ -40,6 +40,13 @@ public interface ISDSwitchButton
     void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback);
 
     /**
+     * 设置手柄view位置变化回调
+     *
+     * @param onViewPositionChangedCallback
+     */
+    void setOnViewPositionChangedCallback(OnViewPositionChangedCallback onViewPositionChangedCallback);
+
+    /**
      * 设置是否是透明度模式来显示隐藏view的
      *
      * @param alphaMode
