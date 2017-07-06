@@ -3,8 +3,6 @@
 
     <solid android:color="@color/red"/>
 
-    <corners android:radius="@dimen/lib_sb_corner"/>
+    <corners android:radius="2dp"/>
 
-    <stroke android:width="@dimen/lib_sb_stroke_width_checked_view"
-            android:color="@color/lib_sb_stroke_color_checked_view"/>
 </shape>

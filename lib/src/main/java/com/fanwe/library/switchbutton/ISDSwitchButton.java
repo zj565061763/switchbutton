@@ -8,7 +8,6 @@ import android.view.View;
 
 public interface ISDSwitchButton
 {
-
     /**
      * 是否处于选中状态
      *
@@ -48,6 +47,13 @@ public interface ISDSwitchButton
     void setAlphaMode(boolean alphaMode);
 
     /**
+     * 获得滚动的百分比[0-1]
+     *
+     * @return
+     */
+    float getScrollPercent();
+
+    /**
      * 返回正常状态view
      *
      * @return
@@ -77,5 +83,15 @@ public interface ISDSwitchButton
          * @param view
          */
         void onCheckedChanged(boolean checked, SDSwitchButton view);
+    }
+
+    interface OnViewPositionChangedCallback
+    {
+        /**
+         * 手柄view滚动回调
+         *
+         * @param view
+         */
+        void onViewPositionChanged(SDSwitchButton view);
     }
 }

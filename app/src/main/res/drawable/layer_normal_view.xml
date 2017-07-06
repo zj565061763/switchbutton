@@ -3,7 +3,7 @@
 
     <solid android:color="@color/lib_sb_color_normal_view"/>
 
-    <corners android:radius="@dimen/lib_sb_corner"/>
+    <corners android:radius="2dp"/>
 
     <stroke android:width="@dimen/lib_sb_stroke_width_normal_view"
             android:color="@color/lib_sb_stroke_color_normal_view"/>

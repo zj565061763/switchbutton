@@ -9,6 +9,7 @@ import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,6 +107,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         ImageView imageThumb = new ImageView(getContext());
         imageThumb.setBackgroundResource(mAttrModel.getImageThumbResId());
         LayoutParams pThumb = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        pThumb.gravity = Gravity.CENTER_VERTICAL;
         pThumb.leftMargin = mAttrModel.getMarginLeft();
         pThumb.topMargin = mAttrModel.getMarginTop();
         pThumb.rightMargin = mAttrModel.getMarginRight();
@@ -124,7 +126,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             @Override
             public boolean onSingleTapUp(MotionEvent e)
             {
-                toggleChecked(true, true);
+                toggleChecked(mAttrModel.isNeedToggleAnim(), true);
                 return super.onSingleTapUp(e);
             }
         });
@@ -157,7 +159,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             {
                 super.onViewPositionChanged(changedView, left, top, dx, dy);
 
-                float percent = getScrollDistance() / (float) getAvailableWidth();
+                final float percent = getScrollPercent();
                 if (mIsAlphaMode)
                 {
                     ViewCompat.setAlpha(mViewChecked, percent);
@@ -639,6 +641,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     public void setAlphaMode(boolean alphaMode)
     {
         mIsAlphaMode = alphaMode;
+    }
+
+    @Override
+    public float getScrollPercent()
+    {
+        return getScrollDistance() / (float) getAvailableWidth();
     }
 
     @Override

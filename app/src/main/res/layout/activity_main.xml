@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="20dp"
     tools:context="com.fanwe.www.switchbutton.MainActivity">
 
     <com.fanwe.library.switchbutton.SDSwitchButton
-        android:id="@+id/sb"
         android:layout_width="50dp"
         android:layout_height="25dp">
+    </com.fanwe.library.switchbutton.SDSwitchButton>
+
+    <com.fanwe.library.switchbutton.SDSwitchButton
+        android:id="@+id/sb"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        app:sbImageChecked="@drawable/layer_checked_view"
+        app:sbImageNormal="@drawable/layer_normal_view"
+        app:sbImageThumb="@drawable/layer_thumb_view"
+        app:sbIsChecked="true"
+        app:sbIsNeedToggleAnim="false"
+        app:sbMarginBottom="2dp"
+        app:sbMarginLeft="2dp"
+        app:sbMarginRight="2dp"
+        app:sbMarginTop="2dp"
+        app:sbMargins="1dp">
 
     </com.fanwe.library.switchbutton.SDSwitchButton>
 

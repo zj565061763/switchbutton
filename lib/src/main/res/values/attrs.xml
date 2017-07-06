@@ -30,6 +30,9 @@
         <!-- 手柄view底部间距 -->
         <attr name="sbMarginBottom" format="dimension"/>
 
+        <!-- 是否需要点击切换动画 -->
+        <attr name="sbIsNeedToggleAnim" format="boolean"/>
+
     </declare-styleable>
 
 </resources>
