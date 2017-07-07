@@ -1,6 +1,9 @@
 # SwitchButton
 Android开关按钮
 
+## Gradle
+`compile 'com.fanwe.android:switchbutton:1.0.1'`
+
 ## 默认效果
 ![](http://thumbsnap.com/i/KBISOucv.gif?0705)
 
