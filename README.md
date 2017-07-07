@@ -49,36 +49,36 @@ Android开关按钮
 
 ## xml属性
 支持的xml属性配置：<br>
-```Xml
-<declare-styleable name="LibSwitchButton">
-    <!-- 正常view图片 -->
-    <attr name="sbImageNormal" format="reference"/>
-    <!-- 选中view图片 -->
-    <attr name="sbImageChecked" format="reference"/>
-    <!-- 手柄view图片 -->
-    <attr name="sbImageThumb" format="reference"/>
-    <!-- 是否选中 -->
-    <attr name="sbIsChecked" format="boolean"/>
-    <!-- 手柄view上下左右间距 -->
-    <attr name="sbMargins" format="dimension"/>
-    <!-- 手柄view左边间距 -->
-    <attr name="sbMarginLeft" format="dimension"/>
-    <!-- 手柄view顶部间距 -->
-    <attr name="sbMarginTop" format="dimension"/>
-    <!-- 手柄view右边间距 -->
-    <attr name="sbMarginRight" format="dimension"/>
-    <!-- 手柄view底部间距 -->
-    <attr name="sbMarginBottom" format="dimension"/>
-    <!-- 是否需要点击切换动画 -->
-    <attr name="sbIsNeedToggleAnim" format="boolean"/>
-</declare-styleable>
+```xml
+    <declare-styleable name="LibSwitchButton">
+        <!-- 正常view图片 -->
+        <attr name="sbImageNormal" format="reference"/>
+        <!-- 选中view图片 -->
+        <attr name="sbImageChecked" format="reference"/>
+        <!-- 手柄view图片 -->
+        <attr name="sbImageThumb" format="reference"/>
+        <!-- 是否选中 -->
+        <attr name="sbIsChecked" format="boolean"/>
+        <!-- 手柄view上下左右间距 -->
+        <attr name="sbMargins" format="dimension"/>
+        <!-- 手柄view左边间距 -->
+        <attr name="sbMarginLeft" format="dimension"/>
+        <!-- 手柄view顶部间距 -->
+        <attr name="sbMarginTop" format="dimension"/>
+        <!-- 手柄view右边间距 -->
+        <attr name="sbMarginRight" format="dimension"/>
+        <!-- 手柄view底部间距 -->
+        <attr name="sbMarginBottom" format="dimension"/>
+        <!-- 是否需要点击切换动画 -->
+        <attr name="sbIsNeedToggleAnim" format="boolean"/>
+    </declare-styleable>
 ```
 
 ## 自定义效果
 ![](http://thumbsnap.com/i/YS9spIQs.gif?0706)<br>
 
 1. xml中布局：<br>
-```Xml
+```xml
 <com.fanwe.library.switchbutton.SDSwitchButton
     android:id="@+id/sb_rect"
     android:layout_width="50dp"
@@ -95,7 +95,7 @@ Android开关按钮
     app:sbMargins="1dp"/>
 ```
 2. java文件中：<br>
-```Java
+```java
 sb_rect.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChangedCallback()
 {
     @Override
@@ -111,7 +111,7 @@ sb_rect.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChang
 ## 完全自定义效果
 ![](http://thumbsnap.com/i/4jo7RqHa.gif?0706)<br>
 xml中布局：<br>
-```Xml
+```xml
 <com.fanwe.library.switchbutton.SDSwitchButton
     android:layout_width="50dp"
     android:layout_height="25dp"
@@ -139,7 +139,7 @@ xml中布局：<br>
 指定view的id为库中的默认id即可完全自定义view的展示效果，定义任何你想要的效果，可以指定其中一个id或者全部id<br>
 <br>
 库中支持的id如下：
-```Xml
+```xml
     <!--正常view的id-->
     <item name="lib_sb_view_normal" type="id"/>
     <!--选中view的id-->
@@ -149,8 +149,7 @@ xml中布局：<br>
 ```
 
 ## 支持的方法
-```Java
-
+```java
 public interface ISDSwitchButton
 {
     /**
