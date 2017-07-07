@@ -453,7 +453,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             case MotionEvent.ACTION_DOWN:
                 mTouchHelper.setNeedIntercept(true);
-                mTouchHelper.requestDisallowInterceptTouchEvent(this, true);
+                SDTouchHelper.requestDisallowInterceptTouchEvent(this, true);
                 break;
         }
         return mTouchHelper.isNeedIntercept() || shouldInterceptTouchEvent;
@@ -485,7 +485,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                     {
                         mTouchHelper.setNeedCosume(false);
                         mTouchHelper.setNeedIntercept(false);
-                        mTouchHelper.requestDisallowInterceptTouchEvent(this, false);
+                        SDTouchHelper.requestDisallowInterceptTouchEvent(this, false);
                     }
                 }
                 break;
@@ -495,7 +495,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
                 mTouchHelper.setNeedCosume(false);
                 mTouchHelper.setNeedIntercept(false);
-                mTouchHelper.requestDisallowInterceptTouchEvent(this, false);
+                SDTouchHelper.requestDisallowInterceptTouchEvent(this, false);
                 break;
             default:
                 mDragHelper.processTouchEvent(event);
