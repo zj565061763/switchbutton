@@ -261,6 +261,8 @@ class SDTouchHelper
         return mDegreeY;
     }
 
+    //----------static method start----------
+
     /**
      * 是否请求当前view的父view不要拦截事件
      *
@@ -276,6 +278,8 @@ class SDTouchHelper
         }
         parent.requestDisallowInterceptTouchEvent(disallowIntercept);
     }
+
+    //----------static method end----------
 
     @Override
     public String toString()
