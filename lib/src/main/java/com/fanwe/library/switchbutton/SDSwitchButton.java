@@ -420,7 +420,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     {
         if (mDragHelper.continueSettling(true))
         {
-            invalidate();
+            ViewCompat.postInvalidateOnAnimation(this);
         }
     }
 
