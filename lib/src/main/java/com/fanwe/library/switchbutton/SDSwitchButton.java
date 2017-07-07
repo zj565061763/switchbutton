@@ -439,6 +439,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 Log.i(TAG, "onInterceptTouchEvent:" + ev.getAction());
             }
         }
+        boolean shouldInterceptTouchEvent = mDragHelper.shouldInterceptTouchEvent(ev);
         if (mTouchHelper.isNeedIntercept())
         {
             if (mIsDebug)
@@ -455,7 +456,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 mTouchHelper.requestDisallowInterceptTouchEvent(this, true);
                 break;
         }
-        return mTouchHelper.isNeedIntercept();
+        return mTouchHelper.isNeedIntercept() || shouldInterceptTouchEvent;
     }
 
     private boolean checkMoveParams()
