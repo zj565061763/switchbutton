@@ -27,11 +27,11 @@ class SDTouchHelper
     private float mLastMoveX;
     private float mLastMoveY;
 
-    private float mMoveDistanceX;
-    private float mMoveDistanceY;
+    private float mDistanceMoveX;
+    private float mDistanceMoveY;
 
-    private float mDistanceX;
-    private float mDistanceY;
+    private float mDistanceDownX;
+    private float mDistanceDownY;
 
     private double mDegreeX;
     private double mDegreeY;
@@ -56,16 +56,16 @@ class SDTouchHelper
                 mMoveX = ev.getRawX();
                 mMoveY = ev.getRawY();
 
-                mMoveDistanceX = mMoveX - mLastMoveX;
-                mMoveDistanceY = mMoveY - mLastMoveY;
+                mDistanceMoveX = mMoveX - mLastMoveX;
+                mDistanceMoveY = mMoveY - mLastMoveY;
 
-                mDistanceX = mMoveX - mDownX;
-                mDistanceY = mMoveY - mDownY;
+                mDistanceDownX = mMoveX - mDownX;
+                mDistanceDownY = mMoveY - mDownY;
 
-                final float angleX = Math.abs(mMoveDistanceY) / Math.abs(mMoveDistanceX);
+                final float angleX = Math.abs(mDistanceMoveY) / Math.abs(mDistanceMoveX);
                 mDegreeX = Math.toDegrees(Math.atan(angleX));
 
-                final float angleY = Math.abs(mMoveDistanceX) / Math.abs(mMoveDistanceY);
+                final float angleY = Math.abs(mDistanceMoveX) / Math.abs(mDistanceMoveY);
                 mDegreeY = Math.toDegrees(Math.atan(angleY));
 
                 mLastMoveX = mMoveX;
@@ -165,9 +165,9 @@ class SDTouchHelper
      *
      * @return
      */
-    public float getMoveDistanceX()
+    public float getDistanceMoveX()
     {
-        return mMoveDistanceX;
+        return mDistanceMoveX;
     }
 
     /**
@@ -177,9 +177,9 @@ class SDTouchHelper
      *
      * @return
      */
-    public float getMoveDistanceY()
+    public float getDistanceMoveY()
     {
-        return mMoveDistanceY;
+        return mDistanceMoveY;
     }
 
     /**
@@ -187,9 +187,9 @@ class SDTouchHelper
      *
      * @return
      */
-    public float getDistanceX()
+    public float getDistanceDownX()
     {
-        return mDistanceX;
+        return mDistanceDownX;
     }
 
     /**
@@ -197,9 +197,9 @@ class SDTouchHelper
      *
      * @return
      */
-    public float getDistanceY()
+    public float getDistanceDownY()
     {
-        return mDistanceY;
+        return mDistanceDownY;
     }
 
     /**
@@ -209,7 +209,7 @@ class SDTouchHelper
      */
     public boolean isMoveLeft()
     {
-        return getMoveDistanceX() < 0;
+        return getDistanceMoveX() < 0;
     }
 
     /**
@@ -219,7 +219,7 @@ class SDTouchHelper
      */
     public boolean isMoveRight()
     {
-        return getMoveDistanceX() > 0;
+        return getDistanceMoveX() > 0;
     }
 
     /**
@@ -229,7 +229,7 @@ class SDTouchHelper
      */
     public boolean isMoveUp()
     {
-        return getMoveDistanceY() < 0;
+        return getDistanceMoveY() < 0;
     }
 
     /**
@@ -239,7 +239,7 @@ class SDTouchHelper
      */
     public boolean isMoveDown()
     {
-        return getMoveDistanceY() > 0;
+        return getDistanceMoveY() > 0;
     }
 
     /**
@@ -297,8 +297,8 @@ class SDTouchHelper
     public String toString()
     {
         StringBuilder sb = new StringBuilder("\r\n");
-        sb.append("mMoveDistanceX:").append(mMoveDistanceX).append("\r\n")
-                .append("mMoveDistanceY:").append(mMoveDistanceY).append("\r\n")
+        sb.append("mDistanceMoveX:").append(mDistanceMoveX).append("\r\n")
+                .append("mDistanceMoveY:").append(mDistanceMoveY).append("\r\n")
                 .append("mDegreeX:").append(mDegreeX).append("\r\n")
                 .append("mDegreeY:").append(mDegreeY).append("\r\n");
         return sb.toString();

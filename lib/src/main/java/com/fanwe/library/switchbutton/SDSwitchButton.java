@@ -468,6 +468,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         return mTouchHelper.getDegreeX() < 45;
     }
 
+    private boolean canPull()
+    {
+        return checkMoveParams()
+                && ((mIsChecked && mTouchHelper.isMoveLeft()) || (!mIsChecked && mTouchHelper.isMoveRight()));
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
@@ -490,7 +496,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                     }
                 } else
                 {
-                    if (checkMoveParams())
+                    if (canPull())
                     {
                         mTouchHelper.setNeedCosume(true);
                     } else
