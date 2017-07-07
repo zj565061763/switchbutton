@@ -7,7 +7,7 @@ import android.view.ViewParent;
 /**
  * 触摸事件处理帮助类
  */
-class SDTouchEventHelper
+class SDTouchHelper
 {
     /**
      * onInterceptTouchEvent方法是否需要拦截事件
