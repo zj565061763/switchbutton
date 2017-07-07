@@ -66,7 +66,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private ViewDragHelper mDragHelper;
     private GestureDetector mGestureDetector;
-    private boolean mIsNeedProcess;
     /**
      * 是否是透明度模式来显示隐藏view的
      */
@@ -473,49 +472,36 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         switch (event.getAction())
         {
             case MotionEvent.ACTION_MOVE:
-                if (mIsNeedProcess)
+                if (mTouchHelper.isNeedCosume())
                 {
                     mDragHelper.processTouchEvent(event);
                 } else
                 {
                     if (checkMoveParams())
                     {
-                        setNeedProcess(true, event);
+                        mTouchHelper.setNeedCosume(true);
                     } else
                     {
+                        mTouchHelper.setNeedCosume(false);
+                        mTouchHelper.setNeedIntercept(false);
                         SDTouchEventHelper.requestDisallowInterceptTouchEvent(this, false);
                     }
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                SDTouchEventHelper.requestDisallowInterceptTouchEvent(this, false);
-                setNeedProcess(false, event);
                 mDragHelper.processTouchEvent(event);
-                if (mIsDebug)
-                {
-                    if (mTouchHelper.isNeedIntercept())
-                    {
-                        Log.e(TAG, "onTouchEvent Intercept released with action " + event.getAction());
-                    }
-                }
+
+                mTouchHelper.setNeedCosume(false);
                 mTouchHelper.setNeedIntercept(false);
+                SDTouchEventHelper.requestDisallowInterceptTouchEvent(this, false);
                 break;
             default:
                 mDragHelper.processTouchEvent(event);
                 break;
         }
 
-        boolean result = super.onTouchEvent(event) || mIsNeedProcess || event.getAction() == MotionEvent.ACTION_DOWN;
-        return result;
-    }
-
-    private void setNeedProcess(boolean needProcess, MotionEvent event)
-    {
-        if (mIsNeedProcess != needProcess)
-        {
-            mIsNeedProcess = needProcess;
-        }
+        return super.onTouchEvent(event) || mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;
     }
 
     @Override
