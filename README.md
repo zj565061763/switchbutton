@@ -2,7 +2,7 @@
 Android开关按钮
 
 ## Gradle
-`compile 'com.fanwe.android:switchbutton:1.0.1'`
+`compile 'com.fanwe.android:switchbutton:1.0.2'`
 
 ## 默认效果
 ![](http://thumbsnap.com/i/KBISOucv.gif?0705)
@@ -11,34 +11,36 @@ Android开关按钮
 支持覆盖的默认配置：<br>
 * colors <br>
 可以在项目中定义colors覆盖库中的默认配置<br>
-```Xml
-<!-- 正常view颜色 -->
-<color name="lib_sb_color_normal_view">#E3E3E3</color>
-<!-- 正常view边框颜色 -->
-<color name="lib_sb_stroke_color_normal_view">#D2D2D2</color>
+```xml
+    <!-- 正常view颜色 -->
+    <color name="lib_sb_color_normal_view">#E3E3E3</color>
+    <!-- 正常view边框颜色 -->
+    <color name="lib_sb_stroke_color_normal_view">#D2D2D2</color>
 
-<!-- 选中view颜色 -->
-<color name="lib_sb_color_checked_view">#4AD863</color>
-<!-- 选中view边框颜色 -->
-<color name="lib_sb_stroke_color_checked_view">@color/lib_sb_color_checked_view</color>
+    <!-- 选中view颜色 -->
+    <color name="lib_sb_color_checked_view">#4AD863</color>
+    <!-- 选中view边框颜色 -->
+    <color name="lib_sb_stroke_color_checked_view">@color/lib_sb_color_checked_view</color>
 
-<!-- 手柄view颜色 -->
-<color name="lib_sb_color_thumb_view">#FFFFFF</color>
-<!-- 手柄view边框颜色 -->
-<color name="lib_sb_stroke_color_thumb_view">@color/lib_sb_color_thumb_view</color>
+    <!-- 手柄view颜色 -->
+    <color name="lib_sb_color_thumb_view">#FFFFFF</color>
+    <!-- 手柄view边框颜色 -->
+    <color name="lib_sb_stroke_color_thumb_view">#D2D2D2</color>
 ```
 
 * dimens <br>
 可以在项目中定义dimens覆盖库中的默认配置<br>
-```Xml
-<!-- 圆角半径 -->
-<dimen name="lib_sb_corner">50dp</dimen>
-<!-- 正常view边框大小 -->
-<dimen name="lib_sb_stroke_width_normal_view">1px</dimen>
-<!-- 选中view边框大小 -->
-<dimen name="lib_sb_stroke_width_checked_view">1px</dimen>
-<!-- 手柄view边框大小 -->
-<dimen name="lib_sb_stroke_width_thumb_view">1px</dimen>
+```xml
+    <!-- 圆角半径 -->
+    <dimen name="lib_sb_corner">50dp</dimen>
+    <!-- 手柄view上下左右间距 -->
+    <dimen name="lib_sb_margins">1dp</dimen>
+    <!-- 正常view边框大小 -->
+    <dimen name="lib_sb_stroke_width_normal_view">1px</dimen>
+    <!-- 选中view边框大小 -->
+    <dimen name="lib_sb_stroke_width_checked_view">1px</dimen>
+    <!-- 手柄view边框大小 -->
+    <dimen name="lib_sb_stroke_width_thumb_view">1px</dimen>
 ```
 
 * drawable <br>
