@@ -267,12 +267,8 @@ class SDTouchHelper
      * @param view
      * @param disallowIntercept true-请求父view不要拦截，false-父view可以拦截
      */
-    public static void requestDisallowInterceptTouchEvent(View view, boolean disallowIntercept)
+    public void requestDisallowInterceptTouchEvent(View view, boolean disallowIntercept)
     {
-        if (view == null)
-        {
-            return;
-        }
         ViewParent parent = view.getParent();
         if (parent == null)
         {
