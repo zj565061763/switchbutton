@@ -13,37 +13,35 @@ Android开关按钮<br>
 * colors <br>
 可以在项目中定义colors覆盖库中的默认配置<br>
 ```xml
-    <!-- 正常view颜色 -->
-    <color name="lib_sb_color_normal_view">#E3E3E3</color>
-    <!-- 正常view边框颜色 -->
-    <color name="lib_sb_stroke_color_normal_view">#D2D2D2</color>
+<!-- 正常view颜色 -->
+<color name="lib_sb_color_normal_view">#E3E3E3</color>
+<!-- 正常view边框颜色 -->
+<color name="lib_sb_stroke_color_normal_view">#D2D2D2</color>
 
-    <!-- 选中view颜色 -->
-    <color name="lib_sb_color_checked_view">#4AD863</color>
-    <!-- 选中view边框颜色 -->
-    <color name="lib_sb_stroke_color_checked_view">@color/lib_sb_color_checked_view</color>
+<!-- 选中view颜色 -->
+<color name="lib_sb_color_checked_view">#4AD863</color>
+<!-- 选中view边框颜色 -->
+<color name="lib_sb_stroke_color_checked_view">@color/lib_sb_color_checked_view</color>
 
-    <!-- 手柄view颜色 -->
-    <color name="lib_sb_color_thumb_view">#FFFFFF</color>
-    <!-- 手柄view边框颜色 -->
-    <color name="lib_sb_stroke_color_thumb_view">#D2D2D2</color>
+<!-- 手柄view颜色 -->
+<color name="lib_sb_color_thumb_view">#FFFFFF</color>
+<!-- 手柄view边框颜色 -->
+<color name="lib_sb_stroke_color_thumb_view">#D2D2D2</color>
 ```
-
 * dimens <br>
 可以在项目中定义dimens覆盖库中的默认配置<br>
 ```xml
-    <!-- 圆角半径 -->
-    <dimen name="lib_sb_corner">50dp</dimen>
-    <!-- 手柄view上下左右间距 -->
-    <dimen name="lib_sb_margins">1dp</dimen>
-    <!-- 正常view边框大小 -->
-    <dimen name="lib_sb_stroke_width_normal_view">1px</dimen>
-    <!-- 选中view边框大小 -->
-    <dimen name="lib_sb_stroke_width_checked_view">1px</dimen>
-    <!-- 手柄view边框大小 -->
-    <dimen name="lib_sb_stroke_width_thumb_view">1px</dimen>
+<!-- 圆角半径 -->
+<dimen name="lib_sb_corner">50dp</dimen>
+<!-- 手柄view上下左右间距 -->
+<dimen name="lib_sb_margins">1dp</dimen>
+<!-- 正常view边框大小 -->
+<dimen name="lib_sb_stroke_width_normal_view">1px</dimen>
+<!-- 选中view边框大小 -->
+<dimen name="lib_sb_stroke_width_checked_view">1px</dimen>
+<!-- 手柄view边框大小 -->
+<dimen name="lib_sb_stroke_width_thumb_view">1px</dimen>
 ```
-
 * drawable <br>
 可以在项目中定义drawable覆盖库中的默认配置，覆盖drawable后以上的colors和dimens设置失效<br>
 ![](http://thumbsnap.com/i/vErZPQhN.png?0706)<br>
@@ -51,33 +49,32 @@ Android开关按钮<br>
 ## xml属性
 支持的xml属性配置：<br>
 ```xml
-    <declare-styleable name="LibSwitchButton">
-        <!-- 正常view图片 -->
-        <attr name="sbImageNormal" format="reference"/>
-        <!-- 选中view图片 -->
-        <attr name="sbImageChecked" format="reference"/>
-        <!-- 手柄view图片 -->
-        <attr name="sbImageThumb" format="reference"/>
-        <!-- 是否选中 -->
-        <attr name="sbIsChecked" format="boolean"/>
-        <!-- 手柄view上下左右间距 -->
-        <attr name="sbMargins" format="dimension"/>
-        <!-- 手柄view左边间距 -->
-        <attr name="sbMarginLeft" format="dimension"/>
-        <!-- 手柄view顶部间距 -->
-        <attr name="sbMarginTop" format="dimension"/>
-        <!-- 手柄view右边间距 -->
-        <attr name="sbMarginRight" format="dimension"/>
-        <!-- 手柄view底部间距 -->
-        <attr name="sbMarginBottom" format="dimension"/>
-        <!-- 是否需要点击切换动画 -->
-        <attr name="sbIsNeedToggleAnim" format="boolean"/>
-    </declare-styleable>
+<declare-styleable name="LibSwitchButton">
+    <!-- 正常view图片 -->
+    <attr name="sbImageNormal" format="reference"/>
+    <!-- 选中view图片 -->
+    <attr name="sbImageChecked" format="reference"/>
+    <!-- 手柄view图片 -->
+    <attr name="sbImageThumb" format="reference"/>
+    <!-- 是否选中 -->
+    <attr name="sbIsChecked" format="boolean"/>
+    <!-- 手柄view上下左右间距 -->
+    <attr name="sbMargins" format="dimension"/>
+    <!-- 手柄view左边间距 -->
+    <attr name="sbMarginLeft" format="dimension"/>
+    <!-- 手柄view顶部间距 -->
+    <attr name="sbMarginTop" format="dimension"/>
+    <!-- 手柄view右边间距 -->
+    <attr name="sbMarginRight" format="dimension"/>
+    <!-- 手柄view底部间距 -->
+    <attr name="sbMarginBottom" format="dimension"/>
+    <!-- 是否需要点击切换动画 -->
+    <attr name="sbIsNeedToggleAnim" format="boolean"/>
+</declare-styleable>
 ```
 
 ## 自定义效果
 ![](http://thumbsnap.com/i/YS9spIQs.gif?0706)<br>
-
 1. xml中布局：<br>
 ```xml
 <com.fanwe.library.switchbutton.SDSwitchButton
@@ -141,12 +138,12 @@ xml中布局：<br>
 <br>
 库中支持的id如下：
 ```xml
-    <!--正常view的id-->
-    <item name="lib_sb_view_normal" type="id"/>
-    <!--选中view的id-->
-    <item name="lib_sb_view_checked" type="id"/>
-    <!--手柄view的id-->
-    <item name="lib_sb_view_thumb" type="id"/>
+<!--正常view的id-->
+<item name="lib_sb_view_normal" type="id"/>
+<!--选中view的id-->
+<item name="lib_sb_view_checked" type="id"/>
+<!--手柄view的id-->
+<item name="lib_sb_view_thumb" type="id"/>
 ```
 
 ## 支持的方法
