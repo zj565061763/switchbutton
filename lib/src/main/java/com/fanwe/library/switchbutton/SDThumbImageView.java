@@ -1,10 +1,8 @@
 package com.fanwe.library.switchbutton;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 /**
@@ -29,14 +27,8 @@ public class SDThumbImageView extends ImageView
     }
 
     @Override
-    protected void onDraw(Canvas canvas)
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
-        super.onDraw(canvas);
-        if (getHeight() > 0 && getHeight() != getWidth())
-        {
-            ViewGroup.LayoutParams params = getLayoutParams();
-            params.width = getHeight();
-            setLayoutParams(params);
-        }
+        super.onMeasure(heightMeasureSpec, heightMeasureSpec);
     }
 }

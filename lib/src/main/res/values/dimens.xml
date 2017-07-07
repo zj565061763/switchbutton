@@ -2,6 +2,8 @@
 
     <!-- 圆角半径 -->
     <dimen name="lib_sb_corner">50dp</dimen>
+    <!-- 手柄view上下左右间距 -->
+    <dimen name="lib_sb_margins">1dp</dimen>
     <!-- 正常view边框大小 -->
     <dimen name="lib_sb_stroke_width_normal_view">1px</dimen>
     <!-- 选中view边框大小 -->

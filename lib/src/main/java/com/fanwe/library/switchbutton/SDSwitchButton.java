@@ -528,75 +528,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     {
         super.onLayout(changed, left, top, right, bottom);
 
-        updateThumbViewParams();
         updateViewByState(false);
-    }
-
-    private int getDefaultMargin()
-    {
-        return getMeasuredHeight() / 15;
-    }
-
-    /**
-     * 更新手柄view的布局参数
-     */
-    private void updateThumbViewParams()
-    {
-        boolean needUpdate = false;
-        LayoutParams params = getParamsThumbView();
-
-        //----------margins----------
-        if (!mIsViewThumbCustom)
-        {
-            if (mAttrModel.getMarginLeft() < 0)
-            {
-                mAttrModel.setMarginLeft(getDefaultMargin());
-            }
-            if (mAttrModel.getMarginTop() < 0)
-            {
-                mAttrModel.setMarginTop(getDefaultMargin());
-            }
-            if (mAttrModel.getMarginRight() < 0)
-            {
-                mAttrModel.setMarginRight(getDefaultMargin());
-            }
-            if (mAttrModel.getMarginBottom() < 0)
-            {
-                mAttrModel.setMarginBottom(getDefaultMargin());
-            }
-        } else
-        {
-            mAttrModel.setMarginLeft(params.leftMargin);
-            mAttrModel.setMarginTop(params.topMargin);
-            mAttrModel.setMarginRight(params.rightMargin);
-            mAttrModel.setMarginBottom(params.bottomMargin);
-        }
-
-        if (params.leftMargin != mAttrModel.getMarginLeft())
-        {
-            params.leftMargin = mAttrModel.getMarginLeft();
-            needUpdate = true;
-        }
-        if (params.topMargin != mAttrModel.getMarginTop())
-        {
-            params.topMargin = mAttrModel.getMarginTop();
-            needUpdate = true;
-        }
-        if (params.rightMargin != mAttrModel.getMarginRight())
-        {
-            params.rightMargin = mAttrModel.getMarginRight();
-            needUpdate = true;
-        }
-        if (params.bottomMargin != mAttrModel.getMarginBottom())
-        {
-            params.bottomMargin = mAttrModel.getMarginBottom();
-            needUpdate = true;
-        }
-
-        if (needUpdate)
-        {
-            mViewThumb.setLayoutParams(params);
-        }
     }
 
     //----------ISDSwitchButton implements start----------
