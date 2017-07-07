@@ -1,5 +1,6 @@
 package com.fanwe.library.switchbutton;
 
+import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
@@ -277,6 +278,17 @@ class SDTouchHelper
             return;
         }
         parent.requestDisallowInterceptTouchEvent(disallowIntercept);
+    }
+
+    /**
+     * 返回MotionEvent的PointerId
+     *
+     * @param event
+     * @return
+     */
+    public static int getPointerId(MotionEvent event)
+    {
+        return event.getPointerId(MotionEventCompat.getActionIndex(event));
     }
 
     //----------static method end----------

@@ -70,6 +70,10 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      * 是否是透明度模式来显示隐藏view的
      */
     private boolean mIsAlphaMode = true;
+    /**
+     * 是否支持边缘触摸也触发手柄view移动
+     */
+    private boolean mIsNeedTrackingEdge = true;
 
     private SBAttrModel mAttrModel = new SBAttrModel();
 
@@ -476,6 +480,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 if (mTouchHelper.isNeedCosume())
                 {
                     mDragHelper.processTouchEvent(event);
+
+                    if (mIsNeedTrackingEdge)
+                    {
+                        if (mDragHelper.getViewDragState() != ViewDragHelper.STATE_DRAGGING)
+                        {
+                            mDragHelper.captureChildView(mViewThumb, SDTouchHelper.getPointerId(event));
+                        }
+                    }
                 } else
                 {
                     if (checkMoveParams())
@@ -624,6 +636,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     public void setAlphaMode(boolean alphaMode)
     {
         mIsAlphaMode = alphaMode;
+    }
+
+    @Override
+    public void setNeedTrackingEdge(boolean needTrackingEdge)
+    {
+        mIsNeedTrackingEdge = needTrackingEdge;
     }
 
     @Override
