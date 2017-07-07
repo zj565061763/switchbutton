@@ -10,9 +10,13 @@ import android.view.ViewParent;
 class SDTouchEventHelper
 {
     /**
-     * 是否需要拦截事件
+     * onInterceptTouchEvent方法是否需要拦截事件
      */
     private boolean mIsNeedIntercept = false;
+    /**
+     * onTouchEvent方法是否需要消费事件
+     */
+    private boolean mIsNeedCosume = false;
 
     private float mDownX;
     private float mDownY;
@@ -74,7 +78,7 @@ class SDTouchEventHelper
     }
 
     /**
-     * 设置是否需要消费事件
+     * 设置onInterceptTouchEvent方法是否需要拦截事件
      *
      * @param needIntercept
      */
@@ -84,13 +88,33 @@ class SDTouchEventHelper
     }
 
     /**
-     * 是否需要消费事件
+     * onInterceptTouchEvent方法是否需要拦截事件
      *
      * @return
      */
     public boolean isNeedIntercept()
     {
         return mIsNeedIntercept;
+    }
+
+    /**
+     * 设置onTouchEvent方法是否需要消费事件
+     *
+     * @param needCosume
+     */
+    public void setNeedCosume(boolean needCosume)
+    {
+        mIsNeedCosume = needCosume;
+    }
+
+    /**
+     * onTouchEvent方法是否需要消费事件
+     *
+     * @return
+     */
+    public boolean isNeedCosume()
+    {
+        return mIsNeedCosume;
     }
 
     /**
