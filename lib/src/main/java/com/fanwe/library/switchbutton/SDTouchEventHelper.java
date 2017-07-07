@@ -1,6 +1,8 @@
 package com.fanwe.library.switchbutton;
 
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewParent;
 
 /**
  * 触摸事件处理帮助类
@@ -26,9 +28,6 @@ class SDTouchEventHelper
     private double mDegreeX;
     private double mDegreeY;
 
-    private long mDownTime;
-    private long mUpTime;
-
     /**
      * 处理触摸事件
      *
@@ -39,7 +38,6 @@ class SDTouchEventHelper
         switch (ev.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                mDownTime = System.currentTimeMillis();
                 mDownX = ev.getRawX();
                 mDownY = ev.getRawY();
 
@@ -66,7 +64,6 @@ class SDTouchEventHelper
                 mLastMoveY = mMoveY;
                 break;
             case MotionEvent.ACTION_UP:
-                mUpTime = System.currentTimeMillis();
                 break;
             default:
                 break;
@@ -238,23 +235,23 @@ class SDTouchEventHelper
     }
 
     /**
-     * 返回ACTION_DOWN的时间戳
+     * 是否请求当前view的父view不要拦截事件
      *
-     * @return
+     * @param view
+     * @param disallowIntercept true-请求父view不要拦截，false-父view可以拦截
      */
-    public long getDownTime()
+    public static void requestDisallowInterceptTouchEvent(View view, boolean disallowIntercept)
     {
-        return mDownTime;
-    }
-
-    /**
-     * 返回ACTION_UP的时间戳
-     *
-     * @return
-     */
-    public long getUpTime()
-    {
-        return mUpTime;
+        if (view == null)
+        {
+            return;
+        }
+        ViewParent parent = view.getParent();
+        if (parent == null)
+        {
+            return;
+        }
+        parent.requestDisallowInterceptTouchEvent(disallowIntercept);
     }
 
     @Override

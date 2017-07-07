@@ -453,10 +453,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             case MotionEvent.ACTION_DOWN:
                 mTouchHelper.setNeedConsume(true);
-                if (getParent() != null)
-                {
-                    getParent().requestDisallowInterceptTouchEvent(true);
-                }
+                SDTouchEventHelper.requestDisallowInterceptTouchEvent(this, true);
                 break;
         }
         return mTouchHelper.isNeedConsume();
@@ -475,10 +472,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
         {
-            case MotionEvent.ACTION_DOWN:
-                //触发ViewDragHelper的尝试捕捉
-                mDragHelper.processTouchEvent(event);
-                break;
             case MotionEvent.ACTION_MOVE:
                 if (mIsNeedProcess)
                 {
@@ -490,19 +483,13 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                         setNeedProcess(true, event);
                     } else
                     {
-                        if (getParent() != null)
-                        {
-                            getParent().requestDisallowInterceptTouchEvent(false);
-                        }
+                        SDTouchEventHelper.requestDisallowInterceptTouchEvent(this, false);
                     }
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                if (getParent() != null)
-                {
-                    getParent().requestDisallowInterceptTouchEvent(false);
-                }
+                SDTouchEventHelper.requestDisallowInterceptTouchEvent(this, false);
                 setNeedProcess(false, event);
                 mDragHelper.processTouchEvent(event);
                 if (mIsDebug)
