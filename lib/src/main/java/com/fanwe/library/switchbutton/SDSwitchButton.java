@@ -532,6 +532,11 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         updateViewByState(false);
     }
 
+    private int getDefaultMargin()
+    {
+        return getMeasuredHeight() / 15;
+    }
+
     /**
      * 更新手柄view的布局参数
      */
@@ -545,19 +550,19 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             if (mAttrModel.getMarginLeft() < 0)
             {
-                mAttrModel.setMarginLeft(getMeasuredHeight() / 15);
+                mAttrModel.setMarginLeft(getDefaultMargin());
             }
             if (mAttrModel.getMarginTop() < 0)
             {
-                mAttrModel.setMarginTop(getMeasuredHeight() / 15);
+                mAttrModel.setMarginTop(getDefaultMargin());
             }
             if (mAttrModel.getMarginRight() < 0)
             {
-                mAttrModel.setMarginRight(getMeasuredHeight() / 15);
+                mAttrModel.setMarginRight(getDefaultMargin());
             }
             if (mAttrModel.getMarginBottom() < 0)
             {
-                mAttrModel.setMarginBottom(getMeasuredHeight() / 15);
+                mAttrModel.setMarginBottom(getDefaultMargin());
             }
         } else
         {
