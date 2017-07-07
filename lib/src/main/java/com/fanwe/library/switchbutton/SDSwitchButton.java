@@ -440,11 +440,11 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 Log.i(TAG, "onInterceptTouchEvent:" + ev.getAction());
             }
         }
-        if (mTouchHelper.isNeedConsume())
+        if (mTouchHelper.isNeedIntercept())
         {
             if (mIsDebug)
             {
-                Log.e(TAG, "onInterceptTouchEvent Intercept success because isNeedConsume is true with action----------" + ev.getAction());
+                Log.e(TAG, "onInterceptTouchEvent Intercept success because isNeedIntercept is true with action----------" + ev.getAction());
             }
             return true;
         }
@@ -452,11 +452,11 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         switch (ev.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                mTouchHelper.setNeedConsume(true);
+                mTouchHelper.setNeedIntercept(true);
                 SDTouchEventHelper.requestDisallowInterceptTouchEvent(this, true);
                 break;
         }
-        return mTouchHelper.isNeedConsume();
+        return mTouchHelper.isNeedIntercept();
     }
 
     private boolean checkMoveParams()
@@ -494,12 +494,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 mDragHelper.processTouchEvent(event);
                 if (mIsDebug)
                 {
-                    if (mTouchHelper.isNeedConsume())
+                    if (mTouchHelper.isNeedIntercept())
                     {
                         Log.e(TAG, "onTouchEvent Intercept released with action " + event.getAction());
                     }
                 }
-                mTouchHelper.setNeedConsume(false);
+                mTouchHelper.setNeedIntercept(false);
                 break;
             default:
                 mDragHelper.processTouchEvent(event);
