@@ -1,3 +1,6 @@
+## 1.0.4
+* 修复计算动画时长的时候如果最大可移动的距离传0的时候造成的计算异常
+
 ## 1.0.3
 * 去掉引用ViewDragHelper，改为Scroller实现
 * 去掉setNeedTrackingEdge(boolean needTrackingEdge)方法，默认支持边缘拖动
