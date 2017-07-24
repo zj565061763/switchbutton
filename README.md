@@ -3,7 +3,7 @@ Android开关按钮<br>
 [更新日志](https://github.com/zj565061763/SwitchButton/blob/master/CHANGELOG.md)
 
 ## Gradle
-`compile 'com.fanwe.android:switchbutton:1.0.2'`
+`compile 'com.fanwe.android:switchbutton:1.0.3'`
 
 ## 默认效果
 ![](http://thumbsnap.com/i/KBISOucv.gif?0705)
@@ -194,13 +194,6 @@ public interface ISDSwitchButton
      * @param alphaMode
      */
     void setAlphaMode(boolean alphaMode);
-
-    /**
-     * 设置是否支持边缘触摸也触发手柄view移动（默认true）
-     *
-     * @param needTrackingEdge
-     */
-    void setNeedTrackingEdge(boolean needTrackingEdge);
 
     /**
      * 获得滚动的百分比[0-1]
