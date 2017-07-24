@@ -194,15 +194,21 @@ class SDScroller extends Scroller
     /**
      * 计算时长
      *
-     * @param dx
-     * @param dy
-     * @param maxDistance
-     * @param maxDuration
-     * @param minDuration
+     * @param dx          x方向移动距离
+     * @param dy          y方向移动距离
+     * @param maxDistance 最大可以移动距离
+     * @param maxDuration 最大时长
+     * @param minDuration 最小时长
      * @return
      */
     public static int computeDuration(int dx, int dy, int maxDistance, int maxDuration, int minDuration)
     {
+        maxDistance = Math.abs(maxDistance);
+        if (maxDistance == 0)
+        {
+            return minDuration;
+        }
+
         float distance = (float) Math.sqrt(Math.abs(dx * dx) + Math.abs(dy * dy));
         float disPercent = distance / maxDistance;
         int duration = (int) ((disPercent + 1) * minDuration);
