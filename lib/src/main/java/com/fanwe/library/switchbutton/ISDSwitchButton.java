@@ -54,13 +54,6 @@ public interface ISDSwitchButton
     void setAlphaMode(boolean alphaMode);
 
     /**
-     * 设置是否支持边缘触摸也触发手柄view移动（默认true）
-     *
-     * @param needTrackingEdge
-     */
-    void setNeedTrackingEdge(boolean needTrackingEdge);
-
-    /**
      * 获得滚动的百分比[0-1]
      *
      * @return

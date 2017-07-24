@@ -5,7 +5,6 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -64,16 +63,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      */
     private boolean mIsViewThumbCustom;
 
-    private ViewDragHelper mDragHelper;
     private GestureDetector mGestureDetector;
+    private SDScroller mScroller;
     /**
      * 是否是透明度模式来显示隐藏view的
      */
     private boolean mIsAlphaMode = true;
-    /**
-     * 是否支持边缘触摸也触发手柄view移动
-     */
-    private boolean mIsNeedTrackingEdge = true;
 
     private SBAttrModel mAttrModel = new SBAttrModel();
 
@@ -84,10 +79,11 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private void init(Context context, AttributeSet attrs)
     {
+        mScroller = new SDScroller(getContext());
+
         mAttrModel.parse(context, attrs);
         addDefaultViews();
         initGestureDetector();
-        initViewDragHelper();
     }
 
     public void setDebug(boolean debug)
@@ -124,7 +120,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         setChecked(mAttrModel.isChecked(), false, false);
     }
 
-
     private void initGestureDetector()
     {
         mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener()
@@ -134,75 +129,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             {
                 toggleChecked(mAttrModel.isNeedToggleAnim(), true);
                 return super.onSingleTapUp(e);
-            }
-        });
-    }
-
-    private void initViewDragHelper()
-    {
-        mDragHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback()
-        {
-            @Override
-            public boolean tryCaptureView(View child, int pointerId)
-            {
-                return child == mViewThumb;
-            }
-
-            @Override
-            public int clampViewPositionVertical(View child, int top, int dy)
-            {
-                return child.getTop();
-            }
-
-            @Override
-            public int clampViewPositionHorizontal(View child, int left, int dx)
-            {
-                return Math.min(Math.max(left, getLeftNormal()), getLeftChecked());
-            }
-
-            @Override
-            public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy)
-            {
-                super.onViewPositionChanged(changedView, left, top, dx, dy);
-
-                final float percent = getScrollPercent();
-                if (mIsAlphaMode)
-                {
-                    ViewCompat.setAlpha(mViewChecked, percent);
-                    ViewCompat.setAlpha(mViewNormal, 1 - percent);
-                }
-
-                if (mOnViewPositionChangedCallback != null)
-                {
-                    mOnViewPositionChangedCallback.onViewPositionChanged(SDSwitchButton.this);
-                }
-            }
-
-            @Override
-            public void onViewCaptured(View capturedChild, int activePointerId)
-            {
-                super.onViewCaptured(capturedChild, activePointerId);
-                if (mIsDebug)
-                {
-                    Log.i(TAG, "onViewCaptured");
-                }
-            }
-
-            @Override
-            public void onViewReleased(View releasedChild, float xvel, float yvel)
-            {
-                super.onViewReleased(releasedChild, xvel, yvel);
-                if (mIsDebug)
-                {
-                    Log.i(TAG, "onViewReleased");
-                }
-                if (releasedChild.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2))
-                {
-                    setChecked(true, true, true);
-                } else
-                {
-                    setChecked(false, true, true);
-                }
             }
         });
     }
@@ -228,7 +154,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             {
                 if (anim)
                 {
-                    mDragHelper.smoothSlideViewTo(mViewThumb, left, mViewThumb.getTop());
+                    mScroller.startScrollToX(mViewThumb.getLeft(), left, -1);
                 } else
                 {
                     mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
@@ -245,7 +171,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             {
                 if (anim)
                 {
-                    mDragHelper.smoothSlideViewTo(mViewThumb, left, mViewThumb.getTop());
+                    mScroller.startScrollToX(mViewThumb.getLeft(), left, -1);
                 } else
                 {
                     mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
@@ -422,8 +348,9 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     @Override
     public void computeScroll()
     {
-        if (mDragHelper.continueSettling(true))
+        if (mScroller.computeScrollOffset())
         {
+            moveView(mScroller.getMoveX());
             ViewCompat.postInvalidateOnAnimation(this);
         }
     }
@@ -443,7 +370,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 Log.i(TAG, "onInterceptTouchEvent:" + ev.getAction());
             }
         }
-        boolean shouldInterceptTouchEvent = mDragHelper.shouldInterceptTouchEvent(ev);
         if (mTouchHelper.isNeedIntercept())
         {
             if (mIsDebug)
@@ -460,7 +386,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 SDTouchHelper.requestDisallowInterceptTouchEvent(this, true);
                 break;
         }
-        return mTouchHelper.isNeedIntercept() || shouldInterceptTouchEvent;
+        return mTouchHelper.isNeedIntercept();
     }
 
     private boolean checkMoveParams()
@@ -477,7 +403,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-
         mGestureDetector.onTouchEvent(event);
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
@@ -485,15 +410,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             case MotionEvent.ACTION_MOVE:
                 if (mTouchHelper.isNeedCosume())
                 {
-                    mDragHelper.processTouchEvent(event);
-
-                    if (mIsNeedTrackingEdge)
-                    {
-                        if (mDragHelper.getViewDragState() != ViewDragHelper.STATE_DRAGGING)
-                        {
-                            mDragHelper.captureChildView(mViewThumb, SDTouchHelper.getPointerId(event));
-                        }
-                    }
+                    processMoveEvent();
                 } else
                 {
                     if (canPull())
@@ -509,18 +426,62 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                mDragHelper.processTouchEvent(event);
+                onActionUp();
 
                 mTouchHelper.setNeedCosume(false);
                 mTouchHelper.setNeedIntercept(false);
                 SDTouchHelper.requestDisallowInterceptTouchEvent(this, false);
                 break;
-            default:
-                mDragHelper.processTouchEvent(event);
-                break;
+
         }
 
         return super.onTouchEvent(event) || mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;
+    }
+
+    private void processMoveEvent()
+    {
+        boolean canMove = false;
+        int leftFuture = (int) (mViewThumb.getLeft() + mTouchHelper.getDistanceMoveX());
+        if (leftFuture >= getLeftNormal() && leftFuture <= getLeftChecked())
+        {
+            canMove = true;
+        }
+
+        if (canMove)
+        {
+            moveView((int) mTouchHelper.getDistanceMoveX());
+        }
+    }
+
+    private void moveView(int distanceX)
+    {
+        ViewCompat.offsetLeftAndRight(mViewThumb, distanceX);
+
+        final float percent = getScrollPercent();
+        if (mIsAlphaMode)
+        {
+            ViewCompat.setAlpha(mViewChecked, percent);
+            ViewCompat.setAlpha(mViewNormal, 1 - percent);
+        }
+
+        if (mOnViewPositionChangedCallback != null)
+        {
+            mOnViewPositionChangedCallback.onViewPositionChanged(SDSwitchButton.this);
+        }
+    }
+
+    private void onActionUp()
+    {
+        if (mTouchHelper.isNeedCosume())
+        {
+            if (mViewThumb.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2))
+            {
+                setChecked(true, true, true);
+            } else
+            {
+                setChecked(false, true, true);
+            }
+        }
     }
 
     @Override
@@ -579,12 +540,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     public void setAlphaMode(boolean alphaMode)
     {
         mIsAlphaMode = alphaMode;
-    }
-
-    @Override
-    public void setNeedTrackingEdge(boolean needTrackingEdge)
-    {
-        mIsNeedTrackingEdge = needTrackingEdge;
     }
 
     @Override
