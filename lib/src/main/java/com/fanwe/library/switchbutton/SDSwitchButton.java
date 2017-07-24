@@ -489,6 +489,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     {
         super.onLayout(changed, left, top, right, bottom);
 
+        mScroller.setMaxScrollDistance(getAvailableWidth());
         updateViewByState(false);
     }
 

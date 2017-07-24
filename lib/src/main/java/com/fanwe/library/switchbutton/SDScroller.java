@@ -6,11 +6,26 @@ import android.widget.Scroller;
 class SDScroller extends Scroller
 {
     /**
-     * 移动像素每毫秒
+     * 默认最小滚动时长
      */
-    public static final float DEFAULT_SPEED = 0.6f;
+    public static final int MIN_SCROLL_DURATION = 256;
+    /**
+     * 默认最大滚动时长
+     */
+    public static final int MAX_SCROLL_DURATION = 600;
 
-    private float mScrollSpeed = DEFAULT_SPEED;
+    /**
+     * 最大滚动距离
+     */
+    private int mMaxScrollDistance;
+    /**
+     * 最大滚动时长
+     */
+    private int mMaxScrollDuration = MAX_SCROLL_DURATION;
+    /**
+     * 最小滚动时长
+     */
+    private int mMinScrollDuration = MIN_SCROLL_DURATION;
 
     private int mLastX;
     private int mLastY;
@@ -29,34 +44,59 @@ class SDScroller extends Scroller
         super(context);
     }
 
-    public void setScrollSpeed(float scrollSpeed)
+    /**
+     * 设置最大滚动距离
+     *
+     * @param maxScrollDistance
+     */
+    public void setMaxScrollDistance(int maxScrollDistance)
     {
-        mScrollSpeed = scrollSpeed;
+        mMaxScrollDistance = maxScrollDistance;
+    }
+
+    /**
+     * 设置最大滚动时长
+     *
+     * @param maxScrollDuration
+     */
+    public void setMaxScrollDuration(int maxScrollDuration)
+    {
+        mMaxScrollDuration = maxScrollDuration;
+    }
+
+    /**
+     * 设置最小滚动时长
+     *
+     * @param minScrollDuration
+     */
+    public void setMinScrollDuration(int minScrollDuration)
+    {
+        mMinScrollDuration = minScrollDuration;
     }
 
     // scroll
-    public boolean startScrollX(int startX, int dx, long duration)
+    public boolean startScrollX(int startX, int dx, int duration)
     {
         return startScrollExtend(startX, 0, dx, 0, duration);
     }
 
-    public boolean startScrollY(int startY, int dy, long duration)
+    public boolean startScrollY(int startY, int dy, int duration)
     {
         return startScrollExtend(0, startY, 0, dy, duration);
     }
 
     // scrollTo
-    public boolean startScrollToX(int startX, int endX, long duration)
+    public boolean startScrollToX(int startX, int endX, int duration)
     {
         return startScrollTo(startX, 0, endX, 0, duration);
     }
 
-    public boolean startScrollToY(int startY, int endY, long duration)
+    public boolean startScrollToY(int startY, int endY, int duration)
     {
         return startScrollTo(0, startY, 0, endY, duration);
     }
 
-    public boolean startScrollTo(int startX, int startY, int endX, int endY, long duration)
+    public boolean startScrollTo(int startX, int startY, int endX, int endY, int duration)
     {
         int dx = endX - startX;
         int dy = endY - startY;
@@ -74,14 +114,14 @@ class SDScroller extends Scroller
      * @param duration
      * @return true-提交滚动任务成功
      */
-    public boolean startScrollExtend(int startX, int startY, int dx, int dy, long duration)
+    public boolean startScrollExtend(int startX, int startY, int dx, int dy, int duration)
     {
         if (dx == 0 && dy == 0)
         {
             return false;
         } else
         {
-            startScroll(startX, startY, dx, dy, (int) duration);
+            startScroll(startX, startY, dx, dy, duration);
             return true;
         }
     }
@@ -96,7 +136,7 @@ class SDScroller extends Scroller
 
         if (duration < 0)
         {
-            duration = (int) getDurationCalculate(dx, dy);
+            duration = getDuration(dx, dy);
         }
 
         super.startScroll(startX, startY, dx, dy, duration);
@@ -145,11 +185,27 @@ class SDScroller extends Scroller
      * @param dy y滚动距离
      * @return
      */
-    public long getDurationCalculate(float dx, float dy)
+    public int getDuration(int dx, int dy)
+    {
+        int duration = computeDuration(dx, dy, mMaxScrollDistance, mMaxScrollDuration, mMinScrollDuration);
+        return duration;
+    }
+
+    /**
+     * 计算时长
+     *
+     * @param dx
+     * @param dy
+     * @param maxDistance
+     * @param maxDuration
+     * @param minDuration
+     * @return
+     */
+    public static int computeDuration(int dx, int dy, int maxDistance, int maxDuration, int minDuration)
     {
         float distance = (float) Math.sqrt(Math.abs(dx * dx) + Math.abs(dy * dy));
-        float duration = distance / mScrollSpeed;
-
-        return (long) duration;
+        float disPercent = distance / maxDistance;
+        int duration = (int) ((disPercent + 1) * minDuration);
+        return Math.min(duration, maxDuration);
     }
 }
