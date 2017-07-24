@@ -9,7 +9,7 @@ import android.widget.ImageView;
  * Created by Administrator on 2017/7/6.
  */
 
-public class SDThumbImageView extends ImageView
+class SDThumbImageView extends ImageView
 {
     public SDThumbImageView(Context context)
     {
