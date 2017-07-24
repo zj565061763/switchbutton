@@ -1,2 +1,5 @@
+## 1.0.3
+去掉引用ViewDragHelper，改为Scroller实现
+
 ## 1.0.2
 * 修复由于动态计算手柄view的默认margin可能造成的第一次显示的时候闪烁一下的问题，改为在dimens中增加默认margin配置，默认为1dp
