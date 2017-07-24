@@ -9,7 +9,7 @@
     tools:context="com.fanwe.www.switchbutton.MainActivity">
 
     <com.fanwe.library.switchbutton.SDSwitchButton
-        android:layout_width="250dp"
+        android:layout_width="50dp"
         android:layout_height="25dp"
         app:sbIsNeedToggleAnim="true"/>
 
