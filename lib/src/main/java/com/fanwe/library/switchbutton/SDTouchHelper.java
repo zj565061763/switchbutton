@@ -1,6 +1,7 @@
 package com.fanwe.library.switchbutton;
 
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.ViewCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
@@ -278,6 +279,50 @@ class SDTouchHelper
             return;
         }
         parent.requestDisallowInterceptTouchEvent(disallowIntercept);
+    }
+
+    /**
+     * view是否已经滚动到最顶部
+     *
+     * @param view
+     * @return
+     */
+    public static boolean isScrollToTop(View view)
+    {
+        return !ViewCompat.canScrollVertically(view, -1);
+    }
+
+    /**
+     * view是否已经滚动到最底部
+     *
+     * @param view
+     * @return
+     */
+    public static boolean isScrollToBottom(View view)
+    {
+        return !ViewCompat.canScrollVertically(view, 1);
+    }
+
+    /**
+     * view是否已经滚动到最左边
+     *
+     * @param view
+     * @return
+     */
+    public static boolean isScrollToLeft(View view)
+    {
+        return !ViewCompat.canScrollHorizontally(view, -1);
+    }
+
+    /**
+     * view是否已经滚动到最右边
+     *
+     * @param view
+     * @return
+     */
+    public static boolean isScrollToRight(View view)
+    {
+        return !ViewCompat.canScrollHorizontally(view, -1);
     }
 
     /**
