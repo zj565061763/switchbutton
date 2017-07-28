@@ -572,4 +572,13 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     //----------ISDSwitchButton implements end----------
 
+    @Override
+    protected void onDetachedFromWindow()
+    {
+        super.onDetachedFromWindow();
+        if (!mScroller.isFinished())
+        {
+            mScroller.abortAnimation();
+        }
+    }
 }
