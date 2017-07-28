@@ -11,6 +11,7 @@ import com.fanwe.library.adapter.viewholder.SDRecyclerViewHolder;
 import com.fanwe.library.model.SelectableModel;
 import com.fanwe.library.switchbutton.ISDSwitchButton;
 import com.fanwe.library.switchbutton.SDSwitchButton;
+import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.view.SDRecyclerView;
 
@@ -45,6 +46,7 @@ public class MainActivity extends SDBaseActivity
             @Override
             public void onViewPositionChanged(SDSwitchButton view)
             {
+                LogUtil.i("percent:" + view.getScrollPercent());
                 float percent = view.getScrollPercent() * 0.8f + 0.2f;
                 ViewCompat.setScaleY(view.getViewNormal(), percent);
                 ViewCompat.setScaleY(view.getViewChecked(), percent);
