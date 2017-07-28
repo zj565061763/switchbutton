@@ -443,8 +443,8 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private void processMoveEvent()
     {
         boolean canMove = false;
-        int distanceX = (int) mTouchHelper.getDistanceX(false);
-        int leftFuture = mViewThumb.getLeft() + distanceX;
+        int dy = (int) mTouchHelper.getDistanceX(false);
+        int leftFuture = mViewThumb.getLeft() + dy;
         if (leftFuture >= getLeftNormal() && leftFuture <= getLeftChecked())
         {
             canMove = true;
@@ -452,13 +452,13 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
         if (canMove)
         {
-            moveView(distanceX);
+            moveView(dy);
         }
     }
 
-    private void moveView(int distanceX)
+    private void moveView(int dy)
     {
-        ViewCompat.offsetLeftAndRight(mViewThumb, distanceX);
+        ViewCompat.offsetLeftAndRight(mViewThumb, dy);
 
         final float percent = getScrollPercent();
         if (mIsAlphaMode)
