@@ -391,13 +391,13 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private boolean checkMoveParams()
     {
-        return mTouchHelper.getDegreeX() < 45;
+        return mTouchHelper.getDegreeX() < 40;
     }
 
     private boolean canPull()
     {
         return checkMoveParams()
-                && ((mIsChecked && mTouchHelper.isMoveLeft()) || (!mIsChecked && mTouchHelper.isMoveRight()));
+                && ((mIsChecked && mTouchHelper.isMoveLeft(true)) || (!mIsChecked && mTouchHelper.isMoveRight(true)));
     }
 
     @Override
@@ -416,6 +416,8 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                     if (canPull())
                     {
                         mTouchHelper.setNeedCosume(true);
+                        mTouchHelper.setNeedIntercept(true);
+                        SDTouchHelper.requestDisallowInterceptTouchEvent(this, true);
                     } else
                     {
                         mTouchHelper.setNeedCosume(false);
@@ -441,7 +443,8 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private void processMoveEvent()
     {
         boolean canMove = false;
-        int leftFuture = (int) (mViewThumb.getLeft() + mTouchHelper.getDistanceMoveX());
+        int distanceX = (int) mTouchHelper.getDistanceX(false);
+        int leftFuture = mViewThumb.getLeft() + distanceX;
         if (leftFuture >= getLeftNormal() && leftFuture <= getLeftChecked())
         {
             canMove = true;
@@ -449,7 +452,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
         if (canMove)
         {
-            moveView((int) mTouchHelper.getDistanceMoveX());
+            moveView(distanceX);
         }
     }
 

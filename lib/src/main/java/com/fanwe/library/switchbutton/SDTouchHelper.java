@@ -2,6 +2,7 @@ package com.fanwe.library.switchbutton;
 
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
@@ -11,6 +12,10 @@ import android.view.ViewParent;
  */
 class SDTouchHelper
 {
+    private static final String TAG = "SDTouchHelper";
+
+    private boolean mDebug;
+
     /**
      * onInterceptTouchEvent方法是否需要拦截事件
      */
@@ -28,14 +33,19 @@ class SDTouchHelper
     private float mLastMoveX;
     private float mLastMoveY;
 
-    private float mDistanceMoveX;
-    private float mDistanceMoveY;
-
     private float mDistanceDownX;
     private float mDistanceDownY;
 
+    private float mDistanceMoveX;
+    private float mDistanceMoveY;
+
     private double mDegreeX;
     private double mDegreeY;
+
+    public void setDebug(boolean debug)
+    {
+        mDebug = debug;
+    }
 
     /**
      * 处理触摸事件
@@ -57,17 +67,29 @@ class SDTouchHelper
                 mMoveX = ev.getRawX();
                 mMoveY = ev.getRawY();
 
-                mDistanceMoveX = mMoveX - mLastMoveX;
-                mDistanceMoveY = mMoveY - mLastMoveY;
-
                 mDistanceDownX = mMoveX - mDownX;
                 mDistanceDownY = mMoveY - mDownY;
 
-                final float angleX = Math.abs(mDistanceMoveY) / Math.abs(mDistanceMoveX);
-                mDegreeX = Math.toDegrees(Math.atan(angleX));
+                mDistanceMoveX = mMoveX - mLastMoveX;
+                mDistanceMoveY = mMoveY - mLastMoveY;
 
-                final float angleY = Math.abs(mDistanceMoveX) / Math.abs(mDistanceMoveY);
-                mDegreeY = Math.toDegrees(Math.atan(angleY));
+                if (mDistanceDownX != 0)
+                {
+                    final float angleX = Math.abs(mDistanceDownY) / Math.abs(mDistanceDownX);
+                    mDegreeX = Math.toDegrees(Math.atan(angleX));
+                } else
+                {
+                    mDegreeX = 0;
+                }
+
+                if (mDistanceDownY != 0)
+                {
+                    final float angleY = Math.abs(mDistanceDownX) / Math.abs(mDistanceDownY);
+                    mDegreeY = Math.toDegrees(Math.atan(angleY));
+                } else
+                {
+                    mDegreeY = 0;
+                }
 
                 mLastMoveX = mMoveX;
                 mLastMoveY = mMoveY;
@@ -76,6 +98,11 @@ class SDTouchHelper
                 break;
             default:
                 break;
+        }
+
+        if (mDebug)
+        {
+            Log.i(TAG, "event " + ev.getAction() + ":" + toString());
         }
     }
 
@@ -119,132 +146,70 @@ class SDTouchHelper
         return mIsNeedCosume;
     }
 
-    /**
-     * 最后一次ACTION_DOWN的x坐标
-     *
-     * @return
-     */
     public float getDownX()
     {
         return mDownX;
     }
 
-    /**
-     * 最后一次ACTION_DOWN的y坐标
-     *
-     * @return
-     */
     public float getDownY()
     {
         return mDownY;
     }
 
-    /**
-     * 最后一次ACTION_MOVE的x坐标
-     *
-     * @return
-     */
     public float getMoveX()
     {
         return mMoveX;
     }
 
-    /**
-     * 最后一次ACTION_MOVE的y坐标
-     *
-     * @return
-     */
     public float getMoveY()
     {
         return mMoveY;
     }
 
-    /**
-     * 最后两次ACTION_MOVE的x距离<br>
-     * 大于0：往右移动<br>
-     * 小于0：往左移动<br>
-     *
-     * @return
-     */
-    public float getDistanceMoveX()
+    public float getDistanceX(boolean baseDown)
     {
-        return mDistanceMoveX;
+        if (baseDown)
+        {
+            return mDistanceDownX;
+        } else
+        {
+            return mDistanceMoveX;
+        }
+    }
+
+    public float getDistanceY(boolean baseDown)
+    {
+        if (baseDown)
+        {
+            return mDistanceDownY;
+        } else
+        {
+            return mDistanceMoveY;
+        }
+    }
+
+    public boolean isMoveLeft(boolean baseDown)
+    {
+        return getDistanceX(baseDown) < 0;
+    }
+
+    public boolean isMoveRight(boolean baseDown)
+    {
+        return getDistanceX(baseDown) > 0;
+    }
+
+    public boolean isMoveUp(boolean baseDown)
+    {
+        return getDistanceY(baseDown) < 0;
+    }
+
+    public boolean isMoveDown(boolean baseDown)
+    {
+        return getDistanceY(baseDown) > 0;
     }
 
     /**
-     * 最后两次ACTION_MOVE的y距离<br>
-     * 大于0：往下移动<br>
-     * 小于0：往上移动<br>
-     *
-     * @return
-     */
-    public float getDistanceMoveY()
-    {
-        return mDistanceMoveY;
-    }
-
-    /**
-     * 当前ACTION_MOVE的x和ACTION_DOWN的x的距离
-     *
-     * @return
-     */
-    public float getDistanceDownX()
-    {
-        return mDistanceDownX;
-    }
-
-    /**
-     * 当前ACTION_MOVE的y和ACTION_DOWN的y的距离
-     *
-     * @return
-     */
-    public float getDistanceDownY()
-    {
-        return mDistanceDownY;
-    }
-
-    /**
-     * 最后两次ACTION_MOVE方向向左
-     *
-     * @return
-     */
-    public boolean isMoveLeft()
-    {
-        return getDistanceMoveX() < 0;
-    }
-
-    /**
-     * 最后两次ACTION_MOVE方向向左
-     *
-     * @return
-     */
-    public boolean isMoveRight()
-    {
-        return getDistanceMoveX() > 0;
-    }
-
-    /**
-     * 最后两次ACTION_MOVE方向向上
-     *
-     * @return
-     */
-    public boolean isMoveUp()
-    {
-        return getDistanceMoveY() < 0;
-    }
-
-    /**
-     * 最后两次ACTION_MOVE方向向下
-     *
-     * @return
-     */
-    public boolean isMoveDown()
-    {
-        return getDistanceMoveY() > 0;
-    }
-
-    /**
-     * 最后两次ACTION_MOVE相对x方向的移动夹角
+     * 当前ACTION_MOVE的和ACTION_DOWN的x方向夹角
      *
      * @return [0-90]度
      */
@@ -254,7 +219,7 @@ class SDTouchHelper
     }
 
     /**
-     * 最后两次ACTION_MOVE相对y方向的移动夹角
+     * 当前ACTION_MOVE的和ACTION_DOWN的y方向夹角
      *
      * @return [0-90]度
      */
@@ -342,8 +307,14 @@ class SDTouchHelper
     public String toString()
     {
         StringBuilder sb = new StringBuilder("\r\n");
-        sb.append("mDistanceMoveX:").append(mDistanceMoveX).append("\r\n")
-                .append("mDistanceMoveY:").append(mDistanceMoveY).append("\r\n")
+        sb.append("mDownX:").append(mDownX).append("\r\n")
+                .append("mDownY:").append(mDownY).append("\r\n")
+                .append("mMoveX:").append(mMoveX).append("\r\n")
+                .append("mMoveY:").append(mMoveY).append("\r\n").append("\r\n")
+                .append("mDistanceDownX:").append(mDistanceDownX).append("\r\n")
+                .append("mDistanceDownY:").append(mDistanceDownY).append("\r\n")
+                .append("mDistanceMoveX:").append(mDistanceMoveX).append("\r\n")
+                .append("mDistanceMoveY:").append(mDistanceMoveY).append("\r\n").append("\r\n")
                 .append("mDegreeX:").append(mDegreeX).append("\r\n")
                 .append("mDegreeY:").append(mDegreeY).append("\r\n");
         return sb.toString();
