@@ -191,10 +191,18 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     {
         if (mIsAlphaMode)
         {
-            ViewCompat.setAlpha(mViewChecked, show ? 1.0f : 0f);
+            float alpha = show ? 1.0f : 0f;
+            if (ViewCompat.getAlpha(mViewChecked) != alpha)
+            {
+                ViewCompat.setAlpha(mViewChecked, alpha);
+            }
         } else
         {
-            mViewChecked.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+            int visibility = show ? View.VISIBLE : View.INVISIBLE;
+            if (mViewChecked.getVisibility() != visibility)
+            {
+                mViewChecked.setVisibility(visibility);
+            }
         }
     }
 
@@ -202,10 +210,18 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     {
         if (mIsAlphaMode)
         {
-            ViewCompat.setAlpha(mViewNormal, show ? 1.0f : 0f);
+            float alpha = show ? 1.0f : 0f;
+            if (ViewCompat.getAlpha(mViewNormal) != alpha)
+            {
+                ViewCompat.setAlpha(mViewNormal, alpha);
+            }
         } else
         {
-            mViewNormal.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+            int visibility = show ? View.VISIBLE : View.INVISIBLE;
+            if (mViewNormal.getVisibility() != visibility)
+            {
+                mViewNormal.setVisibility(visibility);
+            }
         }
     }
 
