@@ -65,10 +65,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private GestureDetector mGestureDetector;
     private SDScroller mScroller;
-    /**
-     * 是否是透明度模式来显示隐藏view的
-     */
-    private boolean mIsAlphaMode = true;
+    private boolean mIsScrollerStarted;
 
     private SBAttrModel mAttrModel = new SBAttrModel();
 
@@ -158,12 +155,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 }
                 invalidate();
             }
-
-            if (mScroller.isFinished() || !mIsAlphaMode)
-            {
-                showCheckedView(true);
-                showNormalView(false);
-            }
         } else
         {
             final int left = getLeftNormal();
@@ -178,12 +169,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 }
                 invalidate();
             }
+        }
 
-            if (mScroller.isFinished() || !mIsAlphaMode)
-            {
-                showCheckedView(false);
-                showNormalView(true);
-            }
+        if (mScroller.isFinished())
+        {
+            updateViewVisibilityByState();
+        } else
+        {
+            mIsScrollerStarted = true;
         }
         mViewThumb.setSelected(mIsChecked);
 
@@ -193,41 +186,34 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         }
     }
 
-    private void showCheckedView(boolean show)
+    private void updateViewVisibilityByState()
     {
-        if (mIsAlphaMode)
+        if (mIsChecked)
         {
-            float alpha = show ? 1.0f : 0f;
-            if (ViewCompat.getAlpha(mViewChecked) != alpha)
-            {
-                ViewCompat.setAlpha(mViewChecked, alpha);
-            }
+            showCheckedView(true);
+            showNormalView(false);
         } else
         {
-            int visibility = show ? View.VISIBLE : View.INVISIBLE;
-            if (mViewChecked.getVisibility() != visibility)
-            {
-                mViewChecked.setVisibility(visibility);
-            }
+            showCheckedView(false);
+            showNormalView(true);
+        }
+    }
+
+    private void showCheckedView(boolean show)
+    {
+        float alpha = show ? 1.0f : 0f;
+        if (ViewCompat.getAlpha(mViewChecked) != alpha)
+        {
+            ViewCompat.setAlpha(mViewChecked, alpha);
         }
     }
 
     private void showNormalView(boolean show)
     {
-        if (mIsAlphaMode)
+        float alpha = show ? 1.0f : 0f;
+        if (ViewCompat.getAlpha(mViewNormal) != alpha)
         {
-            float alpha = show ? 1.0f : 0f;
-            if (ViewCompat.getAlpha(mViewNormal) != alpha)
-            {
-                ViewCompat.setAlpha(mViewNormal, alpha);
-            }
-        } else
-        {
-            int visibility = show ? View.VISIBLE : View.INVISIBLE;
-            if (mViewNormal.getVisibility() != visibility)
-            {
-                mViewNormal.setVisibility(visibility);
-            }
+            ViewCompat.setAlpha(mViewNormal, alpha);
         }
     }
 
@@ -374,6 +360,13 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             moveView(mScroller.getDistanceMoveX());
             ViewCompat.postInvalidateOnAnimation(this);
+        } else
+        {
+            if (mIsScrollerStarted)
+            {
+                mIsScrollerStarted = false;
+                updateViewVisibilityByState();
+            }
         }
     }
 
@@ -504,12 +497,9 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
         ViewCompat.offsetLeftAndRight(mViewThumb, dx);
 
-        final float percent = getScrollPercent();
-        if (mIsAlphaMode)
-        {
-            ViewCompat.setAlpha(mViewChecked, percent);
-            ViewCompat.setAlpha(mViewNormal, 1 - percent);
-        }
+        float percent = getScrollPercent();
+        ViewCompat.setAlpha(mViewChecked, percent);
+        ViewCompat.setAlpha(mViewNormal, 1 - percent);
 
         if (mOnViewPositionChangedCallback != null)
         {
@@ -582,12 +572,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     public void setOnViewPositionChangedCallback(OnViewPositionChangedCallback onViewPositionChangedCallback)
     {
         mOnViewPositionChangedCallback = onViewPositionChangedCallback;
-    }
-
-    @Override
-    public void setAlphaMode(boolean alphaMode)
-    {
-        mIsAlphaMode = alphaMode;
     }
 
     @Override
