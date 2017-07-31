@@ -159,7 +159,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 invalidate();
             }
 
-            if (mScroller.isFinished())
+            if (mScroller.isFinished() || !mIsAlphaMode)
             {
                 showCheckedView(true);
                 showNormalView(false);
@@ -179,7 +179,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 invalidate();
             }
 
-            if (mScroller.isFinished())
+            if (mScroller.isFinished() || !mIsAlphaMode)
             {
                 showCheckedView(false);
                 showNormalView(true);
