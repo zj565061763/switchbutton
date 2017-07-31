@@ -33,11 +33,11 @@ class SDScroller extends Scroller
     /**
      * 两次computeScrollOffset()之间x移动的距离
      */
-    private int mMoveX;
+    private int mDistanceMoveX;
     /**
      * 两次computeScrollOffset()之间y移动的距离
      */
-    private int mMoveY;
+    private int mDistanceMoveY;
 
     public SDScroller(Context context)
     {
@@ -150,8 +150,8 @@ class SDScroller extends Scroller
         int currX = getCurrX();
         int currY = getCurrY();
 
-        mMoveX = currX - mLastX;
-        mMoveY = currY - mLastY;
+        mDistanceMoveX = currX - mLastX;
+        mDistanceMoveY = currY - mLastY;
 
         mLastX = currX;
         mLastY = currY;
@@ -163,9 +163,9 @@ class SDScroller extends Scroller
      *
      * @return
      */
-    public int getMoveX()
+    public int getDistanceMoveX()
     {
-        return mMoveX;
+        return mDistanceMoveX;
     }
 
     /**
@@ -173,9 +173,9 @@ class SDScroller extends Scroller
      *
      * @return
      */
-    public int getMoveY()
+    public int getDistanceMoveY()
     {
-        return mMoveY;
+        return mDistanceMoveY;
     }
 
     /**

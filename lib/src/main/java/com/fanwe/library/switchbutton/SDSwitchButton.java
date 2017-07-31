@@ -366,7 +366,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     {
         if (mScroller.computeScrollOffset())
         {
-            moveView(mScroller.getMoveX());
+            moveView(mScroller.getDistanceMoveX());
             ViewCompat.postInvalidateOnAnimation(this);
         }
     }
@@ -407,7 +407,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private boolean checkMoveParams()
     {
-        return mTouchHelper.getDegreeX() < 40;
+        return mTouchHelper.getDegreeX(true) < 40;
     }
 
     private boolean canPull()
