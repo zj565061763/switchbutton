@@ -84,7 +84,7 @@ class SDTouchHelper
 
         if (mDebug)
         {
-            StringBuilder sb = getDebugParams()
+            StringBuilder sb = getDebugInfo()
                     .append("DegreeX down:").append(getDegreeX(true)).append("\r\n")
                     .append("DegreeY down:").append(getDegreeY(true)).append("\r\n")
                     .append("DegreeX move:").append(getDegreeX(false)).append("\r\n")
@@ -365,7 +365,7 @@ class SDTouchHelper
 
     //----------static method end----------
 
-    public StringBuilder getDebugParams()
+    public StringBuilder getDebugInfo()
     {
         StringBuilder sb = new StringBuilder("\r\n");
         sb.append("DownX:").append(mDownX).append("\r\n")
