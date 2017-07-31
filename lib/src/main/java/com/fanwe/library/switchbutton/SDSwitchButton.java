@@ -458,28 +458,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private void processMoveEvent()
     {
         int dx = (int) mTouchHelper.getDistanceX(false);
-        int leftFuture = mViewThumb.getLeft() + dx;
-
-        if (mTouchHelper.isMoveLeft(false))
-        {
-            //如果向左拖动
-            if (leftFuture < getLeftNormal())
-            {
-                int comsume = getLeftNormal() - leftFuture;
-                dx += comsume;
-            }
-        }
-
-        if (mTouchHelper.isMoveRight(false))
-        {
-            //如果向右拖动
-            if (leftFuture > getLeftChecked())
-            {
-                int comsume = leftFuture - getLeftChecked();
-                dx -= comsume;
-            }
-        }
-
+        dx = mTouchHelper.getLegalDistanceX(mViewThumb, getLeftNormal(), getLeftChecked(), dx);
         moveView(dx);
     }
 

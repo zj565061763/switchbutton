@@ -290,6 +290,70 @@ class SDTouchHelper
         return result;
     }
 
+    /**
+     * 根据条件返回合法的x方向移动距离
+     *
+     * @param view    要处理的view
+     * @param minLeft view的最小left
+     * @param maxLeft view的最大left
+     * @param dx      x方向将要移动的距离
+     * @return
+     */
+    public int getLegalDistanceX(View view, int minLeft, int maxLeft, int dx)
+    {
+        int future = view.getLeft() + dx;
+        if (isMoveLeft(false))
+        {
+            //如果向左拖动
+            if (future < minLeft)
+            {
+                int comsume = minLeft - future;
+                dx += comsume;
+            }
+        } else if (isMoveRight(false))
+        {
+            //如果向右拖动
+            if (future > maxLeft)
+            {
+                int comsume = future - maxLeft;
+                dx -= comsume;
+            }
+        }
+        return dx;
+    }
+
+    /**
+     * 根据条件返回合法的y方向移动距离
+     *
+     * @param view   要处理的view
+     * @param minTop view的最小top
+     * @param maxTop view的最大top
+     * @param dy     y方向将要移动的距离
+     * @return
+     */
+    public int getLegalDistanceY(View view, int minTop, int maxTop, int dy)
+    {
+        int future = view.getTop() + dy;
+        if (isMoveUp(false))
+        {
+            //如果向上拖动
+            if (future < minTop)
+            {
+                int comsume = minTop - future;
+                dy += comsume;
+            }
+        } else if (isMoveDown(false))
+        {
+            //如果向下拖动
+            if (future > maxTop)
+            {
+                int comsume = future - maxTop;
+                dy -= comsume;
+            }
+        }
+        return dy;
+    }
+
     //----------static method start----------
 
     /**
