@@ -458,23 +458,45 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private void processMoveEvent()
     {
-        boolean canMove = false;
-        int dy = (int) mTouchHelper.getDistanceX(false);
-        int leftFuture = mViewThumb.getLeft() + dy;
-        if (leftFuture >= getLeftNormal() && leftFuture <= getLeftChecked())
+        int dx = (int) mTouchHelper.getDistanceX(false);
+        int leftFuture = mViewThumb.getLeft() + dx;
+
+        if (mTouchHelper.isMoveLeft(false))
         {
-            canMove = true;
+            //如果向左拖动
+            if (leftFuture < getLeftNormal())
+            {
+                int comsume = getLeftNormal() - leftFuture;
+                dx += comsume;
+            }
         }
 
-        if (canMove)
+        if (mTouchHelper.isMoveRight(false))
         {
-            moveView(dy);
+            //如果向右拖动
+            if (leftFuture > getLeftChecked())
+            {
+                int comsume = leftFuture - getLeftChecked();
+                dx -= comsume;
+            }
         }
+
+        moveView(dx);
     }
 
-    private void moveView(int dy)
+    private void moveView(int dx)
     {
-        ViewCompat.offsetLeftAndRight(mViewThumb, dy);
+        if (mIsDebug)
+        {
+            Log.i(TAG, "moveView:" + dx);
+        }
+
+        if (dx == 0)
+        {
+            return;
+        }
+
+        ViewCompat.offsetLeftAndRight(mViewThumb, dx);
 
         final float percent = getScrollPercent();
         if (mIsAlphaMode)
