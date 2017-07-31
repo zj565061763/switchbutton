@@ -146,9 +146,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         }
         if (mIsChecked)
         {
-            showCheckedView(true);
-            showNormalView(false);
-
             final int left = getLeftChecked();
             if (mViewThumb.getLeft() != left)
             {
@@ -161,11 +158,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 }
                 invalidate();
             }
+
+            if (mScroller.isFinished())
+            {
+                showCheckedView(true);
+                showNormalView(false);
+            }
         } else
         {
-            showCheckedView(false);
-            showNormalView(true);
-
             final int left = getLeftNormal();
             if (mViewThumb.getLeft() != left)
             {
@@ -177,6 +177,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                     mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
                 }
                 invalidate();
+            }
+
+            if (mScroller.isFinished())
+            {
+                showCheckedView(false);
+                showNormalView(true);
             }
         }
         mViewThumb.setSelected(mIsChecked);
