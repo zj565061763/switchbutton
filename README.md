@@ -189,13 +189,6 @@ public interface ISDSwitchButton
     void setOnViewPositionChangedCallback(OnViewPositionChangedCallback onViewPositionChangedCallback);
 
     /**
-     * 设置是否是透明度模式来显示隐藏view（默认true）
-     *
-     * @param alphaMode
-     */
-    void setAlphaMode(boolean alphaMode);
-
-    /**
      * 获得滚动的百分比[0-1]
      *
      * @return
