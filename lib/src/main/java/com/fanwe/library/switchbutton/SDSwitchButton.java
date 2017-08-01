@@ -7,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -57,12 +57,10 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      * 手柄view
      */
     private View mViewThumb;
-    /**
-     * 手柄view是否被自定义
-     */
-    private boolean mIsViewThumbCustom;
 
-    private GestureDetector mGestureDetector;
+    private int mTouchSlop;
+    private long mClickTimeout;
+
     private SDScroller mScroller;
     private boolean mIsScrollerStarted;
 
@@ -75,16 +73,18 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private void init(Context context, AttributeSet attrs)
     {
+        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        mClickTimeout = ViewConfiguration.getPressedStateDuration() + ViewConfiguration.getTapTimeout();
         mScroller = new SDScroller(getContext());
 
         mAttrModel.parse(context, attrs);
         addDefaultViews();
-        initGestureDetector();
     }
 
     public void setDebug(boolean debug)
     {
         mIsDebug = debug;
+        mTouchHelper.setDebug(debug);
     }
 
     private void addDefaultViews()
@@ -114,19 +114,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         mViewThumb = imageThumb;
 
         setChecked(mAttrModel.isChecked(), false, false);
-    }
-
-    private void initGestureDetector()
-    {
-        mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener()
-        {
-            @Override
-            public boolean onSingleTapUp(MotionEvent e)
-            {
-                toggleChecked(mAttrModel.isNeedToggleAnim(), true);
-                return super.onSingleTapUp(e);
-            }
-        });
     }
 
     /**
@@ -327,7 +314,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         if (replaceOldView(mViewThumb, viewThumb))
         {
             mViewThumb = viewThumb;
-            mIsViewThumbCustom = true;
         }
     }
 
@@ -405,19 +391,19 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private boolean checkMoveParams()
     {
-        return mTouchHelper.getDegreeX(true) < 40;
+        return mTouchHelper.getDegreeXFrom(SDTouchHelper.EVENT_DOWN) < 40;
     }
 
     private boolean canPull()
     {
         return checkMoveParams()
-                && ((mIsChecked && mTouchHelper.isMoveLeft(true)) || (!mIsChecked && mTouchHelper.isMoveRight(true)));
+                && ((mIsChecked && mTouchHelper.isMoveLeftFrom(SDTouchHelper.EVENT_DOWN))
+                || (!mIsChecked && mTouchHelper.isMoveRightFrom(SDTouchHelper.EVENT_DOWN)));
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        mGestureDetector.onTouchEvent(event);
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
         {
@@ -442,7 +428,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                onActionUp();
+                onActionUp(event);
 
                 mTouchHelper.setNeedCosume(false);
                 mTouchHelper.setNeedIntercept(false);
@@ -456,7 +442,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private void processMoveEvent()
     {
-        int dx = (int) mTouchHelper.getDistanceX(false);
+        int dx = (int) mTouchHelper.getDeltaXFrom(SDTouchHelper.EVENT_LAST);
         dx = mTouchHelper.getLegalDistanceX(mViewThumb, getLeftNormal(), getLeftChecked(), dx);
         moveView(dx);
     }
@@ -485,16 +471,25 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         }
     }
 
-    private void onActionUp()
+    private void onActionUp(MotionEvent event)
     {
-        if (mTouchHelper.isNeedCosume())
+        long duration = event.getEventTime() - event.getDownTime();
+        if (duration < mClickTimeout
+                && mTouchHelper.getDeltaXFrom(SDTouchHelper.EVENT_DOWN) < mTouchSlop
+                && mTouchHelper.getDeltaYFrom(SDTouchHelper.EVENT_DOWN) < mTouchSlop)
         {
-            if (mViewThumb.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2))
+            toggleChecked(mAttrModel.isNeedToggleAnim(), true);
+        } else
+        {
+            if (mTouchHelper.isNeedCosume())
             {
-                setChecked(true, true, true);
-            } else
-            {
-                setChecked(false, true, true);
+                if (mViewThumb.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2))
+                {
+                    setChecked(true, true, true);
+                } else
+                {
+                    setChecked(false, true, true);
+                }
             }
         }
     }
