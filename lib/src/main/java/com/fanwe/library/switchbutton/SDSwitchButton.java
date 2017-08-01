@@ -15,13 +15,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.fanwe.library.touchhelper.SDScroller;
-import com.fanwe.library.touchhelper.SDTouchHelper;
-
 /**
  * Created by Administrator on 2017/7/5.
  */
-
 public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 {
     public SDSwitchButton(@NonNull Context context)
