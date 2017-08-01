@@ -443,7 +443,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private void processMoveEvent()
     {
         int dx = (int) mTouchHelper.getDeltaXFrom(SDTouchHelper.EVENT_LAST);
-        dx = mTouchHelper.getLegalDistanceX(mViewThumb, getLeftNormal(), getLeftChecked(), dx);
+        dx = mTouchHelper.getLegalDeltaX(mViewThumb, getLeftNormal(), getLeftChecked(), dx);
         moveView(dx);
     }
 

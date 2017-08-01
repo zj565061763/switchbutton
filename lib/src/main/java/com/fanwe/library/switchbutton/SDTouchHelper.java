@@ -282,15 +282,15 @@ class SDTouchHelper
     }
 
     /**
-     * 根据条件返回合法的x方向移动距离
+     * 根据条件返回合法的x方向增量
      *
      * @param view    要处理的view
      * @param minLeft view的最小left
      * @param maxLeft view的最大left
-     * @param dx      x方向将要移动的距离
+     * @param dx      x方向将要叠加的增量
      * @return
      */
-    public int getLegalDistanceX(View view, int minLeft, int maxLeft, int dx)
+    public int getLegalDeltaX(View view, int minLeft, int maxLeft, int dx)
     {
         int future = view.getLeft() + dx;
         if (isMoveLeftFrom(EVENT_LAST))
@@ -314,15 +314,15 @@ class SDTouchHelper
     }
 
     /**
-     * 根据条件返回合法的y方向移动距离
+     * 根据条件返回合法的y方向增量
      *
      * @param view   要处理的view
      * @param minTop view的最小top
      * @param maxTop view的最大top
-     * @param dy     y方向将要移动的距离
+     * @param dy     y方向将要叠加的增量
      * @return
      */
-    public int getLegalDistanceY(View view, int minTop, int maxTop, int dy)
+    public int getLegalDeltaY(View view, int minTop, int maxTop, int dy)
     {
         int future = view.getTop() + dy;
         if (isMoveUpFrom(EVENT_LAST))
