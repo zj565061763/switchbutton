@@ -200,38 +200,23 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
      */
     private void updateViewByState(boolean anim)
     {
-        if (mIsDebug)
+        int left = mIsChecked ? getLeftChecked() : getLeftNormal();
+
+        if (mViewThumb.getLeft() != left)
         {
-            Log.i(TAG, "updateViewByState");
-        }
-        if (mIsChecked)
-        {
-            final int left = getLeftChecked();
-            if (mViewThumb.getLeft() != left)
+            if (mIsDebug)
             {
-                if (anim)
-                {
-                    mViewDragHelper.smoothSlideViewTo(mViewThumb, left, mViewThumb.getTop());
-                } else
-                {
-                    mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
-                }
-                invalidate();
+                Log.i(TAG, "updateViewByState:" + anim);
             }
-        } else
-        {
-            final int left = getLeftNormal();
-            if (mViewThumb.getLeft() != left)
+
+            if (anim)
             {
-                if (anim)
-                {
-                    mViewDragHelper.smoothSlideViewTo(mViewThumb, left, mViewThumb.getTop());
-                } else
-                {
-                    mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
-                }
-                invalidate();
+                mViewDragHelper.smoothSlideViewTo(mViewThumb, left, mViewThumb.getTop());
+            } else
+            {
+                mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
             }
+            invalidate();
         }
 
         if (mViewDragHelper.getViewDragState() == ViewDragHelper.STATE_SETTLING)
