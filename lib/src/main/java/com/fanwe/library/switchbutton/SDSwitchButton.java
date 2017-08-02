@@ -167,9 +167,13 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             public void onViewDragStateChanged(int state)
             {
                 super.onViewDragStateChanged(state);
-                if (mIsDebug)
+                if (state == ViewDragHelper.STATE_IDLE)
                 {
-                    Log.i(TAG, "ViewDragHelper onViewDragStateChanged:" + state);
+                    if (mIsScrollerStarted)
+                    {
+                        mIsScrollerStarted = false;
+                        updateViewVisibilityByState();
+                    }
                 }
             }
 
@@ -424,13 +428,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         if (mViewDragHelper.continueSettling(true))
         {
             ViewCompat.postInvalidateOnAnimation(this);
-        } else
-        {
-            if (mIsScrollerStarted)
-            {
-                mIsScrollerStarted = false;
-                updateViewVisibilityByState();
-            }
         }
     }
 
@@ -521,9 +518,9 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private void processMoveEvent(MotionEvent event)
     {
+        // 捕获view
         if (mViewDragHelper.getCapturedView() != mViewThumb)
         {
-            // 捕获view
             mViewDragHelper.captureChildView(mViewThumb, SDTouchHelper.getPointerId(event));
         }
 
