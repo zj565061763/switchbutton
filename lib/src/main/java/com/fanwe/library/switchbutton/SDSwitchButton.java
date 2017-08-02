@@ -206,7 +206,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             if (mIsDebug)
             {
-                Log.i(TAG, "updateViewByState:" + anim);
+                Log.i(TAG, "updateViewByState anim:" + anim);
             }
 
             if (anim)
