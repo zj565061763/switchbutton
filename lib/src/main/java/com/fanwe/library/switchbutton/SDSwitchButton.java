@@ -561,6 +561,10 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
         super.onLayout(changed, left, top, right, bottom);
+        if (mIsDebug)
+        {
+            Log.i(TAG, "onLayout");
+        }
         updateViewByState(false);
     }
 
