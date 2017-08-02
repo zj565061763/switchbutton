@@ -129,6 +129,26 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             }
 
             @Override
+            public void onViewCaptured(View capturedChild, int activePointerId)
+            {
+                super.onViewCaptured(capturedChild, activePointerId);
+                if (mIsDebug)
+                {
+                    Log.i(TAG, "ViewDragHelper onViewCaptured:" + capturedChild + " " + activePointerId);
+                }
+            }
+
+            @Override
+            public void onViewReleased(View releasedChild, float xvel, float yvel)
+            {
+                super.onViewReleased(releasedChild, xvel, yvel);
+                if (mIsDebug)
+                {
+                    Log.i(TAG, "ViewDragHelper onViewReleased:" + releasedChild + " " + xvel + "," + yvel);
+                }
+            }
+
+            @Override
             public int clampViewPositionVertical(View child, int top, int dy)
             {
                 return child.getTop();
@@ -148,6 +168,10 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 super.onViewDragStateChanged(state);
                 if (state == ViewDragHelper.STATE_IDLE)
                 {
+                    if (mIsDebug)
+                    {
+                        Log.i(TAG, "ViewDragHelper onViewDragStateChanged:" + state);
+                    }
                     updateViewVisibilityByState();
                 }
             }
@@ -227,6 +251,11 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private void updateViewVisibilityByState()
     {
+        if (mIsDebug)
+        {
+            Log.i(TAG, "updateViewVisibilityByState:" + mIsChecked);
+        }
+
         if (mIsChecked)
         {
             showCheckedView(true);
