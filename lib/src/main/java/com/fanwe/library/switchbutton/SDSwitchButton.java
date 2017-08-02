@@ -557,6 +557,10 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         if (mIsChecked != checked)
         {
             mIsChecked = checked;
+
+            updateViewByState(anim);
+
+            // 通知回调
             if (notifyCallback)
             {
                 if (mOnCheckedChangedCallback != null)
@@ -565,8 +569,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 }
             }
         }
-
-        updateViewByState(anim);
     }
 
     @Override
