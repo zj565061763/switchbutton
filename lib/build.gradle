@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 17080202
-        versionName "1.0.11"
+        versionCode 17080203
+        versionName "1.0.12"
     }
     buildTypes {
         release {
@@ -33,7 +33,7 @@ publish {
     userOrg = 'zj565061763'
     groupId = 'com.fanwe.android'
     artifactId = 'switchbutton'
-    publishVersion = '1.0.11'
+    publishVersion = '1.0.12'
     desc = 'android switchbutton library'
     website = 'https://github.com/zj565061763/SwitchButton'
 }
