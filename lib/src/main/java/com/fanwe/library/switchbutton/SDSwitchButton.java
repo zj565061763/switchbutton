@@ -134,7 +134,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 super.onViewCaptured(capturedChild, activePointerId);
                 if (mIsDebug)
                 {
-                    Log.i(TAG, "ViewDragHelper onViewCaptured:" + capturedChild + " " + activePointerId);
+                    Log.i(TAG, "ViewDragHelper onViewCaptured:" + activePointerId);
                 }
             }
 
@@ -144,7 +144,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 super.onViewReleased(releasedChild, xvel, yvel);
                 if (mIsDebug)
                 {
-                    Log.i(TAG, "ViewDragHelper onViewReleased:" + releasedChild + " " + xvel + "," + yvel);
+                    Log.i(TAG, "ViewDragHelper onViewReleased:" + xvel + "," + yvel);
                 }
             }
 
