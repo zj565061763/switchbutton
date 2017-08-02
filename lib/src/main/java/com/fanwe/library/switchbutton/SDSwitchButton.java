@@ -134,7 +134,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 super.onViewCaptured(capturedChild, activePointerId);
                 if (mIsDebug)
                 {
-                    Log.i(TAG, "ViewDragHelper onViewCaptured:" + activePointerId);
+                    Log.i(TAG, "ViewDragHelper onViewCaptured----------");
                 }
             }
 
@@ -144,7 +144,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 super.onViewReleased(releasedChild, xvel, yvel);
                 if (mIsDebug)
                 {
-                    Log.i(TAG, "ViewDragHelper onViewReleased:" + xvel + "," + yvel);
+                    Log.i(TAG, "ViewDragHelper onViewReleased");
                 }
             }
 
@@ -166,12 +166,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             public void onViewDragStateChanged(int state)
             {
                 super.onViewDragStateChanged(state);
+                if (mIsDebug)
+                {
+                    Log.i(TAG, "ViewDragHelper onViewDragStateChanged:" + state);
+                }
                 if (state == ViewDragHelper.STATE_IDLE)
                 {
-                    if (mIsDebug)
-                    {
-                        Log.i(TAG, "ViewDragHelper onViewDragStateChanged:" + state);
-                    }
                     updateViewVisibilityByState();
                 }
             }
@@ -459,9 +459,16 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private boolean canPull()
     {
-        return checkMoveParams()
+        boolean canPull = checkMoveParams()
                 && ((mIsChecked && mTouchHelper.isMoveLeftFrom(SDTouchHelper.EVENT_DOWN))
                 || (!mIsChecked && mTouchHelper.isMoveRightFrom(SDTouchHelper.EVENT_DOWN)));
+
+        if (mIsDebug)
+        {
+            Log.i(TAG, "canPull:" + canPull);
+        }
+
+        return canPull;
     }
 
     @Override
@@ -477,7 +484,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                     mViewDragHelper.processTouchEvent(event);
                 } else
                 {
-                    if (canPull())
+                    if (mTouchHelper.isNeedIntercept() || canPull())
                     {
                         // 捕获view
                         mViewDragHelper.captureChildView(mViewThumb, SDTouchHelper.getPointerId(event));

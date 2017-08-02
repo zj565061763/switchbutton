@@ -13,20 +13,38 @@
         android:layout_height="25dp"
         app:sbIsNeedToggleAnim="true"/>
 
-    <com.fanwe.library.switchbutton.SDSwitchButton
-        android:id="@+id/sb_rect"
-        android:layout_width="50dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="10dp"
-        app:sbImageChecked="@drawable/layer_checked_view"
-        app:sbImageNormal="@drawable/layer_normal_view"
-        app:sbImageThumb="@drawable/layer_thumb_view"
-        app:sbIsChecked="true"
-        app:sbMarginBottom="2dp"
-        app:sbMarginLeft="0dp"
-        app:sbMarginRight="2dp"
-        app:sbMarginTop="2dp"
-        app:sbMargins="1dp"/>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.fanwe.library.switchbutton.SDSwitchButton
+                android:id="@+id/sb_rect"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_margin="10dp"
+                app:sbImageChecked="@drawable/layer_checked_view"
+                app:sbImageNormal="@drawable/layer_normal_view"
+                app:sbImageThumb="@drawable/layer_thumb_view"
+                app:sbIsChecked="true"
+                app:sbMarginBottom="2dp"
+                app:sbMarginLeft="0dp"
+                app:sbMarginRight="2dp"
+                app:sbMarginTop="2dp"
+                app:sbMargins="1dp"/>
+
+            <View
+                android:layout_width="1000dp"
+                android:layout_height="50dp"
+                android:background="@color/red"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
     <com.fanwe.library.view.SDRecyclerView
         android:id="@+id/rv_content"
