@@ -485,15 +485,11 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             case MotionEvent.ACTION_MOVE:
                 if (mTouchHelper.isNeedCosume())
                 {
-                    // 处理view的拖动逻辑
-                    mViewDragHelper.processTouchEvent(event);
+                    processMoveEvent(event);
                 } else
                 {
                     if (mTouchHelper.isNeedIntercept() || canPull())
                     {
-                        // 捕获view
-                        mViewDragHelper.captureChildView(mViewThumb, SDTouchHelper.getPointerId(event));
-
                         mTouchHelper.setNeedCosume(true);
                         mTouchHelper.setNeedIntercept(true);
                         SDTouchHelper.requestDisallowInterceptTouchEvent(this, true);
@@ -521,6 +517,18 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         }
 
         return super.onTouchEvent(event) || mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;
+    }
+
+    private void processMoveEvent(MotionEvent event)
+    {
+        if (mViewDragHelper.getCapturedView() != mViewThumb)
+        {
+            // 捕获view
+            mViewDragHelper.captureChildView(mViewThumb, SDTouchHelper.getPointerId(event));
+        }
+
+        // 处理view的拖动逻辑
+        mViewDragHelper.processTouchEvent(event);
     }
 
     private void onActionUp(MotionEvent event)
