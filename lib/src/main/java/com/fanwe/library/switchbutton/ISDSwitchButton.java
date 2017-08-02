@@ -21,8 +21,9 @@ public interface ISDSwitchButton
      * @param checked        true-选中，false-未选中
      * @param anim           是否需要动画
      * @param notifyCallback 是否需要通知回调
+     * @return true-调用此方法后状态发生了变化
      */
-    void setChecked(boolean checked, boolean anim, boolean notifyCallback);
+    boolean setChecked(boolean checked, boolean anim, boolean notifyCallback);
 
     /**
      * 切换选中状态

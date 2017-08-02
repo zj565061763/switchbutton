@@ -525,12 +525,34 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             if (mTouchHelper.isNeedCosume())
             {
-                if (mViewThumb.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2))
+                boolean checked = false;
+                boolean updatePosition = false;
+                final int left = mViewThumb.getLeft();
+                if (left >= ((getLeftNormal() + getLeftChecked()) / 2))
                 {
-                    setChecked(true, true, true);
+                    checked = true;
+                    if (left != getLeftChecked())
+                    {
+                        updatePosition = true;
+                    }
                 } else
                 {
-                    setChecked(false, true, true);
+                    checked = false;
+                    if (left != getLeftNormal())
+                    {
+                        updatePosition = true;
+                    }
+                }
+
+                if (setChecked(checked, true, true))
+                {
+                    // 更新状态成功，内部会更新view的位置
+                } else
+                {
+                    if (updatePosition)
+                    {
+                        updateViewByState(true);
+                    }
                 }
             }
         }
@@ -552,7 +574,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     }
 
     @Override
-    public void setChecked(boolean checked, boolean anim, boolean notifyCallback)
+    public boolean setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
         if (mIsChecked != checked)
         {
@@ -568,6 +590,10 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                     mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
                 }
             }
+            return true;
+        } else
+        {
+            return false;
         }
     }
 
