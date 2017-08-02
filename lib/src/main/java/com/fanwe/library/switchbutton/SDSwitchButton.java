@@ -471,14 +471,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         switch (event.getAction())
         {
             case MotionEvent.ACTION_MOVE:
-                if (mTouchHelper.isNeedIntercept())
-                {
-                    // 已经满足拖动条件，直接处理拖动逻辑
-                    mTouchHelper.setNeedCosume(true);
-                    // 捕获view
-                    mViewDragHelper.captureChildView(mViewThumb, SDTouchHelper.getPointerId(event));
-                }
-
                 if (mTouchHelper.isNeedCosume())
                 {
                     // 处理view的拖动逻辑
