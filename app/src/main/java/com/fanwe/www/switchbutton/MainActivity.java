@@ -75,7 +75,6 @@ public class MainActivity extends SDBaseActivity
             public void onBindData(SDRecyclerViewHolder<SelectableModel> holder, int position, final SelectableModel model)
             {
                 SDSwitchButton sb = holder.get(R.id.sb);
-                sb.setDebug(true);
                 sb.setChecked(model.isSelected(), false, false);
                 sb.setOnCheckedChangedCallback(new ISDSwitchButton.OnCheckedChangedCallback()
                 {
