@@ -8,43 +8,56 @@
     android:padding="20dp"
     tools:context="com.fanwe.www.switchbutton.MainActivity">
 
-    <com.fanwe.library.switchbutton.SDSwitchButton
-        android:layout_width="50dp"
-        android:layout_height="25dp"
-        app:sbIsNeedToggleAnim="true"/>
-
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
-
             <com.fanwe.library.switchbutton.SDSwitchButton
-                android:id="@+id/sb_rect"
                 android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:layout_margin="10dp"
-                app:sbImageChecked="@drawable/layer_checked_view"
-                app:sbImageNormal="@drawable/layer_normal_view"
-                app:sbImageThumb="@drawable/layer_thumb_view"
-                app:sbIsChecked="true"
-                app:sbMarginBottom="2dp"
-                app:sbMarginLeft="0dp"
-                app:sbMarginRight="2dp"
-                app:sbMarginTop="2dp"
-                app:sbMargins="1dp"/>
-
+                app:sbIsNeedToggleAnim="true"/>
             <View
                 android:layout_width="1000dp"
                 android:layout_height="50dp"
                 android:background="@color/red"/>
-
         </LinearLayout>
-
     </HorizontalScrollView>
+
+    <com.fanwe.library.switchbutton.SDSwitchButton
+        android:id="@+id/sb_rect"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        app:sbImageChecked="@drawable/layer_checked_view"
+        app:sbImageNormal="@drawable/layer_normal_view"
+        app:sbImageThumb="@drawable/layer_thumb_view"
+        app:sbIsChecked="true"
+        app:sbMarginBottom="2dp"
+        app:sbMarginLeft="0dp"
+        app:sbMarginRight="2dp"
+        app:sbMarginTop="2dp"
+        app:sbMargins="1dp"/>
+
+    <com.fanwe.library.switchbutton.SDSwitchButton
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:id="@id/lib_sb_view_thumb"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/lib_sb_layer_thumb_view"/>
+
+    </com.fanwe.library.switchbutton.SDSwitchButton>
 
     <com.fanwe.library.view.SDRecyclerView
         android:id="@+id/rv_content"
