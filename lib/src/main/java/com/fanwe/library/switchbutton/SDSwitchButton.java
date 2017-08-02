@@ -525,19 +525,18 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         {
             if (mTouchHelper.isNeedCosume())
             {
-                boolean checked = false;
-                boolean updatePosition = false;
                 final int left = mViewThumb.getLeft();
-                if (left >= ((getLeftNormal() + getLeftChecked()) / 2))
+                boolean checked = left >= ((getLeftNormal() + getLeftChecked()) / 2);
+
+                boolean updatePosition = false;
+                if (checked)
                 {
-                    checked = true;
                     if (left != getLeftChecked())
                     {
                         updatePosition = true;
                     }
                 } else
                 {
-                    checked = false;
                     if (left != getLeftNormal())
                     {
                         updatePosition = true;
