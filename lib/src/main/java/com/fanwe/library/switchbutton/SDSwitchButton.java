@@ -427,6 +427,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         switch (ev.getAction())
         {
             case MotionEvent.ACTION_DOWN:
+                mViewDragHelper.processTouchEvent(ev);
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (canPull())
