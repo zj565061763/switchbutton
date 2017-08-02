@@ -64,6 +64,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private SDTouchHelper mTouchHelper = new SDTouchHelper();
     private ViewDragHelper mViewDragHelper;
+    private boolean mIsScrollerStarted;
 
     private SBAttrModel mAttrModel = new SBAttrModel();
 
@@ -170,10 +171,6 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 {
                     Log.i(TAG, "ViewDragHelper onViewDragStateChanged:" + state);
                 }
-                if (state == ViewDragHelper.STATE_IDLE)
-                {
-                    updateViewVisibilityByState();
-                }
             }
 
             @Override
@@ -236,6 +233,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         if (mViewDragHelper.getViewDragState() == ViewDragHelper.STATE_SETTLING)
         {
             //触发滚动成功，不需要立即更新view的可见状态，动画结束后更新
+            mIsScrollerStarted = true;
         } else
         {
             // 立即更新view的可见状态
@@ -426,6 +424,13 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         if (mViewDragHelper.continueSettling(true))
         {
             ViewCompat.postInvalidateOnAnimation(this);
+        } else
+        {
+            if (mIsScrollerStarted)
+            {
+                mIsScrollerStarted = false;
+                updateViewVisibilityByState();
+            }
         }
     }
 
