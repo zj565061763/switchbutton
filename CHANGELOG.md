@@ -1,3 +1,8 @@
+## 1.0.13
+* 修复OnViewPositionChangedCallback位置变化回调可能被多次调用的
+* 修复当拖动View被自定义为Button的时候由于Button内部拦截ACTION_DOWN事件导致拖动失效
+* 新增sbIsDebug的xml属性可以从xml中设置是否调试模式
+
 ## 1.0.12
 * 重构捕获view的逻辑判断
 
