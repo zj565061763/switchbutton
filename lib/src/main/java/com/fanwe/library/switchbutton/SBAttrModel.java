@@ -46,6 +46,10 @@ class SBAttrModel
      * 是否需要点击切换动画
      */
     private boolean isNeedToggleAnim;
+    /**
+     * 是否调试模式
+     */
+    private boolean isDebug;
 
     /**
      * 解析xml属性
@@ -101,6 +105,7 @@ class SBAttrModel
 
             isChecked = a.getBoolean(R.styleable.LibSwitchButton_sbIsChecked, false);
             isNeedToggleAnim = a.getBoolean(R.styleable.LibSwitchButton_sbIsNeedToggleAnim, true);
+            isDebug = a.getBoolean(R.styleable.LibSwitchButton_sbIsDebug, false);
 
             a.recycle();
         }
@@ -194,5 +199,15 @@ class SBAttrModel
     public void setNeedToggleAnim(boolean needToggleAnim)
     {
         isNeedToggleAnim = needToggleAnim;
+    }
+
+    public boolean isDebug()
+    {
+        return isDebug;
+    }
+
+    public void setDebug(boolean debug)
+    {
+        isDebug = debug;
     }
 }

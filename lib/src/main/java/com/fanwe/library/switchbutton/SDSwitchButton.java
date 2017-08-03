@@ -75,13 +75,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private void init(Context context, AttributeSet attrs)
     {
+        mAttrModel.parse(context, attrs);
+
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         mClickTimeout = ViewConfiguration.getPressedStateDuration() + ViewConfiguration.getTapTimeout();
 
         initViewDragHelper();
-
-        mAttrModel.parse(context, attrs);
         addDefaultViews();
+        setDebug(mAttrModel.isDebug());
     }
 
     public void setDebug(boolean debug)

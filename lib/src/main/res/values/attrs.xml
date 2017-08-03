@@ -22,6 +22,8 @@
         <attr name="sbMarginBottom" format="dimension"/>
         <!-- 是否需要点击切换动画 -->
         <attr name="sbIsNeedToggleAnim" format="boolean"/>
+        <!-- 是否调试模式 -->
+        <attr name="sbIsDebug" format="boolean"/>
     </declare-styleable>
 
 </resources>
