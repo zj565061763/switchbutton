@@ -32,7 +32,6 @@ public class MainActivity extends SDBaseActivity
 
         testRecyclerView();
 
-        sb_rect.setDebug(true);
         sb_rect.setOnCheckedChangedCallback(new SDSwitchButton.OnCheckedChangedCallback()
         {
             @Override

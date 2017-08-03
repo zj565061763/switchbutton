@@ -37,6 +37,7 @@
         app:sbImageNormal="@drawable/layer_normal_view"
         app:sbImageThumb="@drawable/layer_thumb_view"
         app:sbIsChecked="true"
+        app:sbIsDebug="true"
         app:sbMarginBottom="2dp"
         app:sbMarginLeft="0dp"
         app:sbMarginRight="2dp"
@@ -44,14 +45,15 @@
         app:sbMargins="1dp"/>
 
     <com.fanwe.library.switchbutton.SDSwitchButton
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp">
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        app:sbIsDebug="false">
 
         <Button
             android:id="@id/lib_sb_view_thumb"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
