@@ -425,6 +425,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
             return true;
         }
 
+        mTouchHelper.processTouchEvent(ev);
         switch (ev.getAction())
         {
             case MotionEvent.ACTION_DOWN:
