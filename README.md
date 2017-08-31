@@ -1,4 +1,4 @@
-# SwitchButton
+# About
 Android开关按钮<br>
 [更新日志](https://github.com/zj565061763/SwitchButton/blob/master/CHANGELOG.md)
 
