@@ -88,7 +88,7 @@ dependencies {
 ![](http://thumbsnap.com/i/YS9spIQs.gif?0706)<br>
 1. xml中布局：<br>
 ```xml
-<com.fanwe.library.switchbutton.SDSwitchButton
+<com.fanwe.lib.switchbutton.SDSwitchButton
     android:id="@+id/sb_rect"
     android:layout_width="50dp"
     android:layout_height="25dp"
@@ -121,7 +121,7 @@ sb_rect.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChang
 ![](http://thumbsnap.com/i/4jo7RqHa.gif?0706)<br>
 xml中布局：<br>
 ```xml
-<com.fanwe.library.switchbutton.SDSwitchButton
+<com.fanwe.lib.switchbutton.SDSwitchButton
     android:layout_width="50dp"
     android:layout_height="25dp"
     android:layout_marginTop="10dp">
@@ -143,7 +143,7 @@ xml中布局：<br>
         android:layout_height="match_parent"
         android:layout_margin="2dp"
         android:background="@color/white"/>
-</com.fanwe.library.switchbutton.SDSwitchButton>
+</com.fanwe.lib.switchbutton.SDSwitchButton>
 ```
 指定view的id为库中的默认id即可完全自定义view的展示效果，定义任何你想要的效果，可以指定其中一个id或者全部id<br>
 <br>
