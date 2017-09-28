@@ -6,7 +6,7 @@
               android:padding="2dp">
 
 
-    <com.fanwe.library.switchbutton.SDSwitchButton
+    <com.fanwe.lib.switchbutton.SDSwitchButton
         android:id="@+id/sb"
         android:layout_width="50dp"
         android:layout_height="25dp"/>
