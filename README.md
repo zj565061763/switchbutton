@@ -2,19 +2,7 @@
 Android开关按钮
 
 ## Gradle
-```
-allprojects {
-    repositories {
-        ...
-        maven { url 'https://jitpack.io' }
-    }
-}
-
-dependencies {
-        compile 'com.github.zj565061763:switchbutton:1.0.15'
-}
-
-```
+[![](https://jitpack.io/v/zj565061763/switchbutton.svg)](https://jitpack.io/#zj565061763/switchbutton)
 
 ## 默认效果
 ![](http://thumbsnap.com/i/KBISOucv.gif?0705)
