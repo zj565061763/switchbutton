@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
     defaultConfig {
         applicationId "com.fanwe.www.switchbutton"
         minSdkVersion 15
@@ -24,6 +23,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.fanwe.android:libCore:1.0.69'
+    compile 'com.github.zj565061763:libcore:1.0.98'
     compile project(':lib')
 }
