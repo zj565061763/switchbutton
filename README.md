@@ -76,7 +76,7 @@ Android开关按钮
 ![](http://thumbsnap.com/i/YS9spIQs.gif?0706)<br>
 1. xml中布局：<br>
 ```xml
-<com.fanwe.lib.switchbutton.SDSwitchButton
+<com.fanwe.lib.switchbutton.FSwitchButton
     android:id="@+id/sb_rect"
     android:layout_width="50dp"
     android:layout_height="25dp"
@@ -93,10 +93,10 @@ Android开关按钮
 ```
 2. java文件中：<br>
 ```java
-sb_rect.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChangedCallback()
+sb_rect.setOnViewPositionChangedCallback(new FISwitchButton.OnViewPositionChangedCallback()
 {
     @Override
-    public void onViewPositionChanged(SDSwitchButton view)
+    public void onViewPositionChanged(FSwitchButton view)
     {
         float percent = view.getScrollPercent() * 0.8f + 0.2f;
         ViewCompat.setScaleY(view.getViewNormal(), percent);
@@ -109,7 +109,7 @@ sb_rect.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChang
 ![](http://thumbsnap.com/i/4jo7RqHa.gif?0706)<br>
 xml中布局：<br>
 ```xml
-<com.fanwe.lib.switchbutton.SDSwitchButton
+<com.fanwe.lib.switchbutton.FSwitchButton
     android:layout_width="50dp"
     android:layout_height="25dp"
     android:layout_marginTop="10dp">
@@ -131,7 +131,7 @@ xml中布局：<br>
         android:layout_height="match_parent"
         android:layout_margin="2dp"
         android:background="@color/white"/>
-</com.fanwe.lib.switchbutton.SDSwitchButton>
+</com.fanwe.lib.switchbutton.FSwitchButton>
 ```
 指定view的id为库中的默认id即可完全自定义view的展示效果，定义任何你想要的效果，可以指定其中一个id或者全部id<br>
 <br>
@@ -147,7 +147,7 @@ xml中布局：<br>
 
 ## 支持的方法
 ```java
-public interface ISDSwitchButton
+public interface FISwitchButton
 {
     /**
      * 是否处于选中状态
@@ -223,7 +223,7 @@ public interface ISDSwitchButton
          * @param checked
          * @param view
          */
-        void onCheckedChanged(boolean checked, SDSwitchButton view);
+        void onCheckedChanged(boolean checked, FSwitchButton view);
     }
 
     interface OnViewPositionChangedCallback
@@ -233,7 +233,7 @@ public interface ISDSwitchButton
          *
          * @param view
          */
-        void onViewPositionChanged(SDSwitchButton view);
+        void onViewPositionChanged(FSwitchButton view);
     }
 }
 ```
