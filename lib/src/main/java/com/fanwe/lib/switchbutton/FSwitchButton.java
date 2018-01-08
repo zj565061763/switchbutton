@@ -31,22 +31,22 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
+public class FSwitchButton extends FrameLayout implements FISwitchButton
 {
-    public SDSwitchButton(@NonNull Context context)
+    public FSwitchButton(@NonNull Context context)
     {
         super(context);
         init(context, null);
     }
 
-    public SDSwitchButton(@NonNull Context context, @Nullable AttributeSet attrs)
+    public FSwitchButton(@NonNull Context context, @Nullable AttributeSet attrs)
     {
         super(context, attrs);
 
         init(context, attrs);
     }
 
-    public SDSwitchButton(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr)
+    public FSwitchButton(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
@@ -74,7 +74,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     private int mTouchSlop;
     private long mClickTimeout;
 
-    private SDTouchHelper mTouchHelper = new SDTouchHelper();
+    private FTouchHelper mTouchHelper = new FTouchHelper();
     private ViewDragHelper mViewDragHelper;
     private boolean mIsScrollerStarted;
 
@@ -117,7 +117,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         addView(imageChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         mViewChecked = imageChecked;
 
-        ImageView imageThumb = new SDThumbImageView(getContext());
+        ImageView imageThumb = new SBThumbImageView(getContext());
         imageThumb.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         imageThumb.setImageResource(mAttrModel.getImageThumbResId());
         LayoutParams pThumb = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
@@ -200,7 +200,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 ViewCompat.setAlpha(mViewNormal, 1 - percent);
                 if (mOnViewPositionChangedCallback != null)
                 {
-                    mOnViewPositionChangedCallback.onViewPositionChanged(SDSwitchButton.this);
+                    mOnViewPositionChangedCallback.onViewPositionChanged(FSwitchButton.this);
                 }
             }
         });
@@ -245,7 +245,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
         if (mOnViewPositionChangedCallback != null)
         {
-            mOnViewPositionChangedCallback.onViewPositionChanged(SDSwitchButton.this);
+            mOnViewPositionChangedCallback.onViewPositionChanged(FSwitchButton.this);
         }
     }
 
@@ -447,7 +447,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                 if (canPull())
                 {
                     mTouchHelper.setNeedIntercept(true);
-                    SDTouchHelper.requestDisallowInterceptTouchEvent(this, true);
+                    FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
                 }
                 break;
         }
@@ -456,14 +456,14 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
     private boolean checkMoveParams()
     {
-        return mTouchHelper.getDegreeXFrom(SDTouchHelper.EVENT_DOWN) < 40;
+        return mTouchHelper.getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 40;
     }
 
     private boolean canPull()
     {
         boolean canPull = checkMoveParams()
-                && ((mIsChecked && mTouchHelper.isMoveLeftFrom(SDTouchHelper.EVENT_DOWN))
-                || (!mIsChecked && mTouchHelper.isMoveRightFrom(SDTouchHelper.EVENT_DOWN)));
+                && ((mIsChecked && mTouchHelper.isMoveLeftFrom(FTouchHelper.EVENT_DOWN))
+                || (!mIsChecked && mTouchHelper.isMoveRightFrom(FTouchHelper.EVENT_DOWN)));
 
         if (mIsDebug)
         {
@@ -489,12 +489,12 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
                     {
                         mTouchHelper.setNeedCosume(true);
                         mTouchHelper.setNeedIntercept(true);
-                        SDTouchHelper.requestDisallowInterceptTouchEvent(this, true);
+                        FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
                     } else
                     {
                         mTouchHelper.setNeedCosume(false);
                         mTouchHelper.setNeedIntercept(false);
-                        SDTouchHelper.requestDisallowInterceptTouchEvent(this, false);
+                        FTouchHelper.requestDisallowInterceptTouchEvent(this, false);
                     }
                 }
                 break;
@@ -505,7 +505,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
 
                 mTouchHelper.setNeedCosume(false);
                 mTouchHelper.setNeedIntercept(false);
-                SDTouchHelper.requestDisallowInterceptTouchEvent(this, false);
+                FTouchHelper.requestDisallowInterceptTouchEvent(this, false);
                 break;
             default:
                 mViewDragHelper.processTouchEvent(event);
@@ -521,7 +521,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         // 捕获view
         if (mViewDragHelper.getCapturedView() != mViewThumb)
         {
-            mViewDragHelper.captureChildView(mViewThumb, SDTouchHelper.getPointerId(event));
+            mViewDragHelper.captureChildView(mViewThumb, event.getPointerId(event.getActionIndex()));
         }
 
         // 处理view的拖动逻辑
@@ -532,8 +532,8 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
     {
         long duration = event.getEventTime() - event.getDownTime();
         if (duration < mClickTimeout
-                && mTouchHelper.getDeltaXFrom(SDTouchHelper.EVENT_DOWN) < mTouchSlop
-                && mTouchHelper.getDeltaYFrom(SDTouchHelper.EVENT_DOWN) < mTouchSlop)
+                && mTouchHelper.getDeltaXFrom(FTouchHelper.EVENT_DOWN) < mTouchSlop
+                && mTouchHelper.getDeltaYFrom(FTouchHelper.EVENT_DOWN) < mTouchSlop)
         {
             toggleChecked(mAttrModel.isNeedToggleAnim(), true);
         } else
@@ -583,7 +583,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         updateViewByState(false);
     }
 
-    //----------ISDSwitchButton implements start----------
+    //----------FISwitchButton implements start----------
 
     @Override
     public boolean isChecked()
@@ -657,7 +657,7 @@ public class SDSwitchButton extends FrameLayout implements ISDSwitchButton
         return mViewThumb;
     }
 
-    //----------ISDSwitchButton implements end----------
+    //----------FISwitchButton implements end----------
 
     @Override
     protected void onDetachedFromWindow()

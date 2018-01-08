@@ -20,19 +20,19 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-class SDThumbImageView extends ImageView
+class SBThumbImageView extends ImageView
 {
-    public SDThumbImageView(Context context)
+    public SBThumbImageView(Context context)
     {
         super(context);
     }
 
-    public SDThumbImageView(Context context, @Nullable AttributeSet attrs)
+    public SBThumbImageView(Context context, @Nullable AttributeSet attrs)
     {
         super(context, attrs);
     }
 
-    public SDThumbImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr)
+    public SBThumbImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
     }

@@ -15,8 +15,6 @@
  */
 package com.fanwe.lib.switchbutton;
 
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,11 +23,11 @@ import android.view.ViewParent;
 /**
  * 触摸事件处理帮助类<br>
  */
-class SDTouchHelper
+class FTouchHelper
 {
-    private static final String TAG = "SDTouchHelper";
+    private static final String TAG = "FTouchHelper";
 
-    private boolean mDebug;
+    private boolean mIsDebug;
 
     /**
      * 最后一次ACTION_DOWN事件
@@ -63,9 +61,11 @@ class SDTouchHelper
     private float mUpX;
     private float mUpY;
 
+    private Direction mDirection = Direction.None;
+
     public void setDebug(boolean debug)
     {
-        mDebug = debug;
+        mIsDebug = debug;
     }
 
     /**
@@ -86,6 +86,8 @@ class SDTouchHelper
             case MotionEvent.ACTION_DOWN:
                 mDownX = mCurrentX;
                 mDownY = mCurrentY;
+
+                setDirection(Direction.None);
                 break;
             case MotionEvent.ACTION_MOVE:
                 mMoveX = mCurrentX;
@@ -99,7 +101,7 @@ class SDTouchHelper
                 break;
         }
 
-        if (mDebug)
+        if (mIsDebug)
         {
             StringBuilder sb = getDebugInfo();
             Log.i(TAG, "event " + ev.getAction() + ":" + sb.toString());
@@ -174,6 +176,111 @@ class SDTouchHelper
     public float getUpY()
     {
         return mUpY;
+    }
+
+    /**
+     * 保存当前移动方向
+     */
+    public void saveDirection()
+    {
+        if (mDirection != Direction.None)
+        {
+            return;
+        }
+
+        final float dx = getDeltaXFrom(EVENT_DOWN);
+        final float dy = getDeltaYFrom(EVENT_DOWN);
+        if (dx == 0 && dy == 0)
+        {
+            return;
+        }
+
+        if (Math.abs(dx) > Math.abs(dy))
+        {
+            if (dx < 0)
+            {
+                setDirection(Direction.MoveLeft);
+            } else if (dx > 0)
+            {
+                setDirection(Direction.MoveRight);
+            }
+        } else
+        {
+            if (dy < 0)
+            {
+                setDirection(Direction.MoveTop);
+            } else if (dy > 0)
+            {
+                setDirection(Direction.MoveBottom);
+            }
+        }
+    }
+
+    /**
+     * 保存水平方向
+     */
+    public void saveDirectionHorizontal()
+    {
+        if (mDirection == Direction.MoveLeft || mDirection == Direction.MoveRight)
+        {
+            return;
+        }
+        final int dx = (int) getDeltaXFrom(EVENT_DOWN);
+        if (dx == 0)
+        {
+            return;
+        }
+
+        if (dx < 0)
+        {
+            setDirection(Direction.MoveLeft);
+        } else if (dx > 0)
+        {
+            setDirection(Direction.MoveRight);
+        }
+    }
+
+    /**
+     * 保存竖直方向
+     */
+    public void saveDirectionVertical()
+    {
+        if (mDirection == Direction.MoveTop || mDirection == Direction.MoveBottom)
+        {
+            return;
+        }
+        final int dy = (int) getDeltaYFrom(EVENT_DOWN);
+        if (dy == 0)
+        {
+            return;
+        }
+
+        if (dy < 0)
+        {
+            setDirection(Direction.MoveTop);
+        } else if (dy > 0)
+        {
+            setDirection(Direction.MoveBottom);
+        }
+    }
+
+    private void setDirection(Direction direction)
+    {
+        mDirection = direction;
+        if (mIsDebug)
+        {
+            Log.i(TAG, "setDirection:" + direction);
+        }
+    }
+
+    /**
+     * 返回已保存的移动方向
+     *
+     * @return
+     */
+    public Direction getDirection()
+    {
+        return mDirection;
     }
 
     /**
@@ -264,6 +371,17 @@ class SDTouchHelper
     }
 
     /**
+     * 返回当前事件相对于指定事件是否向上移动
+     *
+     * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
+     * @return
+     */
+    public boolean isMoveTopFrom(int event)
+    {
+        return getDeltaYFrom(event) < 0;
+    }
+
+    /**
      * 返回当前事件相对于指定事件是否向右移动
      *
      * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
@@ -275,23 +393,12 @@ class SDTouchHelper
     }
 
     /**
-     * 返回当前事件相对于指定事件是否向上移动
-     *
-     * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
-     * @return
-     */
-    public boolean isMoveUpFrom(int event)
-    {
-        return getDeltaYFrom(event) < 0;
-    }
-
-    /**
      * 返回当前事件相对于指定事件是否向下移动
      *
      * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
      * @return
      */
-    public boolean isMoveDownFrom(int event)
+    public boolean isMoveBottomFrom(int event)
     {
         return getDeltaYFrom(event) > 0;
     }
@@ -299,29 +406,29 @@ class SDTouchHelper
     /**
      * 根据条件返回合法的x方向增量
      *
-     * @param view    要处理的view
-     * @param minLeft view的最小left
-     * @param maxLeft view的最大left
-     * @param dx      x方向将要叠加的增量
+     * @param x    当前x
+     * @param minX 最小x
+     * @param maxX 最大x
+     * @param dx   x方向将要叠加的增量
      * @return
      */
-    public int getLegalDeltaX(View view, int minLeft, int maxLeft, int dx)
+    public int getLegalDeltaX(int x, int minX, int maxX, int dx)
     {
-        int future = view.getLeft() + dx;
+        int future = x + dx;
         if (isMoveLeftFrom(EVENT_LAST))
         {
             //如果向左拖动
-            if (future < minLeft)
+            if (future < minX)
             {
-                int comsume = minLeft - future;
+                int comsume = minX - future;
                 dx += comsume;
             }
         } else if (isMoveRightFrom(EVENT_LAST))
         {
             //如果向右拖动
-            if (future > maxLeft)
+            if (future > maxX)
             {
-                int comsume = future - maxLeft;
+                int comsume = future - maxX;
                 dx -= comsume;
             }
         }
@@ -331,29 +438,29 @@ class SDTouchHelper
     /**
      * 根据条件返回合法的y方向增量
      *
-     * @param view   要处理的view
-     * @param minTop view的最小top
-     * @param maxTop view的最大top
-     * @param dy     y方向将要叠加的增量
+     * @param y    当前y
+     * @param minY 最小y
+     * @param maxY 最大y
+     * @param dy   y方向将要叠加的增量
      * @return
      */
-    public int getLegalDeltaY(View view, int minTop, int maxTop, int dy)
+    public int getLegalDeltaY(int y, int minY, int maxY, int dy)
     {
-        int future = view.getTop() + dy;
-        if (isMoveUpFrom(EVENT_LAST))
+        int future = y + dy;
+        if (isMoveTopFrom(EVENT_LAST))
         {
             //如果向上拖动
-            if (future < minTop)
+            if (future < minY)
             {
-                int comsume = minTop - future;
+                int comsume = minY - future;
                 dy += comsume;
             }
-        } else if (isMoveDownFrom(EVENT_LAST))
+        } else if (isMoveBottomFrom(EVENT_LAST))
         {
             //如果向下拖动
-            if (future > maxTop)
+            if (future > maxY)
             {
-                int comsume = future - maxTop;
+                int comsume = future - maxY;
                 dy -= comsume;
             }
         }
@@ -379,28 +486,6 @@ class SDTouchHelper
     }
 
     /**
-     * view是否已经滚动到最顶部
-     *
-     * @param view
-     * @return
-     */
-    public static boolean isScrollToTop(View view)
-    {
-        return !ViewCompat.canScrollVertically(view, -1);
-    }
-
-    /**
-     * view是否已经滚动到最底部
-     *
-     * @param view
-     * @return
-     */
-    public static boolean isScrollToBottom(View view)
-    {
-        return !ViewCompat.canScrollVertically(view, 1);
-    }
-
-    /**
      * view是否已经滚动到最左边
      *
      * @param view
@@ -408,7 +493,18 @@ class SDTouchHelper
      */
     public static boolean isScrollToLeft(View view)
     {
-        return !ViewCompat.canScrollHorizontally(view, -1);
+        return !view.canScrollHorizontally(-1);
+    }
+
+    /**
+     * view是否已经滚动到最顶部
+     *
+     * @param view
+     * @return
+     */
+    public static boolean isScrollToTop(View view)
+    {
+        return !view.canScrollVertically(-1);
     }
 
     /**
@@ -419,21 +515,42 @@ class SDTouchHelper
      */
     public static boolean isScrollToRight(View view)
     {
-        return !ViewCompat.canScrollHorizontally(view, -1);
+        return !view.canScrollHorizontally(1);
     }
 
     /**
-     * 返回MotionEvent的PointerId
+     * view是否已经滚动到最底部
      *
-     * @param event
+     * @param view
      * @return
      */
-    public static int getPointerId(MotionEvent event)
+    public static boolean isScrollToBottom(View view)
     {
-        return event.getPointerId(MotionEventCompat.getActionIndex(event));
+        return !view.canScrollVertically(1);
     }
 
     //----------static method end----------
+
+    public enum Direction
+    {
+        None,
+        /**
+         * 向左移动
+         */
+        MoveLeft,
+        /**
+         * 向上移动
+         */
+        MoveTop,
+        /**
+         * 向右移动
+         */
+        MoveRight,
+        /**
+         * 向下移动
+         */
+        MoveBottom,
+    }
 
     public StringBuilder getDebugInfo()
     {

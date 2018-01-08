@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.view.ViewGroup;
 
+import com.fanwe.lib.switchbutton.FISwitchButton;
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.activity.SDBaseActivity;
 import com.fanwe.library.adapter.SDSimpleRecyclerAdapter;
 import com.fanwe.library.adapter.viewholder.SDRecyclerViewHolder;
 import com.fanwe.library.model.SelectableModel;
-import com.fanwe.lib.switchbutton.ISDSwitchButton;
-import com.fanwe.lib.switchbutton.SDSwitchButton;
+import com.fanwe.lib.switchbutton.FSwitchButton;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.view.SDRecyclerView;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MainActivity extends SDBaseActivity
 {
-    private SDSwitchButton sb_rect;
+    private FSwitchButton sb_rect;
 
 
     @Override
@@ -28,22 +28,22 @@ public class MainActivity extends SDBaseActivity
     {
         SDLibrary.getInstance().init(getApplication());
         setContentView(R.layout.activity_main);
-        sb_rect = (SDSwitchButton) findViewById(R.id.sb_rect);
+        sb_rect = (FSwitchButton) findViewById(R.id.sb_rect);
 
         testRecyclerView();
 
-        sb_rect.setOnCheckedChangedCallback(new SDSwitchButton.OnCheckedChangedCallback()
+        sb_rect.setOnCheckedChangedCallback(new FSwitchButton.OnCheckedChangedCallback()
         {
             @Override
-            public void onCheckedChanged(boolean checked, SDSwitchButton view)
+            public void onCheckedChanged(boolean checked, FSwitchButton view)
             {
                 SDToast.showToast("" + checked);
             }
         });
-        sb_rect.setOnViewPositionChangedCallback(new ISDSwitchButton.OnViewPositionChangedCallback()
+        sb_rect.setOnViewPositionChangedCallback(new FISwitchButton.OnViewPositionChangedCallback()
         {
             @Override
-            public void onViewPositionChanged(SDSwitchButton view)
+            public void onViewPositionChanged(FSwitchButton view)
             {
                 LogUtil.i("percent:" + view.getScrollPercent());
                 float percent = view.getScrollPercent() * 0.8f + 0.2f;
@@ -73,12 +73,12 @@ public class MainActivity extends SDBaseActivity
             @Override
             public void onBindData(SDRecyclerViewHolder<SelectableModel> holder, int position, final SelectableModel model)
             {
-                SDSwitchButton sb = holder.get(R.id.sb);
+                FSwitchButton sb = holder.get(R.id.sb);
                 sb.setChecked(model.isSelected(), false, false);
-                sb.setOnCheckedChangedCallback(new ISDSwitchButton.OnCheckedChangedCallback()
+                sb.setOnCheckedChangedCallback(new FISwitchButton.OnCheckedChangedCallback()
                 {
                     @Override
-                    public void onCheckedChanged(boolean checked, SDSwitchButton view)
+                    public void onCheckedChanged(boolean checked, FSwitchButton view)
                     {
                         model.setSelected(checked);
                     }
