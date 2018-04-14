@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.view.ViewGroup;
 
+import com.fanwe.lib.adapter.FSimpleRecyclerAdapter;
+import com.fanwe.lib.adapter.viewholder.FRecyclerViewHolder;
+import com.fanwe.lib.selectmanager.FSelectManager;
 import com.fanwe.lib.switchbutton.FISwitchButton;
+import com.fanwe.lib.switchbutton.FSwitchButton;
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.activity.SDBaseActivity;
-import com.fanwe.library.adapter.SDSimpleRecyclerAdapter;
-import com.fanwe.library.adapter.viewholder.SDRecyclerViewHolder;
-import com.fanwe.library.model.SelectableModel;
-import com.fanwe.lib.switchbutton.FSwitchButton;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.view.SDRecyclerView;
@@ -59,19 +59,19 @@ public class MainActivity extends SDBaseActivity
 
     private void testRecyclerView()
     {
-        rv_content = (SDRecyclerView) findViewById(R.id.rv_content);
+        rv_content = findViewById(R.id.rv_content);
 
-        List<SelectableModel> listModel = new ArrayList<>();
+        List<FSelectManager.SelectableModel> listModel = new ArrayList<>();
         for (int i = 0; i < 100; i++)
         {
-            SelectableModel model = new SelectableModel();
+            FSelectManager.SelectableModel model = new FSelectManager.SelectableModel();
             listModel.add(model);
         }
 
-        SDSimpleRecyclerAdapter<SelectableModel> adapter = new SDSimpleRecyclerAdapter<SelectableModel>(listModel, this)
+        FSimpleRecyclerAdapter<FSelectManager.SelectableModel> adapter = new FSimpleRecyclerAdapter<FSelectManager.SelectableModel>(this)
         {
             @Override
-            public void onBindData(SDRecyclerViewHolder<SelectableModel> holder, int position, final SelectableModel model)
+            public void onBindData(FRecyclerViewHolder<FSelectManager.SelectableModel> holder, int position, final FSelectManager.SelectableModel model)
             {
                 FSwitchButton sb = holder.get(R.id.sb);
                 sb.setChecked(model.isSelected(), false, false);
@@ -91,6 +91,8 @@ public class MainActivity extends SDBaseActivity
                 return R.layout.item_listview;
             }
         };
+        adapter.getDataHolder().setData(listModel);
+
         rv_content.setAdapter(adapter);
     }
 }
