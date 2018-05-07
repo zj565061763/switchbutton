@@ -52,7 +52,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         init(context, attrs);
     }
 
-    private static final String TAG = "SDSwitchButton";
+    private static final String TAG = FSwitchButton.class.getSimpleName();
 
     /**
      * 是否选中
@@ -74,11 +74,11 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     private int mTouchSlop;
     private long mClickTimeout;
 
-    private FTouchHelper mTouchHelper = new FTouchHelper();
+    private final FTouchHelper mTouchHelper = new FTouchHelper();
     private ViewDragHelper mViewDragHelper;
     private boolean mIsScrollerStarted;
 
-    private SBAttrModel mAttrModel = new SBAttrModel();
+    private final SBAttrModel mAttrModel = new SBAttrModel();
 
     private boolean mIsDebug;
 
@@ -185,7 +185,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
                     if (mIsScrollerStarted)
                     {
                         mIsScrollerStarted = false;
-                        updateViewVisibilityByState();
+                        updateViewByState(false);
                     }
                 }
             }
@@ -213,7 +213,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
      */
     private void updateViewByState(boolean anim)
     {
-        int left = mIsChecked ? getLeftChecked() : getLeftNormal();
+        final int left = mIsChecked ? getLeftChecked() : getLeftNormal();
 
         if (mViewThumb.getLeft() != left)
         {
