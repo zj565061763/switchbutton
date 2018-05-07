@@ -22,10 +22,12 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.fanwe.lib.touchhelper.FGestureManager;
+import com.fanwe.lib.touchhelper.FTouchHelper;
 
 public class FSwitchButton extends FrameLayout implements FISwitchButton
 {
@@ -337,37 +339,56 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         }
 
         @Override
-        public boolean onGestureDown(MotionEvent event)
+        public void onTagInterceptChanged(boolean intercept)
+        {
+            final ViewParent parent = getParent();
+            if (parent != null)
+            {
+                parent.requestDisallowInterceptTouchEvent(intercept);
+            }
+        }
+
+        @Override
+        public boolean consumeDownEvent(MotionEvent event)
         {
             return true;
         }
 
         @Override
-        public boolean onGestureSingleTapUp(MotionEvent event)
+        public boolean shouldConsumeTouchEvent(MotionEvent event)
         {
-            toggleChecked(mAttrModel.isNeedToggleAnim(), true);
-            return true;
+            return event.getAction() == MotionEvent.ACTION_MOVE && canPull();
         }
 
         @Override
-        public boolean onGestureScroll(MotionEvent event)
+        public void onTagConsumeChanged(boolean consume)
         {
-            final int x = mViewThumb.getLeft();
-            final int minX = getLeftNormal();
-            final int maxX = getLeftChecked();
-            final int dx = (int) mGestureManager.getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
-
-            final int dxLegal = mGestureManager.getTouchHelper().getLegalDeltaX(x, minX, maxX, dx);
-            mViewThumb.offsetLeftAndRight(dxLegal);
-
-            notifyViewPositionChanged();
-            return true;
+            mGestureManager.getTouchHelper().setTagIntercept(consume);
         }
 
         @Override
-        public void onGestureFinish(MotionEvent event, float velocityX, float velocityY)
+        public boolean onConsumeEvent(MotionEvent event)
         {
-            if (mGestureManager.hasScrolled())
+            if (event.getAction() == MotionEvent.ACTION_MOVE)
+            {
+                final int x = mViewThumb.getLeft();
+                final int minX = getLeftNormal();
+                final int maxX = getLeftChecked();
+                final int dx = (int) mGestureManager.getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
+
+                final int dxLegal = mGestureManager.getTouchHelper().getLegalDeltaX(x, minX, maxX, dx);
+                mViewThumb.offsetLeftAndRight(dxLegal);
+
+                notifyViewPositionChanged();
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onConsumeEventFinish(MotionEvent event)
+        {
+            if (mGestureManager.hasConsumed())
             {
                 if (mIsDebug)
                 {
