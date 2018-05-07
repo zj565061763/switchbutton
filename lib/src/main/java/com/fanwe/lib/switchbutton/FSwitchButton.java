@@ -408,10 +408,6 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
     @Override
     protected void onComputeScroll(int dx, int dy)
     {
-        if (mIsDebug)
-        {
-            Log.e(TAG, "onComputeScroll");
-        }
         mViewThumb.offsetLeftAndRight(dx);
         notifyViewPositionChanged();
     }
