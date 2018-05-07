@@ -354,14 +354,18 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
     }
 
     @Override
-    protected boolean shouldInterceptTouchEventMove(MotionEvent event)
+    protected boolean shouldInterceptTouchEvent(MotionEvent event)
     {
         return canPull();
     }
 
+    private boolean mOnGestureScrolled;
+
     @Override
     protected boolean onGestureScroll(MotionEvent event)
     {
+        mOnGestureScrolled = true;
+
         final int x = mViewThumb.getLeft();
         final int minX = getLeftNormal();
         final int maxX = getLeftChecked();
@@ -370,40 +374,46 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
         final int dxLegal = getTouchHelper().getLegalDeltaX(x, minX, maxX, dx);
         mViewThumb.offsetLeftAndRight(dxLegal);
 
+        onViewPositionChanged();
         return true;
     }
 
     @Override
-    protected void onGestureUp(MotionEvent event, float velocityX, float velocityY)
+    protected void onGestureFinish(MotionEvent event, float velocityX, float velocityY)
     {
-//        final int left = mViewThumb.getLeft();
-//        final boolean checked = left >= ((getLeftNormal() + getLeftChecked()) / 2);
-//
-//        boolean updatePosition = false;
-//        if (checked)
-//        {
-//            if (left != getLeftChecked())
-//            {
-//                updatePosition = true;
-//            }
-//        } else
-//        {
-//            if (left != getLeftNormal())
-//            {
-//                updatePosition = true;
-//            }
-//        }
-//
-//        if (setChecked(checked, true, true))
-//        {
-//            // 更新状态成功，内部会更新view的位置
-//        } else
-//        {
-//            if (updatePosition)
-//            {
-//                updateViewByState(true);
-//            }
-//        }
+        if (mOnGestureScrolled)
+        {
+            mOnGestureScrolled = false;
+
+            final int left = mViewThumb.getLeft();
+            final boolean checked = left >= ((getLeftNormal() + getLeftChecked()) / 2);
+
+            boolean updatePosition = false;
+            if (checked)
+            {
+                if (left != getLeftChecked())
+                {
+                    updatePosition = true;
+                }
+            } else
+            {
+                if (left != getLeftNormal())
+                {
+                    updatePosition = true;
+                }
+            }
+
+            if (setChecked(checked, true, true))
+            {
+                // 更新状态成功，内部会更新view的位置
+            } else
+            {
+                if (updatePosition)
+                {
+                    updateViewByState(true);
+                }
+            }
+        }
     }
 
     @Override
