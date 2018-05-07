@@ -135,7 +135,6 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
 
             if (anim)
             {
-                mGestureManager.getScroller().abortAnimation();
                 mGestureManager.getScroller().startScrollToX(mViewThumb.getLeft(), left, -1);
                 isScrollerStarted = true;
             } else
@@ -472,6 +471,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         {
             mIsChecked = checked;
 
+            mGestureManager.getScroller().abortAnimation();
             updateViewByState(anim);
 
             // 通知回调
