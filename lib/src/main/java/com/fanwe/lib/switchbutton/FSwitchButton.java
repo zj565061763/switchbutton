@@ -134,6 +134,7 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
 
             if (anim)
             {
+                getScroller().abortAnimation();
                 if (getScroller().startScrollToX(mViewThumb.getLeft(), left, -1))
                 {
                     isScrollerStarted = true;
