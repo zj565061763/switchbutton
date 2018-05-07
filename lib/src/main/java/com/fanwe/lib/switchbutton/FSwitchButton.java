@@ -66,7 +66,6 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
      */
     private View mViewThumb;
 
-    private boolean mIsScrollerStarted;
     private final SBAttrModel mAttrModel = new SBAttrModel();
 
     private boolean mIsDebug;
@@ -124,8 +123,8 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
      */
     private void updateViewByState(boolean anim)
     {
+        boolean isScrollerStarted = false;
         final int left = mIsChecked ? getLeftChecked() : getLeftNormal();
-
         if (mViewThumb.getLeft() != left)
         {
             if (mIsDebug)
@@ -137,7 +136,7 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
             {
                 if (getScroller().startScrollToX(mViewThumb.getLeft(), left, -1))
                 {
-                    mIsScrollerStarted = true;
+                    isScrollerStarted = true;
                 }
             } else
             {
@@ -146,7 +145,7 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
             invalidate();
         }
 
-        if (mIsScrollerStarted)
+        if (isScrollerStarted)
         {
             //触发滚动成功，不需要立即更新view的可见状态，动画结束后更新
         } else
@@ -156,18 +155,14 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
         }
 
         mViewThumb.setSelected(mIsChecked);
-
-        if (mOnViewPositionChangedCallback != null)
-        {
-            mOnViewPositionChangedCallback.onViewPositionChanged(FSwitchButton.this);
-        }
+        notifyViewPositionChanged();
     }
 
     private void updateViewVisibilityByState()
     {
         if (mIsDebug)
         {
-            Log.i(TAG, "updateViewVisibilityByState:" + mIsChecked);
+            Log.i(TAG, "updateViewVisibilityByState isChecked:" + mIsChecked);
         }
 
         if (mIsChecked)
@@ -341,7 +336,7 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
 
     private boolean canPull()
     {
-        boolean canPull = checkMoveParams()
+        final boolean canPull = checkMoveParams()
                 && ((mIsChecked && getTouchHelper().isMoveLeftFrom(FTouchHelper.EVENT_DOWN))
                 || (!mIsChecked && getTouchHelper().isMoveRightFrom(FTouchHelper.EVENT_DOWN)));
 
@@ -374,7 +369,7 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
         final int dxLegal = getTouchHelper().getLegalDeltaX(x, minX, maxX, dx);
         mViewThumb.offsetLeftAndRight(dxLegal);
 
-        onViewPositionChanged();
+        notifyViewPositionChanged();
         return true;
     }
 
@@ -385,33 +380,20 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
         {
             mOnGestureScrolled = false;
 
+            if (mIsDebug)
+            {
+                Log.i(TAG, "onGestureFinish");
+            }
+
             final int left = mViewThumb.getLeft();
             final boolean checked = left >= ((getLeftNormal() + getLeftChecked()) / 2);
-
-            boolean updatePosition = false;
-            if (checked)
-            {
-                if (left != getLeftChecked())
-                {
-                    updatePosition = true;
-                }
-            } else
-            {
-                if (left != getLeftNormal())
-                {
-                    updatePosition = true;
-                }
-            }
 
             if (setChecked(checked, true, true))
             {
                 // 更新状态成功，内部会更新view的位置
             } else
             {
-                if (updatePosition)
-                {
-                    updateViewByState(true);
-                }
+                updateViewByState(true);
             }
         }
     }
@@ -426,18 +408,25 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
     @Override
     protected void onComputeScroll(int dx, int dy)
     {
+        if (mIsDebug)
+        {
+            Log.e(TAG, "onComputeScroll");
+        }
         mViewThumb.offsetLeftAndRight(dx);
-        onViewPositionChanged();
+        notifyViewPositionChanged();
     }
 
     @Override
     protected void onComputeScrollFinish()
     {
-        mIsScrollerStarted = false;
+        if (mIsDebug)
+        {
+            Log.e(TAG, "onComputeScrollFinish");
+        }
         updateViewVisibilityByState();
     }
 
-    protected void onViewPositionChanged()
+    protected void notifyViewPositionChanged()
     {
         float percent = getScrollPercent();
         mViewChecked.setAlpha(percent);
@@ -452,10 +441,6 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
         super.onLayout(changed, left, top, right, bottom);
-        if (mIsDebug)
-        {
-            Log.i(TAG, "onLayout");
-        }
         updateViewByState(false);
     }
 
