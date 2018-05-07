@@ -2,7 +2,9 @@ package com.fanwe.www.switchbutton;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.fanwe.lib.adapter.FSimpleRecyclerAdapter;
 import com.fanwe.lib.adapter.viewholder.FRecyclerViewHolder;
@@ -12,7 +14,6 @@ import com.fanwe.lib.switchbutton.FSwitchButton;
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.activity.SDBaseActivity;
 import com.fanwe.library.utils.LogUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.view.SDRecyclerView;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class MainActivity extends SDBaseActivity
             @Override
             public void onCheckedChanged(boolean checked, FSwitchButton view)
             {
-                SDToast.showToast("" + checked);
+                LogUtil.i("onCheckedChanged:" + checked);
             }
         });
         sb_rect.setOnViewPositionChangedCallback(new FISwitchButton.OnViewPositionChangedCallback()
@@ -48,6 +49,15 @@ public class MainActivity extends SDBaseActivity
                 float percent = view.getScrollPercent() * 0.8f + 0.2f;
                 ViewCompat.setScaleY(view.getViewNormal(), percent);
                 ViewCompat.setScaleY(view.getViewChecked(), percent);
+            }
+        });
+
+        sb_rect.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
