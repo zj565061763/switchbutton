@@ -411,9 +411,11 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
 
     private boolean canPull()
     {
-        final boolean canPull = mGestureManager.getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 40
-                && ((mIsChecked && mGestureManager.getTouchHelper().isMoveLeftFrom(FTouchHelper.EVENT_DOWN))
-                || (!mIsChecked && mGestureManager.getTouchHelper().isMoveRightFrom(FTouchHelper.EVENT_DOWN)));
+        final boolean checkDegreeX = mGestureManager.getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 40;
+        final boolean checkMoveLeft = mIsChecked && mGestureManager.getTouchHelper().isMoveLeftFrom(FTouchHelper.EVENT_DOWN);
+        final boolean checkMoveRight = !mIsChecked && mGestureManager.getTouchHelper().isMoveRightFrom(FTouchHelper.EVENT_DOWN);
+
+        final boolean canPull = checkDegreeX && (checkMoveLeft || checkMoveRight);
 
         if (mIsDebug)
         {
