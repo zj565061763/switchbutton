@@ -16,37 +16,32 @@
 package com.fanwe.lib.switchbutton;
 
 import android.content.Context;
-import android.support.annotation.AttrRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-public class FSwitchButton extends FrameLayout implements FISwitchButton
+import com.fanwe.lib.touchhelper.view.FGestureFrameLayout;
+
+public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
 {
-    public FSwitchButton(@NonNull Context context)
+    public FSwitchButton(Context context)
     {
         super(context);
         init(context, null);
     }
 
-    public FSwitchButton(@NonNull Context context, @Nullable AttributeSet attrs)
+    public FSwitchButton(Context context, AttributeSet attrs)
     {
         super(context, attrs);
 
         init(context, attrs);
     }
 
-    public FSwitchButton(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr)
+    public FSwitchButton(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
@@ -71,13 +66,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
      */
     private View mViewThumb;
 
-    private int mTouchSlop;
-    private long mClickTimeout;
-
-    private final FTouchHelper mTouchHelper = new FTouchHelper();
-    private ViewDragHelper mViewDragHelper;
     private boolean mIsScrollerStarted;
-
     private final SBAttrModel mAttrModel = new SBAttrModel();
 
     private boolean mIsDebug;
@@ -89,10 +78,6 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     {
         mAttrModel.parse(context, attrs);
 
-        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-        mClickTimeout = ViewConfiguration.getPressedStateDuration() + ViewConfiguration.getTapTimeout();
-
-        initViewDragHelper();
         addDefaultViews();
         setDebug(mAttrModel.isDebug());
     }
@@ -100,7 +85,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     public void setDebug(boolean debug)
     {
         mIsDebug = debug;
-        mTouchHelper.setDebug(debug);
+        getTouchHelper().setDebug(debug);
     }
 
     private void addDefaultViews()
@@ -132,80 +117,6 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         setChecked(mAttrModel.isChecked(), false, false);
     }
 
-    private void initViewDragHelper()
-    {
-        mViewDragHelper = ViewDragHelper.create(this, new ViewDragHelper.Callback()
-        {
-            @Override
-            public boolean tryCaptureView(View child, int pointerId)
-            {
-                return false;
-            }
-
-            @Override
-            public void onViewCaptured(View capturedChild, int activePointerId)
-            {
-                super.onViewCaptured(capturedChild, activePointerId);
-                if (mIsDebug)
-                {
-                    Log.i(TAG, "ViewDragHelper onViewCaptured----------");
-                }
-            }
-
-            @Override
-            public void onViewReleased(View releasedChild, float xvel, float yvel)
-            {
-                super.onViewReleased(releasedChild, xvel, yvel);
-                if (mIsDebug)
-                {
-                    Log.i(TAG, "ViewDragHelper onViewReleased");
-                }
-            }
-
-            @Override
-            public int clampViewPositionVertical(View child, int top, int dy)
-            {
-                return child.getTop();
-            }
-
-            @Override
-            public int clampViewPositionHorizontal(View child, int left, int dx)
-            {
-                int result = Math.max(getLeftNormal(), left);
-                result = Math.min(result, getLeftChecked());
-                return result;
-            }
-
-            @Override
-            public void onViewDragStateChanged(int state)
-            {
-                super.onViewDragStateChanged(state);
-                if (state == ViewDragHelper.STATE_IDLE)
-                {
-                    if (mIsScrollerStarted)
-                    {
-                        mIsScrollerStarted = false;
-                        updateViewByState(false);
-                    }
-                }
-            }
-
-            @Override
-            public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy)
-            {
-                super.onViewPositionChanged(changedView, left, top, dx, dy);
-
-                float percent = getScrollPercent();
-                ViewCompat.setAlpha(mViewChecked, percent);
-                ViewCompat.setAlpha(mViewNormal, 1 - percent);
-                if (mOnViewPositionChangedCallback != null)
-                {
-                    mOnViewPositionChangedCallback.onViewPositionChanged(FSwitchButton.this);
-                }
-            }
-        });
-    }
-
     /**
      * 根据状态改变view
      *
@@ -224,7 +135,10 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
 
             if (anim)
             {
-                mViewDragHelper.smoothSlideViewTo(mViewThumb, left, mViewThumb.getTop());
+                if (getScroller().startScrollX(mViewThumb.getLeft(), left, -1))
+                {
+                    mIsScrollerStarted = true;
+                }
             } else
             {
                 mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
@@ -232,15 +146,15 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
             invalidate();
         }
 
-        if (mViewDragHelper.getViewDragState() == ViewDragHelper.STATE_SETTLING)
+        if (mIsScrollerStarted)
         {
             //触发滚动成功，不需要立即更新view的可见状态，动画结束后更新
-            mIsScrollerStarted = true;
         } else
         {
             // 立即更新view的可见状态
             updateViewVisibilityByState();
         }
+
         mViewThumb.setSelected(mIsChecked);
 
         if (mOnViewPositionChangedCallback != null)
@@ -270,18 +184,18 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     private void showCheckedView(boolean show)
     {
         float alpha = show ? 1.0f : 0f;
-        if (ViewCompat.getAlpha(mViewChecked) != alpha)
+        if (mViewChecked.getAlpha() != alpha)
         {
-            ViewCompat.setAlpha(mViewChecked, alpha);
+            mViewChecked.setAlpha(alpha);
         }
     }
 
     private void showNormalView(boolean show)
     {
         float alpha = show ? 1.0f : 0f;
-        if (ViewCompat.getAlpha(mViewNormal) != alpha)
+        if (mViewNormal.getAlpha() != alpha)
         {
-            ViewCompat.setAlpha(mViewNormal, alpha);
+            mViewNormal.setAlpha(alpha);
         }
     }
 
@@ -420,50 +334,16 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         }
     }
 
-    @Override
-    public void computeScroll()
-    {
-        if (mViewDragHelper.continueSettling(true))
-        {
-            ViewCompat.postInvalidateOnAnimation(this);
-        }
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev)
-    {
-        if (mTouchHelper.isNeedIntercept())
-        {
-            return true;
-        }
-
-        mTouchHelper.processTouchEvent(ev);
-        switch (ev.getAction())
-        {
-            case MotionEvent.ACTION_DOWN:
-                mViewDragHelper.processTouchEvent(ev);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (canPull())
-                {
-                    mTouchHelper.setNeedIntercept(true);
-                    FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
-                }
-                break;
-        }
-        return mTouchHelper.isNeedIntercept();
-    }
-
     private boolean checkMoveParams()
     {
-        return mTouchHelper.getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 40;
+        return getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 40;
     }
 
     private boolean canPull()
     {
         boolean canPull = checkMoveParams()
-                && ((mIsChecked && mTouchHelper.isMoveLeftFrom(FTouchHelper.EVENT_DOWN))
-                || (!mIsChecked && mTouchHelper.isMoveRightFrom(FTouchHelper.EVENT_DOWN)));
+                && ((mIsChecked && getTouchHelper().isMoveLeftFrom(FTouchHelper.EVENT_DOWN))
+                || (!mIsChecked && getTouchHelper().isMoveRightFrom(FTouchHelper.EVENT_DOWN)));
 
         if (mIsDebug)
         {
@@ -474,101 +354,80 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event)
+    protected boolean shouldInterceptTouchEventMove(MotionEvent event)
     {
-        mTouchHelper.processTouchEvent(event);
-        switch (event.getAction())
-        {
-            case MotionEvent.ACTION_MOVE:
-                if (mTouchHelper.isNeedCosume())
-                {
-                    processMoveEvent(event);
-                } else
-                {
-                    if (mTouchHelper.isNeedIntercept() || canPull())
-                    {
-                        mTouchHelper.setNeedCosume(true);
-                        mTouchHelper.setNeedIntercept(true);
-                        FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
-                    } else
-                    {
-                        mTouchHelper.setNeedCosume(false);
-                        mTouchHelper.setNeedIntercept(false);
-                        FTouchHelper.requestDisallowInterceptTouchEvent(this, false);
-                    }
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                mViewDragHelper.processTouchEvent(event);
-                onActionUp(event);
-
-                mTouchHelper.setNeedCosume(false);
-                mTouchHelper.setNeedIntercept(false);
-                FTouchHelper.requestDisallowInterceptTouchEvent(this, false);
-                break;
-            default:
-                mViewDragHelper.processTouchEvent(event);
-                break;
-
-        }
-
-        return super.onTouchEvent(event) || mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;
+        return canPull();
     }
 
-    private void processMoveEvent(MotionEvent event)
+    @Override
+    protected boolean onGestureScroll(MotionEvent event)
     {
-        // 捕获view
-        if (mViewDragHelper.getCapturedView() != mViewThumb)
-        {
-            mViewDragHelper.captureChildView(mViewThumb, event.getPointerId(event.getActionIndex()));
-        }
+        final int x = mViewThumb.getLeft();
+        final int minX = getLeftNormal();
+        final int maxX = getLeftChecked();
+        final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
 
-        // 处理view的拖动逻辑
-        mViewDragHelper.processTouchEvent(event);
+        final int dxLegal = getTouchHelper().getLegalDeltaX(x, minX, maxX, dx);
+        mViewThumb.offsetLeftAndRight(dxLegal);
+
+        return true;
     }
 
-    private void onActionUp(MotionEvent event)
+    @Override
+    protected void onGestureUp(MotionEvent event, float velocityX, float velocityY)
     {
-        long duration = event.getEventTime() - event.getDownTime();
-        if (duration < mClickTimeout
-                && mTouchHelper.getDeltaXFrom(FTouchHelper.EVENT_DOWN) < mTouchSlop
-                && mTouchHelper.getDeltaYFrom(FTouchHelper.EVENT_DOWN) < mTouchSlop)
+        final int left = mViewThumb.getLeft();
+        final boolean checked = left >= ((getLeftNormal() + getLeftChecked()) / 2);
+
+        boolean updatePosition = false;
+        if (checked)
         {
-            toggleChecked(mAttrModel.isNeedToggleAnim(), true);
+            if (left != getLeftChecked())
+            {
+                updatePosition = true;
+            }
         } else
         {
-            if (mTouchHelper.isNeedCosume())
+            if (left != getLeftNormal())
             {
-                final int left = mViewThumb.getLeft();
-                final boolean checked = left >= ((getLeftNormal() + getLeftChecked()) / 2);
-
-                boolean updatePosition = false;
-                if (checked)
-                {
-                    if (left != getLeftChecked())
-                    {
-                        updatePosition = true;
-                    }
-                } else
-                {
-                    if (left != getLeftNormal())
-                    {
-                        updatePosition = true;
-                    }
-                }
-
-                if (setChecked(checked, true, true))
-                {
-                    // 更新状态成功，内部会更新view的位置
-                } else
-                {
-                    if (updatePosition)
-                    {
-                        updateViewByState(true);
-                    }
-                }
+                updatePosition = true;
             }
+        }
+
+        if (setChecked(checked, true, true))
+        {
+            // 更新状态成功，内部会更新view的位置
+        } else
+        {
+            if (updatePosition)
+            {
+                updateViewByState(true);
+            }
+        }
+    }
+
+    @Override
+    protected boolean onGestureSingleTapUp(MotionEvent event)
+    {
+        toggleChecked(mAttrModel.isNeedToggleAnim(), true);
+        return super.onGestureSingleTapUp(event);
+    }
+
+    @Override
+    protected void onComputeScroll(int dx, int dy)
+    {
+        mViewThumb.offsetLeftAndRight(dx);
+        onViewPositionChanged();
+    }
+
+    protected void onViewPositionChanged()
+    {
+        float percent = getScrollPercent();
+        mViewChecked.setAlpha(percent);
+        mViewNormal.setAlpha(1 - percent);
+        if (mOnViewPositionChangedCallback != null)
+        {
+            mOnViewPositionChangedCallback.onViewPositionChanged(FSwitchButton.this);
         }
     }
 
@@ -658,11 +517,4 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     }
 
     //----------FISwitchButton implements end----------
-
-    @Override
-    protected void onDetachedFromWindow()
-    {
-        super.onDetachedFromWindow();
-        mViewDragHelper.abort();
-    }
 }

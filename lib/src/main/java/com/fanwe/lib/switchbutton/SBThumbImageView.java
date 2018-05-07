@@ -16,7 +16,6 @@
 package com.fanwe.lib.switchbutton;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -27,12 +26,12 @@ class SBThumbImageView extends ImageView
         super(context);
     }
 
-    public SBThumbImageView(Context context, @Nullable AttributeSet attrs)
+    public SBThumbImageView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
 
-    public SBThumbImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr)
+    public SBThumbImageView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
     }
