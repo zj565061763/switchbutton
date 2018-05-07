@@ -331,7 +331,6 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         }
     }
 
-    private boolean mOnGestureScrolled;
     private final FGestureManager.Callback mGestureCallback = new FGestureManager.Callback()
     {
         @Override
@@ -356,8 +355,6 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         @Override
         public boolean onGestureScroll(MotionEvent event)
         {
-            mOnGestureScrolled = true;
-
             final int x = mViewThumb.getLeft();
             final int minX = getLeftNormal();
             final int maxX = getLeftChecked();
@@ -373,10 +370,8 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         @Override
         public void onGestureFinish(MotionEvent event, float velocityX, float velocityY)
         {
-            if (mOnGestureScrolled)
+            if (mGestureManager.hasScrolled())
             {
-                mOnGestureScrolled = false;
-
                 if (mIsDebug)
                 {
                     Log.i(TAG, "onGestureFinish");
