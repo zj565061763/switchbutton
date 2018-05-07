@@ -25,7 +25,7 @@ android {
 }
 
 dependencies {
-    api 'com.github.zj565061763:touchhelper:20e4e20214'
+    implementation 'com.github.zj565061763:touchhelper:89d746b2da'
 }
 
 // 指定编码

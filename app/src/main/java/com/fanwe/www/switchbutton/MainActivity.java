@@ -22,13 +22,12 @@ public class MainActivity extends SDBaseActivity
 {
     private FSwitchButton sb_rect;
 
-
     @Override
     protected void init(Bundle savedInstanceState)
     {
         SDLibrary.getInstance().init(getApplication());
         setContentView(R.layout.activity_main);
-        sb_rect = (FSwitchButton) findViewById(R.id.sb_rect);
+        sb_rect = findViewById(R.id.sb_rect);
 
         testRecyclerView();
 

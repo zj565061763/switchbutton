@@ -22,11 +22,12 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.fanwe.lib.touchhelper.view.FGestureFrameLayout;
+import com.fanwe.lib.touchhelper.FGestureManager;
 
-public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
+public class FSwitchButton extends FrameLayout implements FISwitchButton
 {
     public FSwitchButton(Context context)
     {
@@ -67,7 +68,7 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
     private View mViewThumb;
 
     private final SBAttrModel mAttrModel = new SBAttrModel();
-
+    private final FGestureManager mGestureManager = new FGestureManager(this);
     private boolean mIsDebug;
 
     private OnCheckedChangedCallback mOnCheckedChangedCallback;
@@ -76,15 +77,15 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
     private void init(Context context, AttributeSet attrs)
     {
         mAttrModel.parse(context, attrs);
-
         addDefaultViews();
+
+        mGestureManager.setCallback(mGestureCallback);
         setDebug(mAttrModel.isDebug());
     }
 
     public void setDebug(boolean debug)
     {
         mIsDebug = debug;
-        getTouchHelper().setDebug(debug);
     }
 
     private void addDefaultViews()
@@ -134,8 +135,8 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
 
             if (anim)
             {
-                getScroller().abortAnimation();
-                if (getScroller().startScrollToX(mViewThumb.getLeft(), left, -1))
+                mGestureManager.getScroller().abortAnimation();
+                if (mGestureManager.getScroller().startScrollToX(mViewThumb.getLeft(), left, -1))
                 {
                     isScrollerStarted = true;
                 }
@@ -330,16 +331,89 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
         }
     }
 
-    private boolean checkMoveParams()
+    private boolean mOnGestureScrolled;
+    private final FGestureManager.Callback mGestureCallback = new FGestureManager.Callback()
     {
-        return getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 40;
-    }
+        @Override
+        public boolean shouldInterceptTouchEvent(MotionEvent event)
+        {
+            return canPull();
+        }
+
+        @Override
+        public boolean onGestureDown(MotionEvent event)
+        {
+            return true;
+        }
+
+        @Override
+        public boolean onGestureSingleTapUp(MotionEvent event)
+        {
+            toggleChecked(mAttrModel.isNeedToggleAnim(), true);
+            return false;
+        }
+
+        @Override
+        public boolean onGestureScroll(MotionEvent event)
+        {
+            mOnGestureScrolled = true;
+
+            final int x = mViewThumb.getLeft();
+            final int minX = getLeftNormal();
+            final int maxX = getLeftChecked();
+            final int dx = (int) mGestureManager.getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
+
+            final int dxLegal = mGestureManager.getTouchHelper().getLegalDeltaX(x, minX, maxX, dx);
+            mViewThumb.offsetLeftAndRight(dxLegal);
+
+            notifyViewPositionChanged();
+            return true;
+        }
+
+        @Override
+        public void onGestureFinish(MotionEvent event, float velocityX, float velocityY)
+        {
+            if (mOnGestureScrolled)
+            {
+                mOnGestureScrolled = false;
+
+                if (mIsDebug)
+                {
+                    Log.i(TAG, "onGestureFinish");
+                }
+
+                final int left = mViewThumb.getLeft();
+                final boolean checked = left >= ((getLeftNormal() + getLeftChecked()) / 2);
+
+                if (setChecked(checked, true, true))
+                {
+                    // 更新状态成功，内部会更新view的位置
+                } else
+                {
+                    updateViewByState(true);
+                }
+            }
+        }
+
+        @Override
+        public void onComputeScroll(int dx, int dy, boolean finish)
+        {
+            if (finish)
+            {
+                updateViewVisibilityByState();
+            } else
+            {
+                mViewThumb.offsetLeftAndRight(dx);
+            }
+            notifyViewPositionChanged();
+        }
+    };
 
     private boolean canPull()
     {
-        final boolean canPull = checkMoveParams()
-                && ((mIsChecked && getTouchHelper().isMoveLeftFrom(FTouchHelper.EVENT_DOWN))
-                || (!mIsChecked && getTouchHelper().isMoveRightFrom(FTouchHelper.EVENT_DOWN)));
+        final boolean canPull = mGestureManager.getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 40
+                && ((mIsChecked && mGestureManager.getTouchHelper().isMoveLeftFrom(FTouchHelper.EVENT_DOWN))
+                || (!mIsChecked && mGestureManager.getTouchHelper().isMoveRightFrom(FTouchHelper.EVENT_DOWN)));
 
         if (mIsDebug)
         {
@@ -347,80 +421,6 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
         }
 
         return canPull;
-    }
-
-    @Override
-    protected boolean shouldInterceptTouchEvent(MotionEvent event)
-    {
-        return canPull();
-    }
-
-    private boolean mOnGestureScrolled;
-
-    @Override
-    protected boolean onGestureScroll(MotionEvent event)
-    {
-        mOnGestureScrolled = true;
-
-        final int x = mViewThumb.getLeft();
-        final int minX = getLeftNormal();
-        final int maxX = getLeftChecked();
-        final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
-
-        final int dxLegal = getTouchHelper().getLegalDeltaX(x, minX, maxX, dx);
-        mViewThumb.offsetLeftAndRight(dxLegal);
-
-        notifyViewPositionChanged();
-        return true;
-    }
-
-    @Override
-    protected void onGestureFinish(MotionEvent event, float velocityX, float velocityY)
-    {
-        if (mOnGestureScrolled)
-        {
-            mOnGestureScrolled = false;
-
-            if (mIsDebug)
-            {
-                Log.i(TAG, "onGestureFinish");
-            }
-
-            final int left = mViewThumb.getLeft();
-            final boolean checked = left >= ((getLeftNormal() + getLeftChecked()) / 2);
-
-            if (setChecked(checked, true, true))
-            {
-                // 更新状态成功，内部会更新view的位置
-            } else
-            {
-                updateViewByState(true);
-            }
-        }
-    }
-
-    @Override
-    protected boolean onGestureSingleTapUp(MotionEvent event)
-    {
-        toggleChecked(mAttrModel.isNeedToggleAnim(), true);
-        return super.onGestureSingleTapUp(event);
-    }
-
-    @Override
-    protected void onComputeScroll(int dx, int dy)
-    {
-        mViewThumb.offsetLeftAndRight(dx);
-        notifyViewPositionChanged();
-    }
-
-    @Override
-    protected void onComputeScrollFinish()
-    {
-        if (mIsDebug)
-        {
-            Log.e(TAG, "onComputeScrollFinish");
-        }
-        updateViewVisibilityByState();
     }
 
     protected void notifyViewPositionChanged()
@@ -439,6 +439,25 @@ public class FSwitchButton extends FGestureFrameLayout implements FISwitchButton
     {
         super.onLayout(changed, left, top, right, bottom);
         updateViewByState(false);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev)
+    {
+        return mGestureManager.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        return mGestureManager.onTouchEvent(event);
+    }
+
+    @Override
+    public void computeScroll()
+    {
+        super.computeScroll();
+        mGestureManager.computeScroll();
     }
 
     //----------FISwitchButton implements start----------
