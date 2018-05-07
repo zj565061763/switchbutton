@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
@@ -71,6 +72,10 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
 
     private final SBAttrModel mAttrModel = new SBAttrModel();
     private final FGestureManager mGestureManager = new FGestureManager(this);
+
+    private int mTouchSlop;
+    private long mClickTimeout;
+
     private boolean mIsDebug;
 
     private OnCheckedChangedCallback mOnCheckedChangedCallback;
@@ -78,6 +83,9 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
 
     private void init(Context context, AttributeSet attrs)
     {
+        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        mClickTimeout = ViewConfiguration.getPressedStateDuration() + ViewConfiguration.getTapTimeout();
+
         mAttrModel.parse(context, attrs);
         addDefaultViews();
 
@@ -406,6 +414,16 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
                 } else
                 {
                     updateViewByState(true);
+                }
+            } else
+            {
+                final long duration = event.getEventTime() - event.getDownTime();
+                final int dx = (int) mGestureManager.getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_DOWN);
+                final int dy = (int) mGestureManager.getTouchHelper().getDeltaYFrom(FTouchHelper.EVENT_DOWN);
+
+                if (duration < mClickTimeout && dx < mTouchSlop && dy < mTouchSlop)
+                {
+                    toggleChecked(mAttrModel.isNeedToggleAnim(), true);
                 }
             }
         }
