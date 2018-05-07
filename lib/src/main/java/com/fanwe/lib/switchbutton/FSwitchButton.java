@@ -350,7 +350,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         public boolean onGestureSingleTapUp(MotionEvent event)
         {
             toggleChecked(mAttrModel.isNeedToggleAnim(), true);
-            return false;
+            return true;
         }
 
         @Override
