@@ -136,10 +136,8 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
             if (anim)
             {
                 mGestureManager.getScroller().abortAnimation();
-                if (mGestureManager.getScroller().startScrollToX(mViewThumb.getLeft(), left, -1))
-                {
-                    isScrollerStarted = true;
-                }
+                mGestureManager.getScroller().startScrollToX(mViewThumb.getLeft(), left, -1);
+                isScrollerStarted = true;
             } else
             {
                 mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
