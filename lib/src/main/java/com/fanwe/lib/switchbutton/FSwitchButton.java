@@ -41,7 +41,6 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     public FSwitchButton(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-
         init(context, attrs);
     }
 
@@ -71,7 +70,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     private View mViewThumb;
 
     private final SBAttrModel mAttrModel = new SBAttrModel();
-    private final FGestureManager mGestureManager = new FGestureManager(this);
+    private FGestureManager mGestureManager;
 
     private int mTouchSlop;
     private long mClickTimeout;
@@ -86,10 +85,11 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         mClickTimeout = ViewConfiguration.getPressedStateDuration() + ViewConfiguration.getTapTimeout();
 
+        mGestureManager = new FGestureManager(context);
+        mGestureManager.setCallback(mGestureCallback);
+
         mAttrModel.parse(context, attrs);
         addDefaultViews();
-
-        mGestureManager.setCallback(mGestureCallback);
         setDebug(mAttrModel.isDebug());
     }
 
@@ -504,7 +504,10 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     public void computeScroll()
     {
         super.computeScroll();
-        mGestureManager.computeScroll();
+        if (mGestureManager.computeScroll())
+        {
+            invalidate();
+        }
     }
 
     //----------FISwitchButton implements start----------

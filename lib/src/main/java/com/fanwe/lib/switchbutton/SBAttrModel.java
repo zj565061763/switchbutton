@@ -82,7 +82,7 @@ class SBAttrModel
 
         if (attrs != null)
         {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LibSwitchButton);
+            final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LibSwitchButton);
 
             imageNormalResId = a.getResourceId(R.styleable.LibSwitchButton_sbImageNormal, imageNormalResId);
             imageCheckedResId = a.getResourceId(R.styleable.LibSwitchButton_sbImageChecked, imageCheckedResId);
