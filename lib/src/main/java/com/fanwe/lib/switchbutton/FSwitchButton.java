@@ -134,6 +134,8 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
      */
     private void updateViewByState(boolean anim)
     {
+        mGestureManager.getScroller().abortAnimation();
+
         boolean isScrollerStarted = false;
         final int left = mIsChecked ? getLeftChecked() : getLeftNormal();
         if (mViewThumb.getLeft() != left)
@@ -510,10 +512,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         {
             mIsChecked = checked;
 
-            mGestureManager.getScroller().abortAnimation();
             updateViewByState(anim);
-
-            // 通知回调
             if (notifyCallback)
             {
                 if (mOnCheckedChangedCallback != null)
