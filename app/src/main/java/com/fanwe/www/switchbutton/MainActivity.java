@@ -2,9 +2,7 @@ package com.fanwe.www.switchbutton;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.fanwe.lib.adapter.FSimpleRecyclerAdapter;
 import com.fanwe.lib.adapter.viewholder.FRecyclerViewHolder;
@@ -51,16 +49,6 @@ public class MainActivity extends SDBaseActivity
                 ViewCompat.setScaleY(view.getViewChecked(), percent);
             }
         });
-
-        sb_rect.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
 
