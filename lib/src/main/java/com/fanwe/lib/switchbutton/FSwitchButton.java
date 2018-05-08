@@ -134,6 +134,11 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
      */
     private void updateViewByState(boolean anim)
     {
+        if (mIsDebug)
+        {
+            Log.i(TAG, "----------updateViewByState anim:" + anim);
+        }
+
         mGestureManager.getScroller().abortAnimation();
 
         boolean isScrollerStarted = false;
@@ -142,7 +147,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         {
             if (mIsDebug)
             {
-                Log.i(TAG, "updateViewByState anim:" + anim);
+                Log.i(TAG, "updateViewByState:" + mViewThumb.getLeft() + " -> " + left + " (" + (left - mViewThumb.getLeft()) + ")");
             }
 
             if (anim)
@@ -430,6 +435,11 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         @Override
         public void onComputeScroll(int dx, int dy, boolean finish)
         {
+            if (mIsDebug)
+            {
+                Log.e(TAG, "onComputeScroll:" + dx + " " + finish);
+            }
+
             if (finish)
             {
                 updateViewVisibilityByState();
