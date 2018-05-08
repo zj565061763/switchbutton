@@ -473,6 +473,9 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
         super.onLayout(changed, left, top, right, bottom);
+
+        final int distance = getLeftChecked() - getLeftNormal();
+        mGestureManager.getScroller().setMaxScrollDistance(distance);
         updateViewByState(false);
     }
 
