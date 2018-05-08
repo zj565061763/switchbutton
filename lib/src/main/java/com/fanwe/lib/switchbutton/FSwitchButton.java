@@ -16,6 +16,7 @@
 package com.fanwe.lib.switchbutton;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -506,7 +507,13 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         super.computeScroll();
         if (mGestureManager.computeScroll())
         {
-            invalidate();
+            if (Build.VERSION.SDK_INT >= 16)
+            {
+                postInvalidateOnAnimation();
+            } else
+            {
+                postInvalidate();
+            }
         }
     }
 
