@@ -521,23 +521,22 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     @Override
     public boolean setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
-        if (mIsChecked != checked)
-        {
-            mIsChecked = checked;
-
-            updateViewByState(anim);
-            if (notifyCallback)
-            {
-                if (mOnCheckedChangedCallback != null)
-                {
-                    mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
-                }
-            }
-            return true;
-        } else
+        if (mIsChecked == checked)
         {
             return false;
         }
+
+        mIsChecked = checked;
+
+        updateViewByState(anim);
+        if (notifyCallback)
+        {
+            if (mOnCheckedChangedCallback != null)
+            {
+                mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
+            }
+        }
+        return true;
     }
 
     @Override
