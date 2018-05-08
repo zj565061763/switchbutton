@@ -403,10 +403,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
                     Log.i(TAG, "onGestureFinish");
                 }
 
-                final int left = mViewThumb.getLeft();
-                final int leftNormal = getLeftNormal();
-                final int leftChecked = getLeftChecked();
-                final boolean checked = left >= ((leftNormal + leftChecked) / 2);
+                final boolean checked = mViewThumb.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2);
 
                 if (setChecked(checked, true, true))
                 {
