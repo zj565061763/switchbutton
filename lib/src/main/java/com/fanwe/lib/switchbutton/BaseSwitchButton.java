@@ -289,7 +289,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
         {
             if (mIsDebug)
             {
-                Log.i(getDebugTag(), "updateViewByState:" + mViewThumb.getLeft() + " -> " + endLeft);
+                Log.i(getDebugTag(), "updateViewByState:" + startLeft + " -> " + endLeft);
             }
 
             if (anim)
