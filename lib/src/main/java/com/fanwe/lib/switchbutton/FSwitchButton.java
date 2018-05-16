@@ -50,7 +50,61 @@ public class FSwitchButton extends BaseSwitchButton
     {
         if (mGestureManager == null)
         {
-            mGestureManager = new FGestureManager(mGestureCallback);
+            mGestureManager = new FGestureManager(new FGestureManager.Callback()
+            {
+                @Override
+                public boolean shouldConsumeTouchEvent(MotionEvent event)
+                {
+                    final boolean canPull = canPull();
+                    if (mIsDebug)
+                    {
+                        Log.i(getDebugTag(), "shouldConsumeTouchEvent:" + canPull);
+                    }
+                    return canPull;
+                }
+
+                @Override
+                public void onTagConsumeChanged(boolean tagConsume)
+                {
+                    FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tagConsume);
+                }
+
+                @Override
+                public boolean onConsumeEvent(MotionEvent event)
+                {
+                    final int dx = (int) getGestureManager().getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
+                    moveView(dx);
+                    return true;
+                }
+
+                @Override
+                public void onConsumeEventFinish(MotionEvent event, VelocityTracker velocityTracker)
+                {
+                    if (getGestureManager().hasConsumeEvent())
+                    {
+                        if (mIsDebug)
+                        {
+                            Log.e(getDebugTag(), "onConsumeEventFinish");
+                        }
+
+                        final boolean checked = getViewThumb().getLeft() >= (getAvailableWidth() / 2);
+
+                        if (setChecked(checked, true, true))
+                        {
+                            // 更新状态成功，内部会更新view的位置
+                        } else
+                        {
+                            updateViewByState(true);
+                        }
+                    } else
+                    {
+                        if (getGestureManager().isClick(event, getContext()))
+                        {
+                            toggleChecked(mAttrModel.isNeedToggleAnim(), true);
+                        }
+                    }
+                }
+            });
         }
         return mGestureManager;
     }
@@ -60,7 +114,31 @@ public class FSwitchButton extends BaseSwitchButton
         if (mScroller == null)
         {
             mScroller = new FScroller(new Scroller(getContext()));
-            mScroller.setCallback(mScrollerCallback);
+            mScroller.setCallback(new FScroller.Callback()
+            {
+                @Override
+                public void onScrollStateChanged(boolean isFinished)
+                {
+                    if (isFinished)
+                    {
+                        if (mIsDebug)
+                        {
+                            Log.e(getDebugTag(), "onScroll finished:" + getViewThumb().getLeft());
+                        }
+                        dealViewIdle();
+                    }
+                }
+
+                @Override
+                public void onScroll(int dx, int dy)
+                {
+                    moveView(dx);
+                    if (mIsDebug)
+                    {
+                        Log.i(getDebugTag(), "onScroll:" + getViewThumb().getLeft());
+                    }
+                }
+            });
         }
         return mScroller;
     }
@@ -76,88 +154,6 @@ public class FSwitchButton extends BaseSwitchButton
     {
         return getScroller().scrollToX(startLeft, endLeft, -1);
     }
-
-    private final FScroller.Callback mScrollerCallback = new FScroller.Callback()
-    {
-        @Override
-        public void onScrollStateChanged(boolean isFinished)
-        {
-            if (isFinished)
-            {
-                if (mIsDebug)
-                {
-                    Log.e(getDebugTag(), "onScroll finished:" + getViewThumb().getLeft());
-                }
-                dealViewIdle();
-            }
-        }
-
-        @Override
-        public void onScroll(int dx, int dy)
-        {
-            moveView(dx);
-            if (mIsDebug)
-            {
-                Log.i(getDebugTag(), "onScroll:" + getViewThumb().getLeft());
-            }
-        }
-    };
-
-    private final FGestureManager.Callback mGestureCallback = new FGestureManager.Callback()
-    {
-        @Override
-        public boolean shouldConsumeTouchEvent(MotionEvent event)
-        {
-            final boolean canPull = canPull();
-            if (mIsDebug)
-            {
-                Log.i(getDebugTag(), "shouldConsumeTouchEvent:" + canPull);
-            }
-            return canPull;
-        }
-
-        @Override
-        public void onTagConsumeChanged(boolean tagConsume)
-        {
-            FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tagConsume);
-        }
-
-        @Override
-        public boolean onConsumeEvent(MotionEvent event)
-        {
-            final int dx = (int) getGestureManager().getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
-            moveView(dx);
-            return true;
-        }
-
-        @Override
-        public void onConsumeEventFinish(MotionEvent event, VelocityTracker velocityTracker)
-        {
-            if (getGestureManager().hasConsumeEvent())
-            {
-                if (mIsDebug)
-                {
-                    Log.e(getDebugTag(), "onConsumeEventFinish");
-                }
-
-                final boolean checked = getViewThumb().getLeft() >= (getAvailableWidth() / 2);
-
-                if (setChecked(checked, true, true))
-                {
-                    // 更新状态成功，内部会更新view的位置
-                } else
-                {
-                    updateViewByState(true);
-                }
-            } else
-            {
-                if (getGestureManager().isClick(event, getContext()))
-                {
-                    toggleChecked(mAttrModel.isNeedToggleAnim(), true);
-                }
-            }
-        }
-    };
 
     private boolean canPull()
     {
