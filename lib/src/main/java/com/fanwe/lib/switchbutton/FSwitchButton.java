@@ -86,8 +86,9 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         mScroller.setCallback(mScrollerCallback);
 
         mAttrModel.parse(context, attrs);
-        addDefaultViews();
         setDebug(mAttrModel.isDebug());
+
+        addDefaultViews();
     }
 
     public void setDebug(boolean debug)
@@ -375,23 +376,6 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     private final FGestureManager.Callback mGestureCallback = new FGestureManager.Callback()
     {
         @Override
-        public boolean shouldInterceptTouchEvent(MotionEvent event)
-        {
-            final boolean canPull = canPull();
-            if (mIsDebug)
-            {
-                Log.i(TAG, "shouldInterceptTouchEvent:" + canPull);
-            }
-            return canPull;
-        }
-
-        @Override
-        public void onTagInterceptChanged(boolean tagIntercept)
-        {
-            FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tagIntercept);
-        }
-
-        @Override
         public boolean shouldConsumeTouchEvent(MotionEvent event)
         {
             final boolean canPull = canPull();
@@ -432,7 +416,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
 
                 if (mIsDebug)
                 {
-                    Log.e(TAG, "onConsumeEventFinish:" + checked);
+                    Log.e(TAG, "onConsumeEventFinish");
                 }
 
                 if (setChecked(checked, true, true))
@@ -521,6 +505,11 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         }
 
         mIsChecked = checked;
+
+        if (mIsDebug)
+        {
+            Log.e(TAG, "setChecked:" + checked);
+        }
 
         updateViewByState(anim);
         if (notifyCallback)
