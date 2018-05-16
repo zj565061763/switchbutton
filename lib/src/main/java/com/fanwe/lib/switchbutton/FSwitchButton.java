@@ -55,12 +55,23 @@ public class FSwitchButton extends BaseSwitchButton
                 @Override
                 public boolean shouldInterceptTouchEvent(MotionEvent event)
                 {
-                    final boolean canPull = canPull();
+                    boolean shouldInterceptTouchEvent = false;
+                    if (event.getAction() == MotionEvent.ACTION_DOWN)
+                    {
+                        if (FTouchHelper.isViewUnder(getViewThumb(), (int) event.getX(), (int) event.getY()))
+                        {
+                            shouldInterceptTouchEvent = true;
+                        }
+                    } else
+                    {
+                        shouldInterceptTouchEvent = canPull();
+                    }
+
                     if (mIsDebug)
                     {
-                        Log.i(getDebugTag(), "shouldInterceptTouchEvent:" + canPull);
+                        Log.i(getDebugTag(), "shouldInterceptTouchEvent:" + shouldInterceptTouchEvent);
                     }
-                    return canPull;
+                    return shouldInterceptTouchEvent;
                 }
 
                 @Override
@@ -72,12 +83,12 @@ public class FSwitchButton extends BaseSwitchButton
                 @Override
                 public boolean shouldConsumeTouchEvent(MotionEvent event)
                 {
-                    final boolean canPull = canPull();
+                    final boolean shouldConsumeTouchEvent = canPull();
                     if (mIsDebug)
                     {
-                        Log.i(getDebugTag(), "shouldConsumeTouchEvent:" + canPull);
+                        Log.i(getDebugTag(), "shouldConsumeTouchEvent:" + shouldConsumeTouchEvent);
                     }
-                    return canPull;
+                    return shouldConsumeTouchEvent;
                 }
 
                 @Override
