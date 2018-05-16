@@ -49,14 +49,14 @@ public interface SwitchButton
      *
      * @param onCheckedChangedCallback
      */
-    void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback);
+    void setOnCheckedChangedCallback(OnCheckedChangeCallback onCheckedChangedCallback);
 
     /**
      * 设置手柄view位置变化回调
      *
      * @param onViewPositionChangedCallback
      */
-    void setOnViewPositionChangedCallback(OnViewPositionChangedCallback onViewPositionChangedCallback);
+    void setOnViewPositionChangedCallback(OnViewPositionChangeCallback onViewPositionChangedCallback);
 
     /**
      * 获得滚动的百分比[0-1]
@@ -86,7 +86,7 @@ public interface SwitchButton
      */
     View getViewThumb();
 
-    interface OnCheckedChangedCallback
+    interface OnCheckedChangeCallback
     {
         /**
          * 选中状态变化回调
@@ -97,7 +97,7 @@ public interface SwitchButton
         void onCheckedChanged(boolean checked, SwitchButton view);
     }
 
-    interface OnViewPositionChangedCallback
+    interface OnViewPositionChangeCallback
     {
         /**
          * 手柄view滚动回调

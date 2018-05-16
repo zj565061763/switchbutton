@@ -65,8 +65,8 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
 
     protected final SBAttrModel mAttrModel = new SBAttrModel();
 
-    private OnCheckedChangedCallback mOnCheckedChangedCallback;
-    private OnViewPositionChangedCallback mOnViewPositionChangedCallback;
+    private OnCheckedChangeCallback mOnCheckedChangedCallback;
+    private OnViewPositionChangeCallback mOnViewPositionChangedCallback;
 
     protected boolean mIsDebug;
 
@@ -435,13 +435,13 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     }
 
     @Override
-    public void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback)
+    public void setOnCheckedChangedCallback(OnCheckedChangeCallback onCheckedChangedCallback)
     {
         mOnCheckedChangedCallback = onCheckedChangedCallback;
     }
 
     @Override
-    public void setOnViewPositionChangedCallback(OnViewPositionChangedCallback onViewPositionChangedCallback)
+    public void setOnViewPositionChangedCallback(OnViewPositionChangeCallback onViewPositionChangedCallback)
     {
         mOnViewPositionChangedCallback = onViewPositionChangedCallback;
     }
