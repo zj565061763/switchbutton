@@ -93,10 +93,10 @@ Android开关按钮
 ```
 2. java文件中：<br>
 ```java
-sb_rect.setOnViewPositionChangedCallback(new FISwitchButton.OnViewPositionChangedCallback()
+sb_rect.setOnViewPositionChangedCallback(new SwitchButton.OnViewPositionChangedCallback()
 {
     @Override
-    public void onViewPositionChanged(FSwitchButton view)
+    public void onViewPositionChanged(SwitchButton view)
     {
         float percent = view.getScrollPercent() * 0.8f + 0.2f;
         ViewCompat.setScaleY(view.getViewNormal(), percent);
@@ -147,7 +147,7 @@ xml中布局：<br>
 
 ## 支持的方法
 ```java
-public interface FISwitchButton
+public interface SwitchButton
 {
     /**
      * 是否处于选中状态
@@ -162,8 +162,9 @@ public interface FISwitchButton
      * @param checked        true-选中，false-未选中
      * @param anim           是否需要动画
      * @param notifyCallback 是否需要通知回调
+     * @return true-调用此方法后状态发生了变化
      */
-    void setChecked(boolean checked, boolean anim, boolean notifyCallback);
+    boolean setChecked(boolean checked, boolean anim, boolean notifyCallback);
 
     /**
      * 切换选中状态
@@ -223,7 +224,7 @@ public interface FISwitchButton
          * @param checked
          * @param view
          */
-        void onCheckedChanged(boolean checked, FSwitchButton view);
+        void onCheckedChanged(boolean checked, SwitchButton view);
     }
 
     interface OnViewPositionChangedCallback
@@ -233,7 +234,7 @@ public interface FISwitchButton
          *
          * @param view
          */
-        void onViewPositionChanged(FSwitchButton view);
+        void onViewPositionChanged(SwitchButton view);
     }
 }
 ```
