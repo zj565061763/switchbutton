@@ -17,7 +17,7 @@ package com.fanwe.lib.switchbutton;
 
 import android.view.View;
 
-public interface FISwitchButton
+public interface SwitchButton
 {
     /**
      * 是否处于选中状态
@@ -94,7 +94,7 @@ public interface FISwitchButton
          * @param checked
          * @param view
          */
-        void onCheckedChanged(boolean checked, FISwitchButton view);
+        void onCheckedChanged(boolean checked, SwitchButton view);
     }
 
     interface OnViewPositionChangedCallback
@@ -104,6 +104,6 @@ public interface FISwitchButton
          *
          * @param view
          */
-        void onViewPositionChanged(FISwitchButton view);
+        void onViewPositionChanged(SwitchButton view);
     }
 }

@@ -26,7 +26,7 @@ import android.widget.ImageView;
 
 import com.fanwe.lib.gesture.FTouchHelper;
 
-public abstract class BaseSwitchButton extends FrameLayout implements FISwitchButton
+public abstract class BaseSwitchButton extends FrameLayout implements SwitchButton
 {
     public BaseSwitchButton(Context context)
     {
@@ -380,7 +380,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements FISwitchBu
         updateViewByState(false);
     }
 
-    //----------FISwitchButton implements start----------
+    //----------SwitchButton implements start----------
 
     @Override
     public boolean isChecked()
@@ -456,5 +456,5 @@ public abstract class BaseSwitchButton extends FrameLayout implements FISwitchBu
         return mViewThumb;
     }
 
-    //----------FISwitchButton implements end----------
+    //----------SwitchButton implements end----------
 }

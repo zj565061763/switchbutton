@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import com.fanwe.lib.adapter.FSimpleRecyclerAdapter;
 import com.fanwe.lib.adapter.viewholder.FRecyclerViewHolder;
 import com.fanwe.lib.selectmanager.FSelectManager;
-import com.fanwe.lib.switchbutton.FISwitchButton;
+import com.fanwe.lib.switchbutton.SwitchButton;
 import com.fanwe.lib.switchbutton.FSwitchButton;
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.activity.SDBaseActivity;
@@ -33,15 +33,15 @@ public class MainActivity extends SDBaseActivity
         sb_rect.setOnCheckedChangedCallback(new FSwitchButton.OnCheckedChangedCallback()
         {
             @Override
-            public void onCheckedChanged(boolean checked, FISwitchButton view)
+            public void onCheckedChanged(boolean checked, SwitchButton view)
             {
                 LogUtil.i("onCheckedChanged:" + checked);
             }
         });
-        sb_rect.setOnViewPositionChangedCallback(new FISwitchButton.OnViewPositionChangedCallback()
+        sb_rect.setOnViewPositionChangedCallback(new SwitchButton.OnViewPositionChangedCallback()
         {
             @Override
-            public void onViewPositionChanged(FISwitchButton view)
+            public void onViewPositionChanged(SwitchButton view)
             {
                 LogUtil.i("percent:" + view.getScrollPercent());
                 float percent = view.getScrollPercent() * 0.8f + 0.2f;
@@ -72,10 +72,10 @@ public class MainActivity extends SDBaseActivity
             {
                 FSwitchButton sb = holder.get(R.id.sb);
                 sb.setChecked(model.isSelected(), false, false);
-                sb.setOnCheckedChangedCallback(new FISwitchButton.OnCheckedChangedCallback()
+                sb.setOnCheckedChangedCallback(new SwitchButton.OnCheckedChangedCallback()
                 {
                     @Override
-                    public void onCheckedChanged(boolean checked, FISwitchButton view)
+                    public void onCheckedChanged(boolean checked, SwitchButton view)
                     {
                         model.setSelected(checked);
                     }
