@@ -368,7 +368,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
 
         if (deltaLegal == 0) return;
 
-        mViewThumb.offsetLeftAndRight(delta);
+        mViewThumb.offsetLeftAndRight(deltaLegal);
         notifyViewPositionChanged();
     }
 
