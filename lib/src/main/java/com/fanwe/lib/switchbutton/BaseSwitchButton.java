@@ -294,7 +294,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
 
             if (anim)
             {
-                if (onSmoothSlide(mViewThumb.getLeft(), endLeft))
+                if (onSmoothSlide(startLeft, endLeft))
                 {
                     isScrollerStarted = true;
                 }
