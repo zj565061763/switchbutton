@@ -252,8 +252,18 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
         return (LayoutParams) mViewThumb.getLayoutParams();
     }
 
+    /**
+     * 停止滑动动画
+     */
     protected abstract void abortAnimation();
 
+    /**
+     * 执行滑动逻辑
+     *
+     * @param startLeft
+     * @param endLeft
+     * @return
+     */
     protected abstract boolean onSmoothSlide(int startLeft, int endLeft);
 
     /**
