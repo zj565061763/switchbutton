@@ -377,7 +377,12 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         @Override
         public boolean shouldInterceptTouchEvent(MotionEvent event)
         {
-            return canPull();
+            final boolean canPull = canPull();
+            if (mIsDebug)
+            {
+                Log.i(TAG, "shouldInterceptTouchEvent:" + canPull);
+            }
+            return canPull;
         }
 
         @Override
@@ -389,7 +394,12 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         @Override
         public boolean shouldConsumeTouchEvent(MotionEvent event)
         {
-            return canPull();
+            final boolean canPull = canPull();
+            if (mIsDebug)
+            {
+                Log.i(TAG, "shouldConsumeTouchEvent:" + canPull);
+            }
+            return canPull;
         }
 
         @Override
@@ -418,12 +428,12 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         {
             if (mGestureManager.hasConsumeEvent())
             {
+                final boolean checked = mViewThumb.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2);
+
                 if (mIsDebug)
                 {
-                    Log.i(TAG, "onGestureFinish");
+                    Log.e(TAG, "onConsumeEventFinish:" + checked);
                 }
-
-                final boolean checked = mViewThumb.getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2);
 
                 if (setChecked(checked, true, true))
                 {
