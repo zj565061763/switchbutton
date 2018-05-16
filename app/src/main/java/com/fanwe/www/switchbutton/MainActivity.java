@@ -30,7 +30,7 @@ public class MainActivity extends SDBaseActivity
 
         testRecyclerView();
 
-        sb_rect.setOnCheckedChangedCallback(new SwitchButton.OnCheckedChangeCallback()
+        sb_rect.setOnCheckedChangeCallback(new SwitchButton.OnCheckedChangeCallback()
         {
             @Override
             public void onCheckedChanged(boolean checked, SwitchButton view)
@@ -38,7 +38,7 @@ public class MainActivity extends SDBaseActivity
                 LogUtil.i("onCheckedChanged:" + checked);
             }
         });
-        sb_rect.setOnViewPositionChangedCallback(new SwitchButton.OnViewPositionChangeCallback()
+        sb_rect.setOnViewPositionChangeCallback(new SwitchButton.OnViewPositionChangeCallback()
         {
             @Override
             public void onViewPositionChanged(SwitchButton view)
@@ -72,7 +72,7 @@ public class MainActivity extends SDBaseActivity
             {
                 FSwitchButton sb = holder.get(R.id.sb);
                 sb.setChecked(model.isSelected(), false, false);
-                sb.setOnCheckedChangedCallback(new SwitchButton.OnCheckedChangeCallback()
+                sb.setOnCheckedChangeCallback(new SwitchButton.OnCheckedChangeCallback()
                 {
                     @Override
                     public void onCheckedChanged(boolean checked, SwitchButton view)

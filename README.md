@@ -93,7 +93,7 @@ Android开关按钮
 ```
 2. java文件中：<br>
 ```java
-sb_rect.setOnViewPositionChangedCallback(new SwitchButton.OnViewPositionChangedCallback()
+sb_rect.setOnViewPositionChangeCallback(new SwitchButton.OnViewPositionChangeCallback()
 {
     @Override
     public void onViewPositionChanged(SwitchButton view)
@@ -177,16 +177,16 @@ public interface SwitchButton
     /**
      * 设置选中变化回调
      *
-     * @param onCheckedChangedCallback
+     * @param onCheckedChangeCallback
      */
-    void setOnCheckedChangedCallback(OnCheckedChangedCallback onCheckedChangedCallback);
+    void setOnCheckedChangeCallback(OnCheckedChangeCallback onCheckedChangeCallback);
 
     /**
      * 设置手柄view位置变化回调
      *
-     * @param onViewPositionChangedCallback
+     * @param onViewPositionChangeCallback
      */
-    void setOnViewPositionChangedCallback(OnViewPositionChangedCallback onViewPositionChangedCallback);
+    void setOnViewPositionChangeCallback(OnViewPositionChangeCallback onViewPositionChangeCallback);
 
     /**
      * 获得滚动的百分比[0-1]
@@ -216,7 +216,7 @@ public interface SwitchButton
      */
     View getViewThumb();
 
-    interface OnCheckedChangedCallback
+    interface OnCheckedChangeCallback
     {
         /**
          * 选中状态变化回调
@@ -227,7 +227,7 @@ public interface SwitchButton
         void onCheckedChanged(boolean checked, SwitchButton view);
     }
 
-    interface OnViewPositionChangedCallback
+    interface OnViewPositionChangeCallback
     {
         /**
          * 手柄view滚动回调

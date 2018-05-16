@@ -65,8 +65,8 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
 
     protected final SBAttrModel mAttrModel = new SBAttrModel();
 
-    private OnCheckedChangeCallback mOnCheckedChangedCallback;
-    private OnViewPositionChangeCallback mOnViewPositionChangedCallback;
+    private OnCheckedChangeCallback mOnCheckedChangeCallback;
+    private OnViewPositionChangeCallback mOnViewPositionChangeCallback;
 
     protected boolean mIsDebug;
 
@@ -381,9 +381,9 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
         float percent = getScrollPercent();
         mViewChecked.setAlpha(percent);
         mViewNormal.setAlpha(1 - percent);
-        if (mOnViewPositionChangedCallback != null)
+        if (mOnViewPositionChangeCallback != null)
         {
-            mOnViewPositionChangedCallback.onViewPositionChanged(BaseSwitchButton.this);
+            mOnViewPositionChangeCallback.onViewPositionChanged(BaseSwitchButton.this);
         }
     }
 
@@ -420,9 +420,9 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
         updateViewByState(anim);
         if (notifyCallback)
         {
-            if (mOnCheckedChangedCallback != null)
+            if (mOnCheckedChangeCallback != null)
             {
-                mOnCheckedChangedCallback.onCheckedChanged(mIsChecked, this);
+                mOnCheckedChangeCallback.onCheckedChanged(mIsChecked, this);
             }
         }
         return true;
@@ -435,15 +435,15 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     }
 
     @Override
-    public void setOnCheckedChangedCallback(OnCheckedChangeCallback onCheckedChangedCallback)
+    public void setOnCheckedChangeCallback(OnCheckedChangeCallback onCheckedChangeCallback)
     {
-        mOnCheckedChangedCallback = onCheckedChangedCallback;
+        mOnCheckedChangeCallback = onCheckedChangeCallback;
     }
 
     @Override
-    public void setOnViewPositionChangedCallback(OnViewPositionChangeCallback onViewPositionChangedCallback)
+    public void setOnViewPositionChangeCallback(OnViewPositionChangeCallback onViewPositionChangeCallback)
     {
-        mOnViewPositionChangedCallback = onViewPositionChangedCallback;
+        mOnViewPositionChangeCallback = onViewPositionChangeCallback;
     }
 
     @Override
