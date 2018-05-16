@@ -73,7 +73,8 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     private void init(Context context, AttributeSet attrs)
     {
         mAttrModel.parse(context, attrs);
-        setDebug(mAttrModel.isDebug());
+        mIsChecked = mAttrModel.isChecked();
+        mIsDebug = mAttrModel.isDebug();
 
         addDefaultViews();
     }
@@ -113,8 +114,6 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
         pThumb.bottomMargin = mAttrModel.getMarginBottom();
         addView(imageThumb, pThumb);
         mViewThumb = imageThumb;
-
-        setChecked(mAttrModel.isChecked(), false, false);
     }
 
     @Override
