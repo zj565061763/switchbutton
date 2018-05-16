@@ -25,7 +25,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.zj565061763:gesture:fbf1c9ad5b'
+    implementation 'com.github.zj565061763:gesture:1.0.4'
 }
 
 // 指定编码
