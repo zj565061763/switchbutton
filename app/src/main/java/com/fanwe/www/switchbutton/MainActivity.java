@@ -33,7 +33,7 @@ public class MainActivity extends SDBaseActivity
         sb_rect.setOnCheckedChangedCallback(new FSwitchButton.OnCheckedChangedCallback()
         {
             @Override
-            public void onCheckedChanged(boolean checked, FSwitchButton view)
+            public void onCheckedChanged(boolean checked, FISwitchButton view)
             {
                 LogUtil.i("onCheckedChanged:" + checked);
             }
@@ -41,7 +41,7 @@ public class MainActivity extends SDBaseActivity
         sb_rect.setOnViewPositionChangedCallback(new FISwitchButton.OnViewPositionChangedCallback()
         {
             @Override
-            public void onViewPositionChanged(FSwitchButton view)
+            public void onViewPositionChanged(FISwitchButton view)
             {
                 LogUtil.i("percent:" + view.getScrollPercent());
                 float percent = view.getScrollPercent() * 0.8f + 0.2f;
@@ -75,7 +75,7 @@ public class MainActivity extends SDBaseActivity
                 sb.setOnCheckedChangedCallback(new FISwitchButton.OnCheckedChangedCallback()
                 {
                     @Override
-                    public void onCheckedChanged(boolean checked, FSwitchButton view)
+                    public void onCheckedChanged(boolean checked, FISwitchButton view)
                     {
                         model.setSelected(checked);
                     }

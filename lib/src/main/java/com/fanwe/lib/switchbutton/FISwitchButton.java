@@ -94,7 +94,7 @@ public interface FISwitchButton
          * @param checked
          * @param view
          */
-        void onCheckedChanged(boolean checked, FSwitchButton view);
+        void onCheckedChanged(boolean checked, FISwitchButton view);
     }
 
     interface OnViewPositionChangedCallback
@@ -104,6 +104,6 @@ public interface FISwitchButton
          *
          * @param view
          */
-        void onViewPositionChanged(FSwitchButton view);
+        void onViewPositionChanged(FISwitchButton view);
     }
 }
