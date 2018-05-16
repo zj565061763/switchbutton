@@ -20,14 +20,16 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Scroller;
 
-import com.fanwe.lib.touchhelper.FGestureManager;
-import com.fanwe.lib.touchhelper.FTouchHelper;
+import com.fanwe.lib.gesture.FGestureManager;
+import com.fanwe.lib.gesture.FScroller;
+import com.fanwe.lib.gesture.FTouchHelper;
 
 public class FSwitchButton extends FrameLayout implements FISwitchButton
 {
@@ -70,6 +72,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
 
     private final SBAttrModel mAttrModel = new SBAttrModel();
     private FGestureManager mGestureManager;
+    private FScroller mScroller;
 
     private boolean mIsDebug;
 
@@ -78,8 +81,9 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
 
     private void init(Context context, AttributeSet attrs)
     {
-        mGestureManager = new FGestureManager(context);
-        mGestureManager.setCallback(mGestureCallback);
+        mGestureManager = new FGestureManager(mGestureCallback);
+        mScroller = new FScroller(new Scroller(getContext()));
+        mScroller.setCallback(mScrollerCallback);
 
         mAttrModel.parse(context, attrs);
         addDefaultViews();
@@ -120,136 +124,6 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         setChecked(mAttrModel.isChecked(), false, false);
     }
 
-    /**
-     * 根据状态改变view
-     *
-     * @param anim
-     */
-    private void updateViewByState(boolean anim)
-    {
-        if (mIsDebug)
-        {
-            Log.i(TAG, "----------updateViewByState anim:" + anim);
-        }
-
-        mGestureManager.getScroller().abortAnimation();
-
-        boolean isScrollerStarted = false;
-        final int left = mIsChecked ? getLeftChecked() : getLeftNormal();
-        if (mViewThumb.getLeft() != left)
-        {
-            if (mIsDebug)
-            {
-                Log.i(TAG, "updateViewByState:" + mViewThumb.getLeft() + " -> " + left + " (" + (left - mViewThumb.getLeft()) + ")");
-            }
-
-            if (anim)
-            {
-                mGestureManager.getScroller().startScrollToX(mViewThumb.getLeft(), left, -1);
-                isScrollerStarted = true;
-            } else
-            {
-                mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
-            }
-            invalidate();
-        }
-
-        if (isScrollerStarted)
-        {
-            //触发滚动成功，不需要立即更新view的可见状态，动画结束后更新
-        } else
-        {
-            // 立即更新view的可见状态
-            updateViewVisibilityByState();
-        }
-
-        mViewThumb.setSelected(mIsChecked);
-        notifyViewPositionChanged();
-    }
-
-    private void updateViewVisibilityByState()
-    {
-        if (mIsDebug)
-        {
-            Log.i(TAG, "updateViewVisibilityByState isChecked:" + mIsChecked);
-        }
-
-        if (mIsChecked)
-        {
-            showCheckedView(true);
-            showNormalView(false);
-        } else
-        {
-            showCheckedView(false);
-            showNormalView(true);
-        }
-    }
-
-    private void showCheckedView(boolean show)
-    {
-        float alpha = show ? 1.0f : 0f;
-        if (mViewChecked.getAlpha() != alpha)
-        {
-            mViewChecked.setAlpha(alpha);
-        }
-    }
-
-    private void showNormalView(boolean show)
-    {
-        float alpha = show ? 1.0f : 0f;
-        if (mViewNormal.getAlpha() != alpha)
-        {
-            mViewNormal.setAlpha(alpha);
-        }
-    }
-
-    /**
-     * 返回normal状态下手柄view的left值
-     *
-     * @return
-     */
-    private int getLeftNormal()
-    {
-        return getParamsThumbView().leftMargin;
-    }
-
-    /**
-     * 返回checked状态下手柄view的left值
-     *
-     * @return
-     */
-    private int getLeftChecked()
-    {
-        return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - getParamsThumbView().rightMargin;
-    }
-
-    /**
-     * 返回手柄view可以移动的宽度大小
-     *
-     * @return
-     */
-    private int getAvailableWidth()
-    {
-        return getLeftChecked() - getLeftNormal();
-    }
-
-    /**
-     * 返回手柄view滚动的距离
-     *
-     * @return
-     */
-    private int getScrollDistance()
-    {
-        return mViewThumb.getLeft() - getLeftNormal();
-    }
-
-    /**
-     * 返回手柄view布局参数
-     */
-    private LayoutParams getParamsThumbView()
-    {
-        return (LayoutParams) mViewThumb.getLayoutParams();
-    }
 
     @Override
     protected void onFinishInflate()
@@ -338,6 +212,166 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         }
     }
 
+    /**
+     * 返回normal状态下手柄view的left值
+     *
+     * @return
+     */
+    private int getLeftNormal()
+    {
+        return getParamsThumbView().leftMargin;
+    }
+
+    /**
+     * 返回checked状态下手柄view的left值
+     *
+     * @return
+     */
+    private int getLeftChecked()
+    {
+        return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - getParamsThumbView().rightMargin;
+    }
+
+    /**
+     * 返回手柄view可以移动的宽度大小
+     *
+     * @return
+     */
+    private int getAvailableWidth()
+    {
+        return getLeftChecked() - getLeftNormal();
+    }
+
+    /**
+     * 返回手柄view滚动的距离
+     *
+     * @return
+     */
+    private int getScrollDistance()
+    {
+        return mViewThumb.getLeft() - getLeftNormal();
+    }
+
+    /**
+     * 返回手柄view布局参数
+     */
+    private LayoutParams getParamsThumbView()
+    {
+        return (LayoutParams) mViewThumb.getLayoutParams();
+    }
+
+    /**
+     * 根据状态改变view
+     *
+     * @param anim
+     */
+    private void updateViewByState(boolean anim)
+    {
+        if (mIsDebug)
+        {
+            Log.i(TAG, "----------updateViewByState anim:" + anim);
+        }
+
+        mScroller.abortAnimation();
+
+        boolean isScrollerStarted = false;
+
+        final int left = mIsChecked ? getLeftChecked() : getLeftNormal();
+        if (mViewThumb.getLeft() != left)
+        {
+            if (mIsDebug)
+            {
+                Log.i(TAG, "updateViewByState:" + mViewThumb.getLeft() + " -> " + left);
+            }
+
+            if (anim)
+            {
+                mScroller.scrollToX(mViewThumb.getLeft(), left, -1);
+                isScrollerStarted = true;
+            } else
+            {
+                mViewThumb.layout(left, mViewThumb.getTop(), left + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
+            }
+            invalidate();
+        }
+
+        if (isScrollerStarted)
+        {
+            // 触发滚动成功，不需要立即更新view的可见状态，动画结束后更新
+        } else
+        {
+            // 立即更新view的可见状态
+            updateViewVisibilityByState();
+        }
+
+        mViewThumb.setSelected(mIsChecked);
+        notifyViewPositionChanged();
+    }
+
+    private void updateViewVisibilityByState()
+    {
+        if (mIsDebug)
+        {
+            Log.i(TAG, "updateViewVisibilityByState isChecked:" + mIsChecked);
+        }
+
+        if (mIsChecked)
+        {
+            showCheckedView(true);
+            showNormalView(false);
+        } else
+        {
+            showCheckedView(false);
+            showNormalView(true);
+        }
+    }
+
+    private void showCheckedView(boolean show)
+    {
+        float alpha = show ? 1.0f : 0f;
+        if (mViewChecked.getAlpha() != alpha)
+        {
+            mViewChecked.setAlpha(alpha);
+        }
+    }
+
+    private void showNormalView(boolean show)
+    {
+        float alpha = show ? 1.0f : 0f;
+        if (mViewNormal.getAlpha() != alpha)
+        {
+            mViewNormal.setAlpha(alpha);
+        }
+    }
+
+    private final FScroller.Callback mScrollerCallback = new FScroller.Callback()
+    {
+        @Override
+        public void onScrollStateChanged(boolean isFinished)
+        {
+            if (isFinished)
+            {
+                if (mIsDebug)
+                {
+                    Log.e(TAG, "onScroll finished:" + mViewThumb.getLeft());
+                }
+                updateViewVisibilityByState();
+            }
+        }
+
+        @Override
+        public void onScroll(int dx, int dy)
+        {
+            mViewThumb.offsetLeftAndRight(dx);
+            notifyViewPositionChanged();
+
+            if (mIsDebug)
+            {
+                Log.i(TAG, "onScroll:" + mViewThumb.getLeft());
+            }
+        }
+    };
+
     private final FGestureManager.Callback mGestureCallback = new FGestureManager.Callback()
     {
         @Override
@@ -347,56 +381,42 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         }
 
         @Override
-        public void onTagInterceptChanged(boolean intercept)
+        public void onTagInterceptChanged(boolean tagIntercept)
         {
-            final ViewParent parent = getParent();
-            if (parent != null)
-            {
-                parent.requestDisallowInterceptTouchEvent(intercept);
-            }
-        }
-
-        @Override
-        public boolean consumeDownEvent(MotionEvent event)
-        {
-            return true;
+            FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tagIntercept);
         }
 
         @Override
         public boolean shouldConsumeTouchEvent(MotionEvent event)
         {
-            return event.getAction() == MotionEvent.ACTION_MOVE && canPull();
+            return canPull();
         }
 
         @Override
-        public void onTagConsumeChanged(boolean consume)
+        public void onTagConsumeChanged(boolean tagConsume)
         {
-            mGestureManager.getTouchHelper().setTagIntercept(consume);
+            FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tagConsume);
         }
 
         @Override
         public boolean onConsumeEvent(MotionEvent event)
         {
-            if (event.getAction() == MotionEvent.ACTION_MOVE)
-            {
-                final int x = mViewThumb.getLeft();
-                final int minX = getLeftNormal();
-                final int maxX = getLeftChecked();
-                final int dx = (int) mGestureManager.getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
+            final int x = mViewThumb.getLeft();
+            final int minX = getLeftNormal();
+            final int maxX = getLeftChecked();
+            final int dx = (int) mGestureManager.getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
 
-                final int dxLegal = mGestureManager.getTouchHelper().getLegalDeltaX(x, minX, maxX, dx);
-                mViewThumb.offsetLeftAndRight(dxLegal);
+            final int dxLegal = mGestureManager.getTouchHelper().getLegalDeltaX(x, minX, maxX, dx);
+            mViewThumb.offsetLeftAndRight(dxLegal);
 
-                notifyViewPositionChanged();
-                return true;
-            }
-            return false;
+            notifyViewPositionChanged();
+            return true;
         }
 
         @Override
-        public void onConsumeEventFinish(MotionEvent event)
+        public void onConsumeEventFinish(MotionEvent event, VelocityTracker velocityTracker)
         {
-            if (mGestureManager.hasConsumed())
+            if (mGestureManager.hasConsumeEvent())
             {
                 if (mIsDebug)
                 {
@@ -414,46 +434,21 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
                 }
             } else
             {
-                if (mGestureManager.isClick(event))
+                if (mGestureManager.isClick(event, getContext()))
                 {
                     toggleChecked(mAttrModel.isNeedToggleAnim(), true);
                 }
             }
         }
-
-        @Override
-        public void onComputeScroll(int dx, int dy, boolean finish)
-        {
-            if (mIsDebug)
-            {
-                Log.e(TAG, "onComputeScroll:" + dx + " " + finish);
-            }
-
-            if (finish)
-            {
-                updateViewVisibilityByState();
-            } else
-            {
-                mViewThumb.offsetLeftAndRight(dx);
-            }
-            notifyViewPositionChanged();
-        }
     };
 
     private boolean canPull()
     {
-        final boolean checkDegreeX = mGestureManager.getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 40;
+        final boolean checkDegreeX = mGestureManager.getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 30;
         final boolean checkMoveLeft = mIsChecked && mGestureManager.getTouchHelper().isMoveLeftFrom(FTouchHelper.EVENT_DOWN);
         final boolean checkMoveRight = !mIsChecked && mGestureManager.getTouchHelper().isMoveRightFrom(FTouchHelper.EVENT_DOWN);
 
-        final boolean canPull = checkDegreeX && (checkMoveLeft || checkMoveRight);
-
-        if (mIsDebug)
-        {
-            Log.i(TAG, "canPull:" + canPull);
-        }
-
-        return canPull;
+        return checkDegreeX && (checkMoveLeft || checkMoveRight);
     }
 
     protected void notifyViewPositionChanged()
@@ -473,7 +468,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
         super.onLayout(changed, left, top, right, bottom);
 
         final int distance = getLeftChecked() - getLeftNormal();
-        mGestureManager.getScroller().setMaxScrollDistance(distance);
+        mScroller.setMaxScrollDistance(distance);
         updateViewByState(false);
     }
 
@@ -493,7 +488,7 @@ public class FSwitchButton extends FrameLayout implements FISwitchButton
     public void computeScroll()
     {
         super.computeScroll();
-        if (mGestureManager.computeScroll())
+        if (mScroller.computeScrollOffset())
         {
             invalidate();
         }
