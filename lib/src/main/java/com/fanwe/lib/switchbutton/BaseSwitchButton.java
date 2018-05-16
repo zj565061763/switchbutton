@@ -314,7 +314,11 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
             dealViewIdle();
         }
 
-        mViewThumb.setSelected(mIsChecked);
+        if (mViewThumb.isSelected() != mIsChecked)
+        {
+            mViewThumb.setSelected(mIsChecked);
+        }
+
         notifyViewPositionChanged();
     }
 
