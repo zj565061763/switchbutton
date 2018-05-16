@@ -53,6 +53,23 @@ public class FSwitchButton extends BaseSwitchButton
             mGestureManager = new FGestureManager(new FGestureManager.Callback()
             {
                 @Override
+                public boolean shouldInterceptTouchEvent(MotionEvent event)
+                {
+                    final boolean canPull = canPull();
+                    if (mIsDebug)
+                    {
+                        Log.i(getDebugTag(), "shouldInterceptTouchEvent:" + canPull);
+                    }
+                    return canPull;
+                }
+
+                @Override
+                public void onTagInterceptChanged(boolean tagIntercept)
+                {
+                    FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tagIntercept);
+                }
+
+                @Override
                 public boolean shouldConsumeTouchEvent(MotionEvent event)
                 {
                     final boolean canPull = canPull();
