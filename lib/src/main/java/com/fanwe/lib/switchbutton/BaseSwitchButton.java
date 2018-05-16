@@ -322,7 +322,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     {
         if (mIsDebug)
         {
-            Log.i(getDebugTag(), "dealViewIdle isChecked:" + mIsChecked);
+            Log.i(getDebugTag(), "dealViewIdle:" + mIsChecked);
         }
 
         if (mIsChecked)
