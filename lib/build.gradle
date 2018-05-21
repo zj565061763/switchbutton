@@ -1,15 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-
-group = 'com.github.zj565061763'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 27
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 20180516
-        versionName "1.0.24"
+        versionCode 20180521
+        versionName "1.1.0"
     }
     buildTypes {
         release {
@@ -25,38 +23,22 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.zj565061763:gesture:1.0.5'
+    implementation 'com.fanwe.android:gesture:1.0.7'
 }
 
-// 指定编码
+publish {
+    userOrg = 'zj565061763'
+    groupId = 'com.fanwe.android'
+
+    artifactId = 'switchbutton'
+    publishVersion = '1.1.0-rc1'
+    desc = 'android switchbutton library'
+    website = 'https://github.com/zj565061763/switchbutton'
+}
+
 tasks.withType(Javadoc) {
     options {
         encoding "UTF-8"
         charSet 'UTF-8'
-        failOnError false
     }
-}
-
-// 打包源码
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    failOnError false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-// 制作文档(Javadoc)
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
 }

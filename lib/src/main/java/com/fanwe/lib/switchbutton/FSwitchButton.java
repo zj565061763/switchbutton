@@ -25,6 +25,7 @@ import android.widget.Scroller;
 import com.fanwe.lib.gesture.FGestureManager;
 import com.fanwe.lib.gesture.FScroller;
 import com.fanwe.lib.gesture.FTouchHelper;
+import com.fanwe.lib.gesture.tag.TagHolder;
 
 public class FSwitchButton extends BaseSwitchButton
 {
@@ -45,97 +46,6 @@ public class FSwitchButton extends BaseSwitchButton
 
     private FGestureManager mGestureManager;
     private FScroller mScroller;
-
-    private FGestureManager getGestureManager()
-    {
-        if (mGestureManager == null)
-        {
-            mGestureManager = new FGestureManager(new FGestureManager.Callback()
-            {
-                @Override
-                public boolean shouldInterceptTouchEvent(MotionEvent event)
-                {
-                    boolean shouldInterceptTouchEvent = false;
-                    if (event.getAction() == MotionEvent.ACTION_DOWN)
-                    {
-                        if (FTouchHelper.isViewUnder(getViewThumb(), (int) event.getX(), (int) event.getY()))
-                        {
-                            shouldInterceptTouchEvent = true;
-                        }
-                    } else
-                    {
-                        shouldInterceptTouchEvent = canPull();
-                    }
-
-                    if (mIsDebug)
-                    {
-                        Log.i(getDebugTag(), "shouldInterceptTouchEvent:" + shouldInterceptTouchEvent);
-                    }
-                    return shouldInterceptTouchEvent;
-                }
-
-                @Override
-                public void onTagInterceptChanged(boolean tagIntercept)
-                {
-                    FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tagIntercept);
-                }
-
-                @Override
-                public boolean shouldConsumeTouchEvent(MotionEvent event)
-                {
-                    final boolean shouldConsumeTouchEvent = canPull();
-                    if (mIsDebug)
-                    {
-                        Log.i(getDebugTag(), "shouldConsumeTouchEvent:" + shouldConsumeTouchEvent);
-                    }
-                    return shouldConsumeTouchEvent;
-                }
-
-                @Override
-                public void onTagConsumeChanged(boolean tagConsume)
-                {
-                    FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tagConsume);
-                }
-
-                @Override
-                public boolean onConsumeEvent(MotionEvent event)
-                {
-                    final int dx = (int) getGestureManager().getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
-                    moveView(dx);
-                    return true;
-                }
-
-                @Override
-                public void onConsumeEventFinish(MotionEvent event, VelocityTracker velocityTracker)
-                {
-                    if (getGestureManager().hasConsumeEvent())
-                    {
-                        if (mIsDebug)
-                        {
-                            Log.e(getDebugTag(), "onConsumeEventFinish");
-                        }
-
-                        final boolean checked = getViewThumb().getLeft() >= (getAvailableWidth() / 2);
-
-                        if (setChecked(checked, true, true))
-                        {
-                            // 更新状态成功，内部会更新view的位置
-                        } else
-                        {
-                            updateViewByState(true);
-                        }
-                    } else
-                    {
-                        if (getGestureManager().isClick(event, getContext()))
-                        {
-                            toggleChecked(mAttrModel.isNeedToggleAnim(), true);
-                        }
-                    }
-                }
-            });
-        }
-        return mGestureManager;
-    }
 
     private FScroller getScroller()
     {
@@ -158,8 +68,10 @@ public class FSwitchButton extends BaseSwitchButton
                 }
 
                 @Override
-                public void onScroll(int dx, int dy)
+                public void onScroll(int currX, int currY, int lastX, int lastY)
                 {
+                    final int dx = currX - lastX;
+
                     moveView(dx);
                     if (mIsDebug)
                     {
@@ -170,6 +82,99 @@ public class FSwitchButton extends BaseSwitchButton
         }
         return mScroller;
     }
+
+    private FGestureManager getGestureManager()
+    {
+        if (mGestureManager == null)
+        {
+            mGestureManager = new FGestureManager(new FGestureManager.Callback()
+            {
+                @Override
+                public boolean shouldInterceptEvent(MotionEvent event)
+                {
+                    boolean shouldInterceptEvent = false;
+                    if (event.getAction() == MotionEvent.ACTION_DOWN)
+                    {
+                        if (FTouchHelper.isViewUnder(getViewThumb(), (int) event.getX(), (int) event.getY()))
+                        {
+                            shouldInterceptEvent = true;
+                        }
+                    } else
+                    {
+                        shouldInterceptEvent = canPull();
+                    }
+
+                    if (mIsDebug)
+                    {
+                        Log.i(getDebugTag(), "shouldInterceptEvent:" + shouldInterceptEvent);
+                    }
+                    return shouldInterceptEvent;
+                }
+
+                @Override
+                public boolean shouldConsumeEvent(MotionEvent event)
+                {
+                    final boolean shouldConsumeEvent = canPull();
+                    if (mIsDebug)
+                    {
+                        Log.i(getDebugTag(), "shouldConsumeEvent:" + shouldConsumeEvent);
+                    }
+                    return shouldConsumeEvent;
+                }
+
+                @Override
+                public boolean onEventConsume(MotionEvent event)
+                {
+                    final int dx = (int) getGestureManager().getTouchHelper().getDeltaX();
+                    moveView(dx);
+                    return true;
+                }
+
+                @Override
+                public void onEventFinish(MotionEvent event, boolean hasConsumeEvent, VelocityTracker velocityTracker)
+                {
+                    if (hasConsumeEvent)
+                    {
+                        final boolean checked = getViewThumb().getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2);
+
+                        if (mIsDebug)
+                        {
+                            Log.e(getDebugTag(), "onConsumeEventFinish:" + checked);
+                        }
+
+                        if (setChecked(checked, true, true))
+                        {
+                            // 更新状态成功，内部会更新view的位置
+                        } else
+                        {
+                            updateViewByState(true);
+                        }
+                    } else
+                    {
+                        if (getGestureManager().getTouchHelper().isClick(event, getContext()))
+                            toggleChecked(mAttrModel.isNeedToggleAnim(), true);
+                    }
+                }
+            });
+
+            mGestureManager.getTagHolder().setCallback(new TagHolder.Callback()
+            {
+                @Override
+                public void onTagInterceptChanged(boolean tag)
+                {
+                    FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tag);
+                }
+
+                @Override
+                public void onTagConsumeChanged(boolean tag)
+                {
+                    FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tag);
+                }
+            });
+        }
+        return mGestureManager;
+    }
+
 
     @Override
     protected void abortAnimation()
@@ -185,9 +190,9 @@ public class FSwitchButton extends BaseSwitchButton
 
     private boolean canPull()
     {
-        final boolean checkDegreeX = getGestureManager().getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 30;
-        final boolean checkMoveLeft = isChecked() && getGestureManager().getTouchHelper().isMoveLeftFrom(FTouchHelper.EVENT_DOWN);
-        final boolean checkMoveRight = !isChecked() && getGestureManager().getTouchHelper().isMoveRightFrom(FTouchHelper.EVENT_DOWN);
+        final boolean checkDegreeX = getGestureManager().getTouchHelper().getDegreeXFromDown() < 30;
+        final boolean checkMoveLeft = isChecked() && getGestureManager().getTouchHelper().getDeltaXFromDown() < 0;
+        final boolean checkMoveRight = !isChecked() && getGestureManager().getTouchHelper().getDeltaXFromDown() > 0;
 
         return checkDegreeX && (checkMoveLeft || checkMoveRight);
     }

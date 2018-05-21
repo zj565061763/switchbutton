@@ -208,7 +208,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
      *
      * @return
      */
-    private int getLeftNormal()
+    protected final int getLeftNormal()
     {
         return getParamsThumbView().leftMargin;
     }
@@ -218,7 +218,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
      *
      * @return
      */
-    private int getLeftChecked()
+    protected final int getLeftChecked()
     {
         return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - getParamsThumbView().rightMargin;
     }
@@ -364,14 +364,16 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
      */
     protected final void moveView(int delta)
     {
+        if (delta == 0) return;
+
         final int current = mViewThumb.getLeft();
         final int min = getLeftNormal();
         final int max = getLeftChecked();
-        final int deltaLegal = FTouchHelper.getLegalDelta(current, min, max, delta);
+        delta = FTouchHelper.getLegalDelta(current, min, max, delta);
 
-        if (deltaLegal == 0) return;
+        if (delta == 0) return;
 
-        mViewThumb.offsetLeftAndRight(deltaLegal);
+        mViewThumb.offsetLeftAndRight(delta);
         notifyViewPositionChanged();
     }
 
@@ -404,25 +406,19 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     @Override
     public boolean setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
-        if (mIsChecked == checked)
-        {
-            return false;
-        }
-
-        mIsChecked = checked;
-
+        if (mIsChecked == checked) return false;
         if (mIsDebug)
         {
             Log.e(getDebugTag(), "setChecked:" + checked);
         }
 
+        mIsChecked = checked;
         updateViewByState(anim);
+
         if (notifyCallback)
         {
             if (mOnCheckedChangeCallback != null)
-            {
                 mOnCheckedChangeCallback.onCheckedChanged(mIsChecked, this);
-            }
         }
         return true;
     }
