@@ -1,10 +1,10 @@
 # About
 Android开关按钮
 
-## Gradle
-`implementation 'com.fanwe.android:switchbutton:1.1.0-rc1'`
+# Gradle
+[![](https://jitpack.io/v/zj565061763/switchbutton.svg)](https://jitpack.io/#zj565061763/switchbutton)
 
-## 默认效果
+# 默认效果
 ![](http://thumbsnap.com/i/KBISOucv.gif?0705)
 
 ## 覆盖全局默认效果
@@ -45,7 +45,7 @@ Android开关按钮
 可以在项目中定义drawable覆盖库中的默认配置，覆盖drawable后以上的colors和dimens设置失效<br>
 ![](http://thumbsnap.com/i/vErZPQhN.png?0706)<br>
 
-## xml属性
+# xml属性
 支持的xml属性配置：<br>
 ```xml
 <declare-styleable name="LibSwitchButton">
@@ -72,7 +72,7 @@ Android开关按钮
 </declare-styleable>
 ```
 
-## 自定义效果
+# 自定义效果
 ![](http://thumbsnap.com/i/YS9spIQs.gif?0706)<br>
 1. xml中布局：<br>
 ```xml
@@ -105,7 +105,7 @@ sb_rect.setOnViewPositionChangeCallback(new SwitchButton.OnViewPositionChangeCal
 });
 ```
 
-## 完全自定义效果
+# 完全自定义效果
 ![](http://thumbsnap.com/i/4jo7RqHa.gif?0706)<br>
 xml中布局：<br>
 ```xml
@@ -145,7 +145,7 @@ xml中布局：<br>
 <item name="lib_sb_view_thumb" type="id"/>
 ```
 
-## 支持的方法
+# SwitchButton接口
 ```java
 public interface SwitchButton
 {
