@@ -68,7 +68,7 @@ public class FSwitchButton extends BaseSwitchButton
                 }
 
                 @Override
-                public void onScroll(int currX, int currY, int lastX, int lastY)
+                public void onScroll(int lastX, int lastY, int currX, int currY)
                 {
                     final int dx = currX - lastX;
 
@@ -131,7 +131,7 @@ public class FSwitchButton extends BaseSwitchButton
                 }
 
                 @Override
-                public void onEventFinish(MotionEvent event, boolean hasConsumeEvent, VelocityTracker velocityTracker)
+                public void onEventFinish(boolean hasConsumeEvent, VelocityTracker velocityTracker, MotionEvent event)
                 {
                     if (hasConsumeEvent)
                     {
