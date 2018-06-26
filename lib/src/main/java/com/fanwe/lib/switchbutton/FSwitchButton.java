@@ -130,7 +130,7 @@ public class FSwitchButton extends BaseSwitchButton
                         final boolean checked = getViewThumb().getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2);
 
                         if (mIsDebug)
-                            Log.e(getDebugTag(), "onConsumeEventFinish:" + checked);
+                            Log.e(getDebugTag(), "onConsumeEventFinish checked:" + checked);
 
                         if (setChecked(checked, true, true))
                         {
