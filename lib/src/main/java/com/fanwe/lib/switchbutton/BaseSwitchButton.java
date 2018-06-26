@@ -151,9 +151,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     private void setViewNormal(View viewNormal)
     {
         if (replaceOldView(mViewNormal, viewNormal))
-        {
             mViewNormal = viewNormal;
-        }
     }
 
     /**
@@ -164,9 +162,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     private void setViewChecked(View viewChecked)
     {
         if (replaceOldView(mViewChecked, viewChecked))
-        {
             mViewChecked = viewChecked;
-        }
     }
 
     /**
@@ -177,23 +173,19 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     private void setViewThumb(View viewThumb)
     {
         if (replaceOldView(mViewThumb, viewThumb))
-        {
             mViewThumb = viewThumb;
-        }
     }
 
     private boolean replaceOldView(View viewOld, View viewNew)
     {
         if (viewNew != null && viewOld != viewNew)
         {
-            int index = indexOfChild(viewOld);
+            final int index = indexOfChild(viewOld);
             ViewGroup.LayoutParams params = viewOld.getLayoutParams();
             removeView(viewOld);
 
             if (viewNew.getLayoutParams() != null)
-            {
                 params = viewNew.getLayoutParams();
-            }
 
             addView(viewNew, index, params);
             return true;
@@ -273,9 +265,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     protected final void updateViewByState(boolean anim)
     {
         if (mIsDebug)
-        {
             Log.i(getDebugTag(), "----------updateViewByState anim:" + anim);
-        }
 
         abortAnimation();
 
@@ -287,16 +277,11 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
         if (startLeft != endLeft)
         {
             if (mIsDebug)
-            {
                 Log.i(getDebugTag(), "updateViewByState:" + startLeft + " -> " + endLeft);
-            }
 
             if (anim)
             {
-                if (onSmoothSlide(startLeft, endLeft))
-                {
-                    isScrollerStarted = true;
-                }
+                isScrollerStarted = onSmoothSlide(startLeft, endLeft);
             } else
             {
                 mViewThumb.layout(endLeft, mViewThumb.getTop(), endLeft + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
@@ -314,9 +299,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
         }
 
         if (mViewThumb.isSelected() != mIsChecked)
-        {
             mViewThumb.setSelected(mIsChecked);
-        }
 
         notifyViewPositionChanged();
     }
@@ -324,9 +307,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     protected final void dealViewIdle()
     {
         if (mIsDebug)
-        {
             Log.i(getDebugTag(), "dealViewIdle:" + mIsChecked);
-        }
 
         if (mIsChecked)
         {
@@ -343,18 +324,14 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     {
         float alpha = show ? 1.0f : 0f;
         if (mViewChecked.getAlpha() != alpha)
-        {
             mViewChecked.setAlpha(alpha);
-        }
     }
 
     private void showNormalView(boolean show)
     {
         float alpha = show ? 1.0f : 0f;
         if (mViewNormal.getAlpha() != alpha)
-        {
             mViewNormal.setAlpha(alpha);
-        }
     }
 
     /**
@@ -364,14 +341,16 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
      */
     protected final void moveView(int delta)
     {
-        if (delta == 0) return;
+        if (delta == 0)
+            return;
 
         final int current = mViewThumb.getLeft();
         final int min = getLeftNormal();
         final int max = getLeftChecked();
         delta = FTouchHelper.getLegalDelta(current, min, max, delta);
 
-        if (delta == 0) return;
+        if (delta == 0)
+            return;
 
         mViewThumb.offsetLeftAndRight(delta);
         notifyViewPositionChanged();
@@ -382,10 +361,9 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
         float percent = getScrollPercent();
         mViewChecked.setAlpha(percent);
         mViewNormal.setAlpha(1 - percent);
+
         if (mOnViewPositionChangeCallback != null)
-        {
             mOnViewPositionChangeCallback.onViewPositionChanged(BaseSwitchButton.this);
-        }
     }
 
     @Override
@@ -406,11 +384,11 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     @Override
     public boolean setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
-        if (mIsChecked == checked) return false;
+        if (mIsChecked == checked)
+            return false;
+
         if (mIsDebug)
-        {
             Log.e(getDebugTag(), "setChecked:" + checked);
-        }
 
         mIsChecked = checked;
         updateViewByState(anim);

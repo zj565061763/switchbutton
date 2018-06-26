@@ -60,9 +60,8 @@ public class FSwitchButton extends BaseSwitchButton
                     if (isFinished)
                     {
                         if (mIsDebug)
-                        {
-                            Log.e(getDebugTag(), "onScroll finished:" + getViewThumb().getLeft());
-                        }
+                            Log.i(getDebugTag(), "onScroll finished:" + getViewThumb().getLeft());
+
                         dealViewIdle();
                     }
                 }
@@ -71,12 +70,9 @@ public class FSwitchButton extends BaseSwitchButton
                 public void onScroll(int lastX, int lastY, int currX, int currY)
                 {
                     final int dx = currX - lastX;
-
                     moveView(dx);
                     if (mIsDebug)
-                    {
                         Log.i(getDebugTag(), "onScroll:" + getViewThumb().getLeft());
-                    }
                 }
             });
         }
@@ -96,18 +92,15 @@ public class FSwitchButton extends BaseSwitchButton
                     if (event.getAction() == MotionEvent.ACTION_DOWN)
                     {
                         if (FTouchHelper.isViewUnder(getViewThumb(), (int) event.getX(), (int) event.getY()))
-                        {
                             shouldInterceptEvent = true;
-                        }
                     } else
                     {
                         shouldInterceptEvent = canPull();
                     }
 
                     if (mIsDebug)
-                    {
                         Log.i(getDebugTag(), "shouldInterceptEvent:" + shouldInterceptEvent);
-                    }
+
                     return shouldInterceptEvent;
                 }
 
@@ -116,9 +109,8 @@ public class FSwitchButton extends BaseSwitchButton
                 {
                     final boolean shouldConsumeEvent = canPull();
                     if (mIsDebug)
-                    {
                         Log.i(getDebugTag(), "shouldConsumeEvent:" + shouldConsumeEvent);
-                    }
+
                     return shouldConsumeEvent;
                 }
 
@@ -138,9 +130,7 @@ public class FSwitchButton extends BaseSwitchButton
                         final boolean checked = getViewThumb().getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2);
 
                         if (mIsDebug)
-                        {
                             Log.e(getDebugTag(), "onConsumeEventFinish:" + checked);
-                        }
 
                         if (setChecked(checked, true, true))
                         {
@@ -221,8 +211,6 @@ public class FSwitchButton extends BaseSwitchButton
     {
         super.computeScroll();
         if (getScroller().computeScrollOffset())
-        {
             invalidate();
-        }
     }
 }
