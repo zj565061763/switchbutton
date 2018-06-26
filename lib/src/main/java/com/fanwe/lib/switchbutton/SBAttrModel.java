@@ -74,7 +74,7 @@ class SBAttrModel
         imageCheckedResId = R.drawable.lib_sb_layer_checked_view;
         imageThumbResId = R.drawable.lib_sb_layer_thumb_view;
 
-        int defaultMargin = context.getResources().getDimensionPixelSize(R.dimen.lib_sb_margins);
+        final int defaultMargin = context.getResources().getDimensionPixelSize(R.dimen.lib_sb_margins);
         marginLeft = defaultMargin;
         marginTop = defaultMargin;
         marginRight = defaultMargin;
@@ -98,21 +98,16 @@ class SBAttrModel
             }
 
             if (a.hasValue(R.styleable.LibSwitchButton_sbMarginLeft))
-            {
                 marginLeft = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginLeft, marginLeft);
-            }
+
             if (a.hasValue(R.styleable.LibSwitchButton_sbMarginTop))
-            {
                 marginTop = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginTop, marginTop);
-            }
+
             if (a.hasValue(R.styleable.LibSwitchButton_sbMarginRight))
-            {
                 marginRight = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginRight, marginRight);
-            }
+
             if (a.hasValue(R.styleable.LibSwitchButton_sbMarginBottom))
-            {
                 marginBottom = a.getDimensionPixelSize(R.styleable.LibSwitchButton_sbMarginBottom, marginBottom);
-            }
 
             isChecked = a.getBoolean(R.styleable.LibSwitchButton_sbIsChecked, false);
             isNeedToggleAnim = a.getBoolean(R.styleable.LibSwitchButton_sbIsNeedToggleAnim, true);
