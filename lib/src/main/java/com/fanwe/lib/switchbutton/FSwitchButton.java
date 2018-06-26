@@ -142,7 +142,7 @@ public class FSwitchButton extends BaseSwitchButton
                     } else
                     {
                         if (getGestureManager().getTouchHelper().isClick(event, getContext()))
-                            toggleChecked(mAttrModel.isNeedToggleAnim(), true);
+                            toggleChecked(mAttrModel.isNeedToggleAnim, true);
                     }
                 }
             });
