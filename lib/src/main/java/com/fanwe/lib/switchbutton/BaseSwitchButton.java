@@ -20,7 +20,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -117,82 +116,19 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     }
 
     @Override
-    protected void onFinishInflate()
+    public void onViewAdded(View child)
     {
-        super.onFinishInflate();
-
-        final View normal = findViewById(R.id.lib_sb_view_normal);
-        if (normal != null)
-        {
-            removeView(normal);
-            setViewNormal(normal);
-        }
-
-        final View checked = findViewById(R.id.lib_sb_view_checked);
-        if (checked != null)
-        {
-            removeView(checked);
-            setViewChecked(checked);
-        }
-
-        final View thumb = findViewById(R.id.lib_sb_view_thumb);
-        if (thumb != null)
-        {
-            removeView(thumb);
-            setViewThumb(thumb);
-        }
+        super.onViewAdded(child);
+        if (getChildCount() > 3)
+            throw new IllegalArgumentException("can not add view to SwitchButton");
     }
 
-    /**
-     * 设置正常view
-     *
-     * @param viewNormal
-     */
-    private void setViewNormal(View viewNormal)
+    @Override
+    public void onViewRemoved(View child)
     {
-        if (replaceOldView(mViewNormal, viewNormal))
-            mViewNormal = viewNormal;
-    }
-
-    /**
-     * 设置选中view
-     *
-     * @param viewChecked
-     */
-    private void setViewChecked(View viewChecked)
-    {
-        if (replaceOldView(mViewChecked, viewChecked))
-            mViewChecked = viewChecked;
-    }
-
-    /**
-     * 设置手柄view
-     *
-     * @param viewThumb
-     */
-    private void setViewThumb(View viewThumb)
-    {
-        if (replaceOldView(mViewThumb, viewThumb))
-            mViewThumb = viewThumb;
-    }
-
-    private boolean replaceOldView(View viewOld, View viewNew)
-    {
-        if (viewNew != null && viewOld != viewNew)
-        {
-            final int index = indexOfChild(viewOld);
-            ViewGroup.LayoutParams params = viewOld.getLayoutParams();
-            removeView(viewOld);
-
-            if (viewNew.getLayoutParams() != null)
-                params = viewNew.getLayoutParams();
-
-            addView(viewNew, index, params);
-            return true;
-        } else
-        {
-            return false;
-        }
+        super.onViewRemoved(child);
+        if (getChildCount() < 3)
+            throw new IllegalArgumentException("can not remove view from SwitchButton");
     }
 
     /**
