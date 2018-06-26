@@ -92,19 +92,19 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     private void addDefaultViews()
     {
         ImageView imageNormal = new ImageView(getContext());
-        imageNormal.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageNormal.setScaleType(ImageView.ScaleType.FIT_XY);
         imageNormal.setImageResource(mAttrModel.imageNormalResId);
         addView(imageNormal, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         mViewNormal = imageNormal;
 
         ImageView imageChecked = new ImageView(getContext());
-        imageChecked.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageChecked.setScaleType(ImageView.ScaleType.FIT_XY);
         imageChecked.setImageResource(mAttrModel.imageCheckedResId);
         addView(imageChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         mViewChecked = imageChecked;
 
         ImageView imageThumb = new SBThumbImageView(getContext());
-        imageThumb.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageThumb.setScaleType(ImageView.ScaleType.FIT_XY);
         imageThumb.setImageResource(mAttrModel.imageThumbResId);
         LayoutParams pThumb = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         pThumb.gravity = Gravity.CENTER_VERTICAL;
@@ -286,12 +286,12 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
             {
                 mViewThumb.layout(endLeft, mViewThumb.getTop(), endLeft + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
             }
-            invalidate();
         }
 
         if (isScrollerStarted)
         {
             // 触发滚动成功，不需要立即更新view的可见状态，动画结束后更新
+            invalidate();
         } else
         {
             // 立即更新view的可见状态
