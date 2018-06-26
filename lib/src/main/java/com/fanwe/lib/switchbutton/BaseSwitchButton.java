@@ -73,8 +73,8 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     private void init(Context context, AttributeSet attrs)
     {
         mAttrModel.parse(context, attrs);
-        mIsChecked = mAttrModel.isChecked();
-        mIsDebug = mAttrModel.isDebug();
+        mIsChecked = mAttrModel.isChecked;
+        mIsDebug = mAttrModel.isDebug;
 
         addDefaultViews();
     }
@@ -93,25 +93,25 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     {
         ImageView imageNormal = new ImageView(getContext());
         imageNormal.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        imageNormal.setImageResource(mAttrModel.getImageNormalResId());
+        imageNormal.setImageResource(mAttrModel.imageNormalResId);
         addView(imageNormal, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         mViewNormal = imageNormal;
 
         ImageView imageChecked = new ImageView(getContext());
         imageChecked.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        imageChecked.setImageResource(mAttrModel.getImageCheckedResId());
+        imageChecked.setImageResource(mAttrModel.imageCheckedResId);
         addView(imageChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         mViewChecked = imageChecked;
 
         ImageView imageThumb = new SBThumbImageView(getContext());
         imageThumb.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        imageThumb.setImageResource(mAttrModel.getImageThumbResId());
+        imageThumb.setImageResource(mAttrModel.imageThumbResId);
         LayoutParams pThumb = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         pThumb.gravity = Gravity.CENTER_VERTICAL;
-        pThumb.leftMargin = mAttrModel.getMarginLeft();
-        pThumb.topMargin = mAttrModel.getMarginTop();
-        pThumb.rightMargin = mAttrModel.getMarginRight();
-        pThumb.bottomMargin = mAttrModel.getMarginBottom();
+        pThumb.leftMargin = mAttrModel.marginLeft;
+        pThumb.topMargin = mAttrModel.marginTop;
+        pThumb.rightMargin = mAttrModel.marginRight;
+        pThumb.bottomMargin = mAttrModel.marginBottom;
         addView(imageThumb, pThumb);
         mViewThumb = imageThumb;
     }

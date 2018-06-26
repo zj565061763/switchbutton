@@ -24,43 +24,43 @@ class SBAttrModel
     /**
      * 正常view图片id
      */
-    private int imageNormalResId;
+    public int imageNormalResId;
     /**
      * 选中view图片id
      */
-    private int imageCheckedResId;
+    public int imageCheckedResId;
     /**
      * 手柄view图片id
      */
-    private int imageThumbResId;
+    public int imageThumbResId;
     /**
      * 手柄view左边间距
      */
-    private int marginLeft;
+    public int marginLeft;
     /**
      * 手柄view顶部间距
      */
-    private int marginTop;
+    public int marginTop;
     /**
      * 手柄view右边间距
      */
-    private int marginRight;
+    public int marginRight;
     /**
      * 手柄view底部间距
      */
-    private int marginBottom;
+    public int marginBottom;
     /**
      * 是否选中
      */
-    private boolean isChecked;
+    public boolean isChecked;
     /**
      * 是否需要点击切换动画
      */
-    private boolean isNeedToggleAnim;
+    public boolean isNeedToggleAnim;
     /**
      * 是否调试模式
      */
-    private boolean isDebug;
+    public boolean isDebug;
 
     /**
      * 解析xml属性
@@ -115,105 +115,5 @@ class SBAttrModel
 
             a.recycle();
         }
-    }
-
-    public int getImageNormalResId()
-    {
-        return imageNormalResId;
-    }
-
-    public void setImageNormalResId(int imageNormalResId)
-    {
-        this.imageNormalResId = imageNormalResId;
-    }
-
-    public int getImageCheckedResId()
-    {
-        return imageCheckedResId;
-    }
-
-    public void setImageCheckedResId(int imageCheckedResId)
-    {
-        this.imageCheckedResId = imageCheckedResId;
-    }
-
-    public int getImageThumbResId()
-    {
-        return imageThumbResId;
-    }
-
-    public void setImageThumbResId(int imageThumbResId)
-    {
-        this.imageThumbResId = imageThumbResId;
-    }
-
-    public int getMarginLeft()
-    {
-        return marginLeft;
-    }
-
-    public void setMarginLeft(int marginLeft)
-    {
-        this.marginLeft = marginLeft;
-    }
-
-    public int getMarginTop()
-    {
-        return marginTop;
-    }
-
-    public void setMarginTop(int marginTop)
-    {
-        this.marginTop = marginTop;
-    }
-
-    public int getMarginRight()
-    {
-        return marginRight;
-    }
-
-    public void setMarginRight(int marginRight)
-    {
-        this.marginRight = marginRight;
-    }
-
-    public int getMarginBottom()
-    {
-        return marginBottom;
-    }
-
-    public void setMarginBottom(int marginBottom)
-    {
-        this.marginBottom = marginBottom;
-    }
-
-    public boolean isChecked()
-    {
-        return isChecked;
-    }
-
-    public void setChecked(boolean checked)
-    {
-        isChecked = checked;
-    }
-
-    public boolean isNeedToggleAnim()
-    {
-        return isNeedToggleAnim;
-    }
-
-    public void setNeedToggleAnim(boolean needToggleAnim)
-    {
-        isNeedToggleAnim = needToggleAnim;
-    }
-
-    public boolean isDebug()
-    {
-        return isDebug;
-    }
-
-    public void setDebug(boolean debug)
-    {
-        isDebug = debug;
     }
 }
