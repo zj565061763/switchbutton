@@ -88,8 +88,7 @@ Android开关按钮
     app:sbMarginBottom="2dp"
     app:sbMarginLeft="0dp"
     app:sbMarginRight="2dp"
-    app:sbMarginTop="2dp"
-    app:sbMargins="1dp"/>
+    app:sbMarginTop="2dp"/>
 ```
 2. java文件中：<br>
 ```java
