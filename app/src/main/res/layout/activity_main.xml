@@ -11,7 +11,7 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/red">
+        android:background="#FF0000">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -68,11 +68,5 @@
             android:background="@drawable/lib_sb_layer_thumb_view" />
 
     </com.fanwe.lib.switchbutton.FSwitchButton>
-
-    <com.fanwe.library.view.SDRecyclerView
-        android:id="@+id/rv_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp" />
 
 </LinearLayout>
