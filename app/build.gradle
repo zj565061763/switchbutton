@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.fanwe.www.switchbutton"
+        applicationId "com.sd.www.switchbutton"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
@@ -24,6 +24,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.github.zj565061763:looper:1.0.16'
+    implementation 'com.github.zj565061763:looper:1.1.0'
     implementation project(':lib')
 }

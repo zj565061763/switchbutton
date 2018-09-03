@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    tools:context="com.fanwe.www.switchbutton.MainActivity">
+    android:padding="20dp">
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -23,7 +21,7 @@
                 android:layout_width="100dp"
                 android:layout_height="50dp" />
 
-            <com.fanwe.lib.switchbutton.FSwitchButton
+            <com.sd.lib.switchbutton.FSwitchButton
                 android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:layout_margin="10dp"
@@ -35,7 +33,7 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <com.fanwe.lib.switchbutton.FSwitchButton
+    <com.sd.lib.switchbutton.FSwitchButton
         android:id="@+id/sb_rect"
         android:layout_width="50dp"
         android:layout_height="25dp"
@@ -51,7 +49,7 @@
         app:sbMarginRight="2dp"
         app:sbMarginTop="2dp" />
 
-    <com.fanwe.lib.switchbutton.FSwitchButton
+    <com.sd.lib.switchbutton.FSwitchButton
         android:layout_width="120dp"
         android:layout_height="30dp"
         android:layout_marginTop="10dp"

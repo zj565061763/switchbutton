@@ -76,7 +76,7 @@ Android开关按钮
 ![](http://thumbsnap.com/i/YS9spIQs.gif?0706)<br>
 1. xml中布局：<br>
 ```xml
-<com.fanwe.lib.switchbutton.FSwitchButton
+<com.sd.lib.switchbutton.FSwitchButton
     android:id="@+id/sb_rect"
     android:layout_width="50dp"
     android:layout_height="25dp"

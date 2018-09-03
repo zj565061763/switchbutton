@@ -1,12 +1,12 @@
-package com.fanwe.www.switchbutton;
+package com.sd.www.switchbutton;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.fanwe.lib.switchbutton.FSwitchButton;
-import com.fanwe.lib.switchbutton.SwitchButton;
+import com.sd.lib.switchbutton.FSwitchButton;
+import com.sd.lib.switchbutton.SwitchButton;
 
 public class MainActivity extends AppCompatActivity
 {
