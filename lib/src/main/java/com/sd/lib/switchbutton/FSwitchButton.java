@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.ViewConfiguration;
 
 import com.sd.lib.gesture.FGestureManager;
 import com.sd.lib.gesture.FTouchHelper;
@@ -102,7 +103,19 @@ public class FSwitchButton extends BaseSwitchButton
                 {
                     if (hasConsumeEvent)
                     {
-                        final boolean checked = getViewThumb().getLeft() >= ((getLeftNormal() + getLeftChecked()) / 2);
+                        velocityTracker.computeCurrentVelocity(1000);
+                        final int velocity = (int) velocityTracker.getXVelocity();
+                        final int minFlingVelocity = ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity() * 8;
+
+                        boolean checked = false;
+                        if (Math.abs(velocity) > minFlingVelocity)
+                        {
+                            checked = velocity > 0;
+                        } else
+                        {
+                            final int leftMiddle = (getLeftNormal() + getLeftChecked()) / 2;
+                            checked = getViewThumb().getLeft() >= leftMiddle;
+                        }
 
                         if (mIsDebug)
                             Log.e(getDebugTag(), "onConsumeEventFinish checked:" + checked);
