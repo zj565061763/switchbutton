@@ -95,11 +95,11 @@ Android开关按钮
 sb_rect.setOnViewPositionChangeCallback(new SwitchButton.OnViewPositionChangeCallback()
 {
     @Override
-    public void onViewPositionChanged(SwitchButton view)
+    public void onViewPositionChanged(SwitchButton switchButton)
     {
-        float percent = view.getScrollPercent() * 0.8f + 0.2f;
-        ViewCompat.setScaleY(view.getViewNormal(), percent);
-        ViewCompat.setScaleY(view.getViewChecked(), percent);
+        float percent = switchButton.getScrollPercent() * 0.8f + 0.2f;
+        switchButton.getViewNormal().setScaleY(percent);
+        switchButton.getViewChecked().setScaleY(percent);
     }
 });
 ```
@@ -181,9 +181,9 @@ public interface SwitchButton
          * 选中状态变化回调
          *
          * @param checked
-         * @param view
+         * @param switchButton
          */
-        void onCheckedChanged(boolean checked, SwitchButton view);
+        void onCheckedChanged(boolean checked, SwitchButton switchButton);
     }
 
     interface OnViewPositionChangeCallback
@@ -191,9 +191,9 @@ public interface SwitchButton
         /**
          * 手柄view滚动回调
          *
-         * @param view
+         * @param switchButton
          */
-        void onViewPositionChanged(SwitchButton view);
+        void onViewPositionChanged(SwitchButton switchButton);
     }
 }
 ```
