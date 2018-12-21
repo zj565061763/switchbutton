@@ -12,7 +12,6 @@ import com.sd.lib.gesture.scroller.FScroller;
 import com.sd.lib.gesture.scroller.SimpleScrollerApi;
 import com.sd.lib.gesture.tag.TagHolder;
 
-
 public class FSwitchButton extends BaseSwitchButton
 {
     private FGestureManager mGestureManager;
@@ -190,6 +189,6 @@ public class FSwitchButton extends BaseSwitchButton
     {
         super.computeScroll();
         if (getScroller().computeScrollOffset())
-            invalidate();
+            postInvalidateOnAnimation();
     }
 }
