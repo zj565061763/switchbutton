@@ -1,7 +1,6 @@
 package com.sd.www.switchbutton;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -36,8 +35,8 @@ public class MainActivity extends AppCompatActivity
             {
                 Log.i(TAG, "percent:" + view.getScrollPercent());
                 float percent = view.getScrollPercent() * 0.8f + 0.2f;
-                ViewCompat.setScaleY(view.getViewNormal(), percent);
-                ViewCompat.setScaleY(view.getViewChecked(), percent);
+                view.getViewNormal().setScaleY(percent);
+                view.getViewChecked().setScaleY(percent);
             }
         });
     }
