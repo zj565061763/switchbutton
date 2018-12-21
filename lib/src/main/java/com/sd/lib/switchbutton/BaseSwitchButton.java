@@ -1,6 +1,7 @@
 package com.sd.lib.switchbutton;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -167,7 +168,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         if (isScrollerStarted)
         {
             // 触发滚动成功，不需要立即更新view的可见状态，动画结束后更新
-            postInvalidateOnAnimation();
+            ViewCompat.postInvalidateOnAnimation(this);
         } else
         {
             // 立即更新view的可见状态
@@ -226,7 +227,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         if (delta == 0)
             return;
 
-        mViewThumb.offsetLeftAndRight(delta);
+        ViewCompat.offsetLeftAndRight(mViewThumb, delta);
         notifyViewPositionChanged();
     }
 

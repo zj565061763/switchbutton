@@ -1,6 +1,7 @@
 package com.sd.lib.switchbutton;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -215,6 +216,6 @@ public class FSwitchButton extends BaseSwitchButton
     {
         super.computeScroll();
         if (getScroller().computeScrollOffset())
-            postInvalidateOnAnimation();
+            ViewCompat.postInvalidateOnAnimation(this);
     }
 }

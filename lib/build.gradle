@@ -6,10 +6,10 @@ group = 'com.github.zj565061763'
 android {
     compileSdkVersion 27
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 15
         targetSdkVersion 22
-        versionCode 20180903
-        versionName "1.2.0-rc1"
+        versionCode 20181221
+        versionName "1.2.0-rc2"
     }
     buildTypes {
         release {
@@ -26,6 +26,7 @@ android {
 
 dependencies {
     implementation 'com.github.zj565061763:gesture:1.1.2'
+    implementation 'com.android.support:support-compat:27.1.1'
 }
 
 // 指定编码
