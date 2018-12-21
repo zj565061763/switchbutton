@@ -317,21 +317,29 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
     @Override
     public boolean setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
-        if (mIsChecked == checked)
-            return false;
+        boolean changed = false;
 
-        if (mIsDebug)
-            Log.e(getDebugTag(), "setChecked:" + checked);
-
-        mIsChecked = checked;
-        updateViewByState(anim);
-
-        if (notifyCallback)
+        if (mIsChecked != checked)
         {
-            if (mOnCheckedChangeCallback != null)
-                mOnCheckedChangeCallback.onCheckedChanged(mIsChecked, this);
+            mIsChecked = checked;
+            changed = true;
+
+            if (mIsDebug)
+                Log.e(getDebugTag(), "setChecked:" + checked);
+
+            updateViewByState(anim);
+
+            if (notifyCallback)
+            {
+                if (mOnCheckedChangeCallback != null)
+                    mOnCheckedChangeCallback.onCheckedChanged(mIsChecked, this);
+            }
         }
-        return true;
+
+        if (!anim && !changed)
+            updateViewByState(false);
+
+        return changed;
     }
 
     @Override
