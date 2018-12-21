@@ -232,9 +232,9 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
 
     private void notifyViewPositionChanged()
     {
-        float percent = getScrollPercent();
+        final float percent = getScrollPercent();
         mViewChecked.setAlpha(percent);
-        mViewNormal.setAlpha(1 - percent);
+        mViewNormal.setAlpha(1.0f - percent);
 
         if (mOnViewPositionChangeCallback != null)
             mOnViewPositionChangeCallback.onViewPositionChanged(this);
