@@ -12,24 +12,6 @@ import com.sd.lib.gesture.FTouchHelper;
 
 public abstract class BaseSwitchButton extends FrameLayout implements SwitchButton
 {
-    public BaseSwitchButton(Context context)
-    {
-        super(context);
-        init(context, null);
-    }
-
-    public BaseSwitchButton(Context context, AttributeSet attrs)
-    {
-        super(context, attrs);
-        init(context, attrs);
-    }
-
-    public BaseSwitchButton(Context context, AttributeSet attrs, int defStyleAttr)
-    {
-        super(context, attrs, defStyleAttr);
-        init(context, attrs);
-    }
-
     /**
      * 是否选中
      */
@@ -53,6 +35,12 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     private OnViewPositionChangeCallback mOnViewPositionChangeCallback;
 
     protected boolean mIsDebug;
+
+    public BaseSwitchButton(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+        init(context, attrs);
+    }
 
     private void init(Context context, AttributeSet attrs)
     {

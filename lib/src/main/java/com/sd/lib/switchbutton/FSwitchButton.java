@@ -15,23 +15,13 @@ import com.sd.lib.gesture.tag.TagHolder;
 
 public class FSwitchButton extends BaseSwitchButton
 {
-    public FSwitchButton(Context context)
-    {
-        super(context);
-    }
+    private FGestureManager mGestureManager;
+    private FScroller mScroller;
 
     public FSwitchButton(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
-
-    public FSwitchButton(Context context, AttributeSet attrs, int defStyleAttr)
-    {
-        super(context, attrs, defStyleAttr);
-    }
-
-    private FGestureManager mGestureManager;
-    private FScroller mScroller;
 
     private FScroller getScroller()
     {
