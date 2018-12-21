@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity
         sb_rect.setOnCheckedChangeCallback(new SwitchButton.OnCheckedChangeCallback()
         {
             @Override
-            public void onCheckedChanged(boolean checked, SwitchButton view)
+            public void onCheckedChanged(boolean checked, SwitchButton switchButton)
             {
                 Log.i(TAG, "onCheckedChanged:" + checked);
             }
@@ -31,12 +31,13 @@ public class MainActivity extends AppCompatActivity
         sb_rect.setOnViewPositionChangeCallback(new SwitchButton.OnViewPositionChangeCallback()
         {
             @Override
-            public void onViewPositionChanged(SwitchButton view)
+            public void onViewPositionChanged(SwitchButton switchButton)
             {
-                Log.i(TAG, "percent:" + view.getScrollPercent());
-                float percent = view.getScrollPercent() * 0.8f + 0.2f;
-                view.getViewNormal().setScaleY(percent);
-                view.getViewChecked().setScaleY(percent);
+                Log.i(TAG, "percent:" + switchButton.getScrollPercent());
+
+                float percent = switchButton.getScrollPercent() * 0.8f + 0.2f;
+                switchButton.getViewNormal().setScaleY(percent);
+                switchButton.getViewChecked().setScaleY(percent);
             }
         });
     }

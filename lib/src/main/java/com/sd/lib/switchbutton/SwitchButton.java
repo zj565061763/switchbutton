@@ -77,9 +77,9 @@ public interface SwitchButton
          * 选中状态变化回调
          *
          * @param checked
-         * @param view
+         * @param switchButton
          */
-        void onCheckedChanged(boolean checked, SwitchButton view);
+        void onCheckedChanged(boolean checked, SwitchButton switchButton);
     }
 
     interface OnViewPositionChangeCallback
@@ -87,8 +87,8 @@ public interface SwitchButton
         /**
          * 手柄view滚动回调
          *
-         * @param view
+         * @param switchButton
          */
-        void onViewPositionChanged(SwitchButton view);
+        void onViewPositionChanged(SwitchButton switchButton);
     }
 }
