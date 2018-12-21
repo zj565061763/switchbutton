@@ -157,10 +157,13 @@ public class FSwitchButton extends BaseSwitchButton
     private boolean canPull()
     {
         final boolean checkDegreeX = getGestureManager().getTouchHelper().getDegreeXFromDown() < 30;
+        if (!checkDegreeX)
+            return false;
+
         final boolean checkMoveLeft = isChecked() && getGestureManager().getTouchHelper().getDeltaXFromDown() < 0;
         final boolean checkMoveRight = !isChecked() && getGestureManager().getTouchHelper().getDeltaXFromDown() > 0;
 
-        return checkDegreeX && (checkMoveLeft || checkMoveRight);
+        return checkMoveLeft || checkMoveRight;
     }
 
     @Override
