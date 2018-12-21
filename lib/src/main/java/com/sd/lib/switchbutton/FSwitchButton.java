@@ -140,6 +140,19 @@ public class FSwitchButton extends BaseSwitchButton
         return mGestureManager;
     }
 
+    @Override
+    protected boolean isViewIdle()
+    {
+        final boolean checkScrollerFinished = getScroller().isFinished();
+        if (!checkScrollerFinished)
+            return false;
+
+        final boolean checkNotDragging = !getGestureManager().getTagHolder().isTagConsume();
+        if (!checkNotDragging)
+            return false;
+
+        return true;
+    }
 
     @Override
     protected void abortAnimation()

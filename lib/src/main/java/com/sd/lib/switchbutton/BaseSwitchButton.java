@@ -3,33 +3,19 @@ package com.sd.lib.switchbutton;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.view.ViewGroup;
 
 import com.sd.lib.gesture.FTouchHelper;
 
-public abstract class BaseSwitchButton extends FrameLayout implements SwitchButton
+public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
 {
-    /**
-     * 是否选中
-     */
-    private boolean mIsChecked;
-    /**
-     * 正常view
-     */
     private View mViewNormal;
-    /**
-     * 选中view
-     */
     private View mViewChecked;
-    /**
-     * 手柄view
-     */
     private View mViewThumb;
-
     protected final SBAttrModel mAttrModel = new SBAttrModel();
+
+    private boolean mIsChecked;
 
     private OnCheckedChangeCallback mOnCheckedChangeCallback;
     private OnViewPositionChangeCallback mOnViewPositionChangeCallback;
@@ -39,16 +25,25 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     public BaseSwitchButton(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        init(context, attrs);
-    }
 
-    private void init(Context context, AttributeSet attrs)
-    {
         mAttrModel.parse(context, attrs);
         mIsChecked = mAttrModel.isChecked;
         mIsDebug = mAttrModel.isDebug;
 
-        addDefaultViews();
+        final View normal = new View(getContext());
+        normal.setBackgroundResource(mAttrModel.imageNormalResId);
+        addView(normal, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mViewNormal = normal;
+
+        final View checked = new View(getContext());
+        checked.setBackgroundResource(mAttrModel.imageCheckedResId);
+        addView(checked, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mViewChecked = checked;
+
+        final View thumb = new SBThumbView(getContext());
+        thumb.setBackgroundResource(mAttrModel.imageThumbResId);
+        addView(thumb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mViewThumb = thumb;
     }
 
     public void setDebug(boolean debug)
@@ -59,33 +54,6 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     protected final String getDebugTag()
     {
         return getClass().getSimpleName();
-    }
-
-    private void addDefaultViews()
-    {
-        ImageView imageNormal = new ImageView(getContext());
-        imageNormal.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageNormal.setImageResource(mAttrModel.imageNormalResId);
-        addView(imageNormal, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        mViewNormal = imageNormal;
-
-        ImageView imageChecked = new ImageView(getContext());
-        imageChecked.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageChecked.setImageResource(mAttrModel.imageCheckedResId);
-        addView(imageChecked, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        mViewChecked = imageChecked;
-
-        ImageView imageThumb = new SBThumbImageView(getContext());
-        imageThumb.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageThumb.setImageResource(mAttrModel.imageThumbResId);
-        LayoutParams pThumb = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-        pThumb.gravity = Gravity.CENTER_VERTICAL;
-        pThumb.leftMargin = mAttrModel.marginLeft;
-        pThumb.topMargin = mAttrModel.marginTop;
-        pThumb.rightMargin = mAttrModel.marginRight;
-        pThumb.bottomMargin = mAttrModel.marginBottom;
-        addView(imageThumb, pThumb);
-        mViewThumb = imageThumb;
     }
 
     @Override
@@ -111,7 +79,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
      */
     protected final int getLeftNormal()
     {
-        return getParamsThumbView().leftMargin;
+        return mAttrModel.marginLeft;
     }
 
     /**
@@ -121,7 +89,7 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
      */
     protected final int getLeftChecked()
     {
-        return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - getParamsThumbView().rightMargin;
+        return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - mAttrModel.marginRight;
     }
 
     /**
@@ -145,12 +113,11 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
     }
 
     /**
-     * 返回手柄view布局参数
+     * view是否处于空闲状态（静止且未被拖动状态）
+     *
+     * @return
      */
-    private LayoutParams getParamsThumbView()
-    {
-        return (LayoutParams) mViewThumb.getLayoutParams();
-    }
+    protected abstract boolean isViewIdle();
 
     /**
      * 停止滑动动画
@@ -193,14 +160,14 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
                 isScrollerStarted = onSmoothSlide(startLeft, endLeft);
             } else
             {
-                mViewThumb.layout(endLeft, mViewThumb.getTop(), endLeft + mViewThumb.getMeasuredWidth(), mViewThumb.getBottom());
+                layoutInternal();
             }
         }
 
         if (isScrollerStarted)
         {
             // 触发滚动成功，不需要立即更新view的可见状态，动画结束后更新
-            invalidate();
+            postInvalidateOnAnimation();
         } else
         {
             // 立即更新view的可见状态
@@ -209,8 +176,6 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
 
         if (mViewThumb.isSelected() != mIsChecked)
             mViewThumb.setSelected(mIsChecked);
-
-        notifyViewPositionChanged();
     }
 
     protected final void dealViewIdle()
@@ -272,14 +237,73 @@ public abstract class BaseSwitchButton extends FrameLayout implements SwitchButt
         mViewNormal.setAlpha(1 - percent);
 
         if (mOnViewPositionChangeCallback != null)
-            mOnViewPositionChangeCallback.onViewPositionChanged(BaseSwitchButton.this);
+            mOnViewPositionChangeCallback.onViewPositionChanged(this);
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom)
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
-        super.onLayout(changed, left, top, right, bottom);
-        updateViewByState(false);
+        measureChild(mViewNormal, widthMeasureSpec, heightMeasureSpec);
+        measureChild(mViewChecked, widthMeasureSpec, heightMeasureSpec);
+
+        final ViewGroup.LayoutParams lpThumb = mViewThumb.getLayoutParams();
+        measureChild(mViewThumb, getChildMeasureSpec(widthMeasureSpec, mAttrModel.marginLeft + mAttrModel.marginRight, lpThumb.width),
+                getChildMeasureSpec(heightMeasureSpec, mAttrModel.marginTop + mAttrModel.marginBottom, lpThumb.height));
+
+        int width = Math.max(mViewThumb.getMeasuredWidth(), Math.max(mViewNormal.getMeasuredWidth(), mViewChecked.getMeasuredWidth()));
+        int height = Math.max(mViewThumb.getMeasuredHeight(), Math.max(mViewNormal.getMeasuredHeight(), mViewChecked.getMeasuredHeight()));
+
+        width = getMeasureSize(width, widthMeasureSpec);
+        height = getMeasureSize(height, heightMeasureSpec);
+
+        setMeasuredDimension(width, height);
+    }
+
+    private static int getMeasureSize(int size, int measureSpec)
+    {
+        int result = 0;
+
+        final int modeSpec = View.MeasureSpec.getMode(measureSpec);
+        final int sizeSpec = View.MeasureSpec.getSize(measureSpec);
+
+        switch (modeSpec)
+        {
+            case View.MeasureSpec.UNSPECIFIED:
+                result = size;
+                break;
+            case View.MeasureSpec.EXACTLY:
+                result = sizeSpec;
+                break;
+            case View.MeasureSpec.AT_MOST:
+                result = Math.min(size, sizeSpec);
+                break;
+        }
+        return result;
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b)
+    {
+        layoutInternal();
+        notifyViewPositionChanged();
+    }
+
+    private void layoutInternal()
+    {
+        mViewNormal.layout(0, 0, mViewNormal.getMeasuredWidth(), mViewNormal.getMeasuredHeight());
+        mViewChecked.layout(0, 0, mViewChecked.getMeasuredWidth(), mViewChecked.getMeasuredHeight());
+
+        int left = 0;
+        int top = mAttrModel.marginTop;
+        if (isViewIdle())
+        {
+            left = mIsChecked ? getLeftChecked() : getLeftNormal();
+        } else
+        {
+            left = mViewThumb.getLeft();
+        }
+        mViewThumb.layout(left, top,
+                left + mViewThumb.getMeasuredWidth(), top + mViewThumb.getMeasuredHeight());
     }
 
     //----------SwitchButton implements start----------
