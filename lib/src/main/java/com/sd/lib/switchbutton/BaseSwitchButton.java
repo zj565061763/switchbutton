@@ -139,75 +139,29 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
      *
      * @param anim
      */
-    protected final void updateViewByState(boolean anim)
+    private void updateViewByState(boolean anim)
     {
-        if (mIsDebug)
-            Log.i(getDebugTag(), "----------updateViewByState anim:" + anim);
-
-        abortAnimation();
-
-        boolean isScrollerStarted = false;
-
         final int startLeft = mViewThumb.getLeft();
         final int endLeft = mIsChecked ? getLeftChecked() : getLeftNormal();
 
+        if (mIsDebug)
+            Log.i(getDebugTag(), "updateViewByState:" + startLeft + " -> " + endLeft + " anim:" + anim);
+
         if (startLeft != endLeft)
         {
-            if (mIsDebug)
-                Log.i(getDebugTag(), "updateViewByState:" + startLeft + " -> " + endLeft);
-
             if (anim)
             {
-                isScrollerStarted = onSmoothSlide(startLeft, endLeft);
+                if (onSmoothSlide(startLeft, endLeft))
+                    ViewCompat.postInvalidateOnAnimation(this);
             } else
             {
                 layoutInternal();
             }
         }
 
-        if (isScrollerStarted)
-        {
-            // 触发滚动成功，不需要立即更新view的可见状态，动画结束后更新
-            ViewCompat.postInvalidateOnAnimation(this);
-        } else
-        {
-            // 立即更新view的可见状态
-            dealViewIdle();
-        }
-
-        if (mViewThumb.isSelected() != mIsChecked)
-            mViewThumb.setSelected(mIsChecked);
+        dealViewIdle();
     }
 
-    protected final void dealViewIdle()
-    {
-        if (mIsDebug)
-            Log.i(getDebugTag(), "dealViewIdle:" + mIsChecked);
-
-        if (mIsChecked)
-        {
-            showCheckedView(true);
-            showNormalView(false);
-        } else
-        {
-            showCheckedView(false);
-            showNormalView(true);
-        }
-    }
-
-    private void showCheckedView(boolean show)
-    {
-        float alpha = show ? 1.0f : 0f;
-        if (mViewChecked.getAlpha() != alpha)
-            mViewChecked.setAlpha(alpha);
-    }
-
-    private void showNormalView(boolean show)
-    {
-        float alpha = show ? 1.0f : 0f;
-        if (mViewNormal.getAlpha() != alpha)
-            mViewNormal.setAlpha(alpha);
-    }
 
     /**
      * 移动手柄view
@@ -239,6 +193,39 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
 
         if (mOnViewPositionChangeCallback != null)
             mOnViewPositionChangeCallback.onViewPositionChanged(this);
+    }
+
+    protected final void dealViewIdle()
+    {
+        if (isViewIdle())
+        {
+            if (mIsDebug)
+                Log.i(getDebugTag(), "dealViewIdle:" + mIsChecked);
+
+            if (mIsChecked)
+            {
+                showCheckedView(true);
+                showNormalView(false);
+            } else
+            {
+                showCheckedView(false);
+                showNormalView(true);
+            }
+        }
+    }
+
+    private void showCheckedView(boolean show)
+    {
+        float alpha = show ? 1.0f : 0f;
+        if (mViewChecked.getAlpha() != alpha)
+            mViewChecked.setAlpha(alpha);
+    }
+
+    private void showNormalView(boolean show)
+    {
+        float alpha = show ? 1.0f : 0f;
+        if (mViewNormal.getAlpha() != alpha)
+            mViewNormal.setAlpha(alpha);
     }
 
     @Override
@@ -318,17 +305,15 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
     @Override
     public boolean setChecked(boolean checked, boolean anim, boolean notifyCallback)
     {
-        boolean changed = false;
+        final boolean changed = mIsChecked != checked;
+
+        if (mIsDebug)
+            Log.e(getDebugTag(), "setChecked:" + mIsChecked + " -> " + checked);
 
         if (mIsChecked != checked)
         {
             mIsChecked = checked;
-            changed = true;
-
-            if (mIsDebug)
-                Log.e(getDebugTag(), "setChecked:" + checked);
-
-            updateViewByState(anim);
+            mViewThumb.setSelected(checked);
 
             if (notifyCallback)
             {
@@ -337,9 +322,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
             }
         }
 
-        if (!anim && !changed)
-            updateViewByState(false);
-
+        updateViewByState(anim);
         return changed;
     }
 

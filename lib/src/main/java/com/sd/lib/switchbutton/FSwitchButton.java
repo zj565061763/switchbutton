@@ -9,9 +9,8 @@ import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 
 import com.sd.lib.gesture.FGestureManager;
+import com.sd.lib.gesture.FScroller;
 import com.sd.lib.gesture.FTouchHelper;
-import com.sd.lib.gesture.scroller.FScroller;
-import com.sd.lib.gesture.scroller.SimpleScrollerApi;
 import com.sd.lib.gesture.tag.TagHolder;
 
 public class FSwitchButton extends BaseSwitchButton
@@ -28,30 +27,28 @@ public class FSwitchButton extends BaseSwitchButton
     {
         if (mScroller == null)
         {
-            mScroller = new FScroller(new SimpleScrollerApi(getContext()));
-            mScroller.setCallback(new FScroller.Callback()
+            mScroller = new FScroller(getContext())
             {
                 @Override
-                public void onScrollStateChanged(boolean isFinished)
+                protected void onScrollCompute(int lastX, int lastY, int currX, int currY)
                 {
-                    if (isFinished)
-                    {
-                        if (mIsDebug)
-                            Log.i(getDebugTag(), "onScroll finished:" + getViewThumb().getLeft());
+                    if (mIsDebug)
+                        Log.i(getDebugTag(), "onScroll:" + getViewThumb().getLeft());
 
-                        dealViewIdle();
-                    }
+                    final int dx = currX - lastX;
+                    moveView(dx);
                 }
 
                 @Override
-                public void onScroll(int lastX, int lastY, int currX, int currY)
+                protected void onScrollFinish(boolean isAbort)
                 {
-                    final int dx = currX - lastX;
-                    moveView(dx);
                     if (mIsDebug)
-                        Log.i(getDebugTag(), "onScroll:" + getViewThumb().getLeft());
+                        Log.e(getDebugTag(), "onScrollFinish isAbort:" + isAbort);
+
+                    if (!isAbort)
+                        dealViewIdle();
                 }
-            });
+            };
         }
         return mScroller;
     }
@@ -100,9 +97,12 @@ public class FSwitchButton extends BaseSwitchButton
                 }
 
                 @Override
-                public void onEventFinish(boolean hasConsumeEvent, VelocityTracker velocityTracker, MotionEvent event)
+                public void onEventFinish(FGestureManager.FinishParams params, VelocityTracker velocityTracker, MotionEvent event)
                 {
-                    if (hasConsumeEvent)
+                    if (params.isCancelTouchEvent)
+                        return;
+
+                    if (params.hasConsumeEvent)
                     {
                         velocityTracker.computeCurrentVelocity(1000);
                         final int velocity = (int) velocityTracker.getXVelocity();
@@ -121,13 +121,7 @@ public class FSwitchButton extends BaseSwitchButton
                         if (mIsDebug)
                             Log.e(getDebugTag(), "onConsumeEventFinish checked:" + checked);
 
-                        if (setChecked(checked, true, true))
-                        {
-                            // 更新状态成功，内部会更新view的位置
-                        } else
-                        {
-                            updateViewByState(true);
-                        }
+                        setChecked(checked, true, true);
                     } else
                     {
                         if (getGestureManager().getTouchHelper().isClick(event, getContext()))
@@ -152,6 +146,13 @@ public class FSwitchButton extends BaseSwitchButton
             });
         }
         return mGestureManager;
+    }
+
+    @Override
+    public boolean setChecked(boolean checked, boolean anim, boolean notifyCallback)
+    {
+        getGestureManager().setCancelTouchEvent();
+        return super.setChecked(checked, anim, notifyCallback);
     }
 
     @Override
@@ -182,12 +183,16 @@ public class FSwitchButton extends BaseSwitchButton
 
     private boolean canPull()
     {
+        final float deltaX = getGestureManager().getTouchHelper().getDeltaXFromDown();
+        if (deltaX == 0)
+            return false;
+
         final boolean checkDegreeX = getGestureManager().getTouchHelper().getDegreeXFromDown() < 30;
         if (!checkDegreeX)
             return false;
 
-        final boolean checkMoveLeft = isChecked() && getGestureManager().getTouchHelper().getDeltaXFromDown() < 0;
-        final boolean checkMoveRight = !isChecked() && getGestureManager().getTouchHelper().getDeltaXFromDown() > 0;
+        final boolean checkMoveLeft = isChecked() && deltaX < 0;
+        final boolean checkMoveRight = !isChecked() && deltaX > 0;
 
         return checkMoveLeft || checkMoveRight;
     }
