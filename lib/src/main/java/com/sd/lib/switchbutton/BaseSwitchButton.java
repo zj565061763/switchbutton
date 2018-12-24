@@ -200,7 +200,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         if (isViewIdle())
         {
             if (mIsDebug)
-                Log.i(getDebugTag(), "dealViewIdle:" + mIsChecked);
+                Log.i(getDebugTag(), "dealViewIdle isChecked:" + mIsChecked);
 
             if (mIsChecked)
             {
