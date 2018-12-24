@@ -3,24 +3,24 @@ package com.sd.www.switchbutton;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.sd.lib.switchbutton.FSwitchButton;
 import com.sd.lib.switchbutton.SwitchButton;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
     public static final String TAG = MainActivity.class.getSimpleName();
-
-    private FSwitchButton sb_rect;
+    private FSwitchButton sb_custom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sb_rect = findViewById(R.id.sb_rect);
+        sb_custom = findViewById(R.id.sb_custom);
 
-        sb_rect.setOnCheckedChangeCallback(new SwitchButton.OnCheckedChangeCallback()
+        sb_custom.setOnCheckedChangeCallback(new SwitchButton.OnCheckedChangeCallback()
         {
             @Override
             public void onCheckedChanged(boolean checked, SwitchButton switchButton)
@@ -28,17 +28,24 @@ public class MainActivity extends AppCompatActivity
                 Log.i(TAG, "onCheckedChanged:" + checked);
             }
         });
-        sb_rect.setOnViewPositionChangeCallback(new SwitchButton.OnViewPositionChangeCallback()
+        sb_custom.setOnViewPositionChangeCallback(new SwitchButton.OnViewPositionChangeCallback()
         {
             @Override
             public void onViewPositionChanged(SwitchButton switchButton)
             {
-                Log.i(TAG, "percent:" + switchButton.getScrollPercent());
+                final float percent = switchButton.getScrollPercent();
+                Log.i(TAG, "percent:" + percent);
 
-                float percent = switchButton.getScrollPercent() * 0.8f + 0.2f;
-                switchButton.getViewNormal().setScaleY(percent);
-                switchButton.getViewChecked().setScaleY(percent);
+                float scalePercent = percent * 0.8f + 0.2f;
+                switchButton.getViewNormal().setScaleY(scalePercent);
+                switchButton.getViewChecked().setScaleY(scalePercent);
             }
         });
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+
     }
 }
