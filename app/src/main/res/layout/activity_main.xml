@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="10dp">
 
     <com.sd.lib.switchbutton.FSwitchButton
         android:id="@+id/sb_custom"
@@ -21,6 +21,18 @@
         app:sbMarginRight="2dp"
         app:sbMarginTop="2dp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#000000" />
+
+    <com.sd.lib.switchbutton.FSwitchButton
+        android:id="@+id/sb_test"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:sbIsDebug="true" />
 
     <Button
         android:layout_width="wrap_content"

@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v)
     {
+        FSwitchButton sb_test = findViewById(R.id.sb_test);
 
     }
 }
