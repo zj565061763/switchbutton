@@ -149,6 +149,8 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
 
         if (startLeft != endLeft)
         {
+            abortAnimation();
+
             if (anim)
             {
                 if (onSmoothSlide(startLeft, endLeft))
