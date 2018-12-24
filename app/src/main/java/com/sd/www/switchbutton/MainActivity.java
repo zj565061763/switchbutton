@@ -47,6 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v)
     {
         FSwitchButton sb_test = findViewById(R.id.sb_test);
-
+        sb_test.toggleChecked(true, false);
     }
 }
