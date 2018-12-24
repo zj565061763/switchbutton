@@ -164,7 +164,6 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         dealViewIdle();
     }
 
-
     /**
      * 移动手柄view
      *
