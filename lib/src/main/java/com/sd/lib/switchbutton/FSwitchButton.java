@@ -31,15 +31,13 @@ public class FSwitchButton extends BaseSwitchButton
                 @Override
                 protected void onScrollStart()
                 {
-
+                    if (mIsDebug)
+                        Log.i(getDebugTag(), "onScrollStart left:" + getViewThumb().getLeft());
                 }
 
                 @Override
                 protected void onScrollCompute(int lastX, int lastY, int currX, int currY)
                 {
-                    if (mIsDebug)
-                        Log.i(getDebugTag(), "onScroll:" + getViewThumb().getLeft());
-
                     final int dx = currX - lastX;
                     moveView(dx);
                 }
@@ -48,7 +46,7 @@ public class FSwitchButton extends BaseSwitchButton
                 protected void onScrollFinish(boolean isAbort)
                 {
                     if (mIsDebug)
-                        Log.e(getDebugTag(), "onScrollFinish isAbort:" + isAbort);
+                        Log.e(getDebugTag(), "onScrollFinish left:" + getViewThumb().getLeft() + " isAbort:" + isAbort);
 
                     if (!isAbort)
                         setIdleIfNeed();

@@ -256,7 +256,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         if (isViewIdle() && mScrollState != ScrollState.Idle)
         {
             if (mIsDebug)
-                Log.e(getDebugTag(), "setIdleIfNeed success:" + mIsChecked);
+                Log.i(getDebugTag(), "setIdleIfNeed success:" + mIsChecked);
 
             setScrollState(ScrollState.Idle);
         }
