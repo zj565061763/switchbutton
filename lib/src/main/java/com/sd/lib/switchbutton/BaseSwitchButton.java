@@ -12,9 +12,9 @@ import com.sd.lib.switchbutton.gesture.FTouchHelper;
 
 public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
 {
-    private final View mViewNormal;
-    private final View mViewChecked;
-    private final View mViewThumb;
+    private View mViewNormal;
+    private View mViewChecked;
+    private View mViewThumb;
     protected final SBAttrModel mAttrModel = new SBAttrModel();
 
     private boolean mIsChecked;
