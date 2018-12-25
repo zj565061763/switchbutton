@@ -168,23 +168,37 @@ public interface SwitchButton
     /**
      * 设置选中变化回调
      *
-     * @param onCheckedChangeCallback
+     * @param callback
      */
-    void setOnCheckedChangeCallback(OnCheckedChangeCallback onCheckedChangeCallback);
+    void setOnCheckedChangeCallback(OnCheckedChangeCallback callback);
 
     /**
      * 设置手柄view位置变化回调
      *
-     * @param onViewPositionChangeCallback
+     * @param callback
      */
-    void setOnViewPositionChangeCallback(OnViewPositionChangeCallback onViewPositionChangeCallback);
+    void setOnViewPositionChangeCallback(OnViewPositionChangeCallback callback);
 
     /**
-     * 获得滚动的百分比[0-1]
+     * 设置滚动状态变化回调
+     *
+     * @param callback
+     */
+    void setOnScrollStateChangeCallback(OnScrollStateChangeCallback callback);
+
+    /**
+     * 返回滚动的百分比[0-1]
      *
      * @return
      */
     float getScrollPercent();
+
+    /**
+     * 返回滚动状态
+     *
+     * @return
+     */
+    ScrollState getScrollState();
 
     /**
      * 返回正常状态view
@@ -226,6 +240,34 @@ public interface SwitchButton
          * @param switchButton
          */
         void onViewPositionChanged(SwitchButton switchButton);
+    }
+
+    enum ScrollState
+    {
+        /**
+         * 空闲状态
+         */
+        Idle,
+        /**
+         * 拖动状态
+         */
+        Drag,
+        /**
+         * 惯性滑动状态
+         */
+        Fling
+    }
+
+    interface OnScrollStateChangeCallback
+    {
+        /**
+         * 滚动状态变化回调
+         *
+         * @param oldState
+         * @param newState
+         * @param switchButton
+         */
+        void onScrollStateChanged(ScrollState oldState, ScrollState newState, SwitchButton switchButton);
     }
 }
 ```
