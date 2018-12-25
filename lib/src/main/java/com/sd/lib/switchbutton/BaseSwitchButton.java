@@ -294,6 +294,10 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         }
         mViewThumb.layout(left, top,
                 left + mViewThumb.getMeasuredWidth(), top + mViewThumb.getMeasuredHeight());
+
+        final float backZ = Math.max(ViewCompat.getZ(mViewNormal), ViewCompat.getZ(mViewChecked));
+        if (ViewCompat.getZ(mViewThumb) <= backZ)
+            ViewCompat.setZ(mViewThumb, backZ + 1);
     }
 
     //----------SwitchButton implements start----------
