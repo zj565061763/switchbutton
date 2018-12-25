@@ -21,17 +21,12 @@
         app:sbMarginRight="2dp"
         app:sbMarginTop="2dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="#000000" />
 
     <com.sd.lib.switchbutton.FSwitchButton
         android:id="@+id/sb_test"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         app:sbIsDebug="true">
 
         <TextView
