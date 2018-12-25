@@ -9,43 +9,43 @@ class SBAttrModel
     /**
      * 正常view图片id
      */
-    public int imageNormalResId;
+    private int imageNormalResId;
     /**
      * 选中view图片id
      */
-    public int imageCheckedResId;
+    private int imageCheckedResId;
     /**
      * 手柄view图片id
      */
-    public int imageThumbResId;
+    private int imageThumbResId;
     /**
      * 手柄view左边间距
      */
-    public int marginLeft;
+    private int marginLeft;
     /**
      * 手柄view顶部间距
      */
-    public int marginTop;
+    private int marginTop;
     /**
      * 手柄view右边间距
      */
-    public int marginRight;
+    private int marginRight;
     /**
      * 手柄view底部间距
      */
-    public int marginBottom;
+    private int marginBottom;
     /**
      * 是否选中
      */
-    public boolean isChecked;
+    private boolean isChecked;
     /**
      * 是否需要点击切换动画
      */
-    public boolean isNeedToggleAnim;
+    private boolean isNeedToggleAnim;
     /**
      * 是否调试模式
      */
-    public boolean isDebug;
+    private boolean isDebug;
 
     /**
      * 解析xml属性
@@ -100,5 +100,55 @@ class SBAttrModel
 
             a.recycle();
         }
+    }
+
+    public int getImageNormalResId()
+    {
+        return imageNormalResId;
+    }
+
+    public int getImageCheckedResId()
+    {
+        return imageCheckedResId;
+    }
+
+    public int getImageThumbResId()
+    {
+        return imageThumbResId;
+    }
+
+    public int getMarginLeft()
+    {
+        return marginLeft;
+    }
+
+    public int getMarginTop()
+    {
+        return marginTop;
+    }
+
+    public int getMarginRight()
+    {
+        return marginRight;
+    }
+
+    public int getMarginBottom()
+    {
+        return marginBottom;
+    }
+
+    public boolean isChecked()
+    {
+        return isChecked;
+    }
+
+    public boolean isNeedToggleAnim()
+    {
+        return isNeedToggleAnim;
+    }
+
+    public boolean isDebug()
+    {
+        return isDebug;
     }
 }

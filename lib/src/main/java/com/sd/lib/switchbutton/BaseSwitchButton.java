@@ -7,13 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sd.lib.gesture.FTouchHelper;
+import com.sd.lib.switchbutton.gesture.FTouchHelper;
+
 
 public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
 {
-    private View mViewNormal;
-    private View mViewChecked;
-    private View mViewThumb;
+    private final View mViewNormal;
+    private final View mViewChecked;
+    private final View mViewThumb;
     protected final SBAttrModel mAttrModel = new SBAttrModel();
 
     private boolean mIsChecked;
@@ -28,21 +29,21 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         super(context, attrs);
 
         mAttrModel.parse(context, attrs);
-        mIsChecked = mAttrModel.isChecked;
-        mIsDebug = mAttrModel.isDebug;
+        mIsChecked = mAttrModel.isChecked();
+        mIsDebug = mAttrModel.isDebug();
 
         final View normal = new View(getContext());
-        normal.setBackgroundResource(mAttrModel.imageNormalResId);
+        normal.setBackgroundResource(mAttrModel.getImageNormalResId());
         addView(normal, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mViewNormal = normal;
 
         final View checked = new View(getContext());
-        checked.setBackgroundResource(mAttrModel.imageCheckedResId);
+        checked.setBackgroundResource(mAttrModel.getImageCheckedResId());
         addView(checked, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mViewChecked = checked;
 
         final View thumb = new SBThumbView(getContext());
-        thumb.setBackgroundResource(mAttrModel.imageThumbResId);
+        thumb.setBackgroundResource(mAttrModel.getImageThumbResId());
         addView(thumb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mViewThumb = thumb;
     }
@@ -80,7 +81,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
      */
     protected final int getLeftNormal()
     {
-        return mAttrModel.marginLeft;
+        return mAttrModel.getMarginLeft();
     }
 
     /**
@@ -90,7 +91,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
      */
     protected final int getLeftChecked()
     {
-        return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - mAttrModel.marginRight;
+        return getMeasuredWidth() - mViewThumb.getMeasuredWidth() - mAttrModel.getMarginRight();
     }
 
     /**
@@ -236,8 +237,8 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         measureChild(mViewChecked, widthMeasureSpec, heightMeasureSpec);
 
         final ViewGroup.LayoutParams lpThumb = mViewThumb.getLayoutParams();
-        measureChild(mViewThumb, getChildMeasureSpec(widthMeasureSpec, mAttrModel.marginLeft + mAttrModel.marginRight, lpThumb.width),
-                getChildMeasureSpec(heightMeasureSpec, mAttrModel.marginTop + mAttrModel.marginBottom, lpThumb.height));
+        measureChild(mViewThumb, getChildMeasureSpec(widthMeasureSpec, mAttrModel.getMarginLeft() + mAttrModel.getMarginRight(), lpThumb.width),
+                getChildMeasureSpec(heightMeasureSpec, mAttrModel.getMarginTop() + mAttrModel.getMarginBottom(), lpThumb.height));
 
         int width = Math.max(mViewThumb.getMeasuredWidth(), Math.max(mViewNormal.getMeasuredWidth(), mViewChecked.getMeasuredWidth()));
         int height = Math.max(mViewThumb.getMeasuredHeight(), Math.max(mViewNormal.getMeasuredHeight(), mViewChecked.getMeasuredHeight()));
@@ -283,7 +284,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         mViewChecked.layout(0, 0, mViewChecked.getMeasuredWidth(), mViewChecked.getMeasuredHeight());
 
         int left = 0;
-        int top = mAttrModel.marginTop;
+        int top = mAttrModel.getMarginTop();
         if (isViewIdle())
         {
             left = mIsChecked ? getLeftChecked() : getLeftNormal();

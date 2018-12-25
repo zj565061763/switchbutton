@@ -8,10 +8,9 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 
-import com.sd.lib.gesture.FGestureManager;
-import com.sd.lib.gesture.FScroller;
-import com.sd.lib.gesture.FTouchHelper;
-import com.sd.lib.gesture.tag.TagHolder;
+import com.sd.lib.switchbutton.gesture.FGestureManager;
+import com.sd.lib.switchbutton.gesture.FScroller;
+import com.sd.lib.switchbutton.gesture.FTouchHelper;
 
 public class FSwitchButton extends BaseSwitchButton
 {
@@ -29,6 +28,12 @@ public class FSwitchButton extends BaseSwitchButton
         {
             mScroller = new FScroller(getContext())
             {
+                @Override
+                protected void onScrollStart()
+                {
+
+                }
+
                 @Override
                 protected void onScrollCompute(int lastX, int lastY, int currX, int currY)
                 {
@@ -125,12 +130,12 @@ public class FSwitchButton extends BaseSwitchButton
                     } else
                     {
                         if (getGestureManager().getTouchHelper().isClick(event, getContext()))
-                            toggleChecked(mAttrModel.isNeedToggleAnim, true);
+                            toggleChecked(mAttrModel.isNeedToggleAnim(), true);
                     }
                 }
             });
 
-            mGestureManager.getTagHolder().setCallback(new TagHolder.Callback()
+            mGestureManager.getTagHolder().setCallback(new FGestureManager.FTagHolder.Callback()
             {
                 @Override
                 public void onTagInterceptChanged(boolean tag)
