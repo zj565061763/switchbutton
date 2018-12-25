@@ -51,7 +51,7 @@ public class FSwitchButton extends BaseSwitchButton
                         Log.e(getDebugTag(), "onScrollFinish isAbort:" + isAbort);
 
                     if (!isAbort)
-                        dealViewIdle();
+                        setIdleIfNeed();
                 }
             };
         }
@@ -127,6 +127,9 @@ public class FSwitchButton extends BaseSwitchButton
                             Log.e(getDebugTag(), "onConsumeEventFinish checked:" + checked);
 
                         setChecked(checked, true, true);
+
+                        if (getScrollState() == ScrollState.Drag)
+                            setScrollState(ScrollState.Idle);
                     } else
                     {
                         if (getGestureManager().getTouchHelper().isClick(event, getContext()))
@@ -147,6 +150,8 @@ public class FSwitchButton extends BaseSwitchButton
                 public void onTagConsumeChanged(boolean tag)
                 {
                     FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tag);
+                    if (tag)
+                        setScrollState(ScrollState.Drag);
                 }
             });
         }

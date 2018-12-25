@@ -18,9 +18,11 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
     protected final SBAttrModel mAttrModel = new SBAttrModel();
 
     private boolean mIsChecked;
+    private ScrollState mScrollState = ScrollState.Idle;
 
     private OnCheckedChangeCallback mOnCheckedChangeCallback;
     private OnViewPositionChangeCallback mOnViewPositionChangeCallback;
+    private OnScrollStateChangeCallback mOnScrollStateChangeCallback;
 
     protected boolean mIsDebug;
 
@@ -204,7 +206,10 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
             if (anim)
             {
                 if (onSmoothSlide(startLeft, endLeft))
+                {
+                    setScrollState(ScrollState.Fling);
                     ViewCompat.postInvalidateOnAnimation(this);
+                }
             } else
             {
                 layoutInternal();
@@ -246,7 +251,44 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
             mOnViewPositionChangeCallback.onViewPositionChanged(this);
     }
 
-    protected final void dealViewIdle()
+    protected final void setIdleIfNeed()
+    {
+        if (isViewIdle() && mScrollState != ScrollState.Idle)
+        {
+            if (mIsDebug)
+                Log.e(getDebugTag(), "setIdleIfNeed success:" + mIsChecked);
+
+            setScrollState(ScrollState.Idle);
+        }
+    }
+
+    /**
+     * 设置滚动状态
+     *
+     * @param state
+     */
+    protected final void setScrollState(ScrollState state)
+    {
+        if (state == null)
+            throw new NullPointerException();
+
+        if (mIsDebug)
+            Log.i(getDebugTag(), "setScrollState:" + mScrollState + " -> " + state);
+
+        final ScrollState old = mScrollState;
+        if (old != state)
+        {
+            mScrollState = state;
+
+            if (state == ScrollState.Idle)
+                dealViewIdle();
+
+            if (mOnScrollStateChangeCallback != null)
+                mOnScrollStateChangeCallback.onScrollStateChanged(old, state, this);
+        }
+    }
+
+    private final void dealViewIdle()
     {
         if (isViewIdle())
         {
@@ -378,6 +420,8 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         }
 
         updateViewByState(anim);
+        setIdleIfNeed();
+
         return changed;
     }
 
@@ -400,9 +444,21 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
     }
 
     @Override
+    public void setOnScrollStateChangeCallback(OnScrollStateChangeCallback callback)
+    {
+        mOnScrollStateChangeCallback = callback;
+    }
+
+    @Override
     public float getScrollPercent()
     {
         return getScrollDistance() / (float) getAvailableWidth();
+    }
+
+    @Override
+    public ScrollState getScrollState()
+    {
+        return mScrollState;
     }
 
     @Override

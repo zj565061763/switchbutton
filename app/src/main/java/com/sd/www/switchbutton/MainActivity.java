@@ -34,11 +34,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onViewPositionChanged(SwitchButton switchButton)
             {
                 final float percent = switchButton.getScrollPercent();
-                Log.i(TAG, "percent:" + percent);
 
                 float scalePercent = percent * 0.8f + 0.2f;
                 switchButton.getViewNormal().setScaleY(scalePercent);
                 switchButton.getViewChecked().setScaleY(scalePercent);
+            }
+        });
+        sb_custom.setOnScrollStateChangeCallback(new SwitchButton.OnScrollStateChangeCallback()
+        {
+            @Override
+            public void onScrollStateChanged(SwitchButton.ScrollState oldState, SwitchButton.ScrollState newState, SwitchButton switchButton)
+            {
+                Log.i(TAG, "onScrollStateChanged:" + oldState + " -> " + newState);
             }
         });
     }
