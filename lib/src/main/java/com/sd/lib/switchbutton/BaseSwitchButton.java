@@ -365,12 +365,18 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b)
     {
+        if (mIsDebug)
+            Log.i(getDebugTag(), "onLayout");
+
         layoutInternal();
         notifyViewPositionChanged();
     }
 
     private void layoutInternal()
     {
+        if (mIsDebug)
+            Log.i(getDebugTag(), "layoutInternal");
+
         mViewNormal.layout(0, 0, mViewNormal.getMeasuredWidth(), mViewNormal.getMeasuredHeight());
         mViewChecked.layout(0, 0, mViewChecked.getMeasuredWidth(), mViewChecked.getMeasuredHeight());
 
