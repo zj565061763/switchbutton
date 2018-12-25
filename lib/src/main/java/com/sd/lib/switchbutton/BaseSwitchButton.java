@@ -206,10 +206,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
             if (anim)
             {
                 if (onSmoothSlide(startLeft, endLeft))
-                {
-                    setScrollState(ScrollState.Fling);
                     ViewCompat.postInvalidateOnAnimation(this);
-                }
             } else
             {
                 layoutInternal();
@@ -270,13 +267,13 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         if (state == null)
             throw new NullPointerException();
 
-        if (mIsDebug)
-            Log.i(getDebugTag(), "setScrollState:" + mScrollState + " -> " + state);
-
         final ScrollState old = mScrollState;
         if (old != state)
         {
             mScrollState = state;
+
+            if (mIsDebug)
+                Log.i(getDebugTag(), "setScrollState:" + old + " -> " + state);
 
             if (state == ScrollState.Idle)
                 layoutInternal();
@@ -285,7 +282,6 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
                 mOnScrollStateChangeCallback.onScrollStateChanged(old, state, this);
         }
     }
-
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)

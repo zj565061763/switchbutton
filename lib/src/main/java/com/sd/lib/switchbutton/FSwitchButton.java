@@ -31,8 +31,7 @@ public class FSwitchButton extends BaseSwitchButton
                 @Override
                 protected void onScrollStart()
                 {
-                    if (mIsDebug)
-                        Log.i(getDebugTag(), "onScrollStart left:" + getViewThumb().getLeft());
+                    setScrollState(ScrollState.Fling);
                 }
 
                 @Override
