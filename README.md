@@ -7,7 +7,7 @@ Android开关按钮
 # 默认效果
 ![](http://thumbsnap.com/i/KBISOucv.gif?0705)
 
-## 覆盖全局默认效果
+# 覆盖全局默认效果
 支持覆盖的默认配置：<br>
 * colors <br>
 可以在项目中定义colors覆盖库中的默认配置<br>
@@ -72,7 +72,7 @@ Android开关按钮
 </declare-styleable>
 ```
 
-# 自定义效果
+# 监听滚动
 ![](http://thumbsnap.com/i/YS9spIQs.gif?0706)<br>
 1. xml中布局：<br>
 ```xml
@@ -102,6 +102,38 @@ sb_rect.setOnViewPositionChangeCallback(new SwitchButton.OnViewPositionChangeCal
         switchButton.getViewChecked().setScaleY(percent);
     }
 });
+```
+
+# 自定义内部的View
+```xml
+<com.sd.lib.switchbutton.FSwitchButton
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <TextView
+        android:id="@id/lib_sb_view_normal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="normal" />
+
+    <TextView
+        android:id="@id/lib_sb_view_checked"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="checked" />
+
+    <TextView
+        android:id="@id/lib_sb_view_thumb"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="thumb" />
+
+</com.sd.lib.switchbutton.FSwitchButton>
 ```
 
 # SwitchButton接口
