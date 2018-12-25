@@ -59,19 +59,68 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
     }
 
     @Override
-    public void onViewAdded(View child)
+    protected void onFinishInflate()
     {
-        super.onViewAdded(child);
-        if (getChildCount() > 3)
-            throw new IllegalArgumentException("can not add view to SwitchButton");
+        super.onFinishInflate();
+
+        final View normal = findViewById(R.id.lib_sb_view_normal);
+        if (normal != null)
+        {
+            removeView(normal);
+            setViewNormal(normal);
+        }
+
+        final View checked = findViewById(R.id.lib_sb_view_checked);
+        if (checked != null)
+        {
+            removeView(checked);
+            setViewChecked(checked);
+        }
+
+        final View thumb = findViewById(R.id.lib_sb_view_thumb);
+        if (thumb != null)
+        {
+            removeView(thumb);
+            setViewThumb(thumb);
+        }
     }
 
-    @Override
-    public void onViewRemoved(View child)
+    private void setViewNormal(View viewNormal)
     {
-        super.onViewRemoved(child);
-        if (getChildCount() < 3)
-            throw new IllegalArgumentException("can not remove view from SwitchButton");
+        if (replaceOldView(mViewNormal, viewNormal))
+            mViewNormal = viewNormal;
+    }
+
+    private void setViewChecked(View viewChecked)
+    {
+        if (replaceOldView(mViewChecked, viewChecked))
+            mViewChecked = viewChecked;
+    }
+
+    private void setViewThumb(View viewThumb)
+    {
+        if (replaceOldView(mViewThumb, viewThumb))
+            mViewThumb = viewThumb;
+    }
+
+    private boolean replaceOldView(View viewOld, View viewNew)
+    {
+        if (viewNew == null || viewNew == viewOld)
+            return false;
+
+        final int index = indexOfChild(viewOld);
+        final ViewGroup.LayoutParams params = viewOld.getLayoutParams();
+        removeView(viewOld);
+
+        final ViewGroup.LayoutParams paramsNew = viewNew.getLayoutParams();
+        if (paramsNew != null)
+        {
+            params.width = paramsNew.width;
+            params.height = paramsNew.height;
+        }
+
+        addView(viewNew, index, params);
+        return true;
     }
 
     /**
