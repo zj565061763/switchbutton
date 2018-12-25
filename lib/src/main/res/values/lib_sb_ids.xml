@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 拖动View的id -->
+    <item name="lib_sb_view_thumb" type="id" />
+    <!-- normal状态View的id -->
+    <item name="lib_sb_view_normal" type="id" />
+    <!-- checked状态View的id -->
+    <item name="lib_sb_view_checked" type="id" />
+</resources>
