@@ -32,16 +32,16 @@ public interface SwitchButton
     /**
      * 设置选中变化回调
      *
-     * @param onCheckedChangeCallback
+     * @param callback
      */
-    void setOnCheckedChangeCallback(OnCheckedChangeCallback onCheckedChangeCallback);
+    void setOnCheckedChangeCallback(OnCheckedChangeCallback callback);
 
     /**
      * 设置手柄view位置变化回调
      *
-     * @param onViewPositionChangeCallback
+     * @param callback
      */
-    void setOnViewPositionChangeCallback(OnViewPositionChangeCallback onViewPositionChangeCallback);
+    void setOnViewPositionChangeCallback(OnViewPositionChangeCallback callback);
 
     /**
      * 获得滚动的百分比[0-1]

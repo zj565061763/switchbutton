@@ -388,15 +388,15 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
     }
 
     @Override
-    public void setOnCheckedChangeCallback(OnCheckedChangeCallback onCheckedChangeCallback)
+    public void setOnCheckedChangeCallback(OnCheckedChangeCallback callback)
     {
-        mOnCheckedChangeCallback = onCheckedChangeCallback;
+        mOnCheckedChangeCallback = callback;
     }
 
     @Override
-    public void setOnViewPositionChangeCallback(OnViewPositionChangeCallback onViewPositionChangeCallback)
+    public void setOnViewPositionChangeCallback(OnViewPositionChangeCallback callback)
     {
-        mOnViewPositionChangeCallback = onViewPositionChangeCallback;
+        mOnViewPositionChangeCallback = callback;
     }
 
     @Override
