@@ -215,8 +215,6 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
                 layoutInternal();
             }
         }
-
-        dealViewIdle();
     }
 
     /**
@@ -281,45 +279,13 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
             mScrollState = state;
 
             if (state == ScrollState.Idle)
-                dealViewIdle();
+                layoutInternal();
 
             if (mOnScrollStateChangeCallback != null)
                 mOnScrollStateChangeCallback.onScrollStateChanged(old, state, this);
         }
     }
 
-    private final void dealViewIdle()
-    {
-        if (isViewIdle())
-        {
-            if (mIsDebug)
-                Log.i(getDebugTag(), "dealViewIdle isChecked:" + mIsChecked);
-
-            if (mIsChecked)
-            {
-                showCheckedView(true);
-                showNormalView(false);
-            } else
-            {
-                showCheckedView(false);
-                showNormalView(true);
-            }
-        }
-    }
-
-    private void showCheckedView(boolean show)
-    {
-        float alpha = show ? 1.0f : 0f;
-        if (mViewChecked.getAlpha() != alpha)
-            mViewChecked.setAlpha(alpha);
-    }
-
-    private void showNormalView(boolean show)
-    {
-        float alpha = show ? 1.0f : 0f;
-        if (mViewNormal.getAlpha() != alpha)
-            mViewNormal.setAlpha(alpha);
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
@@ -395,6 +361,41 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         final float backZ = Math.max(ViewCompat.getZ(mViewNormal), ViewCompat.getZ(mViewChecked));
         if (ViewCompat.getZ(mViewThumb) <= backZ)
             ViewCompat.setZ(mViewThumb, backZ + 1);
+
+        dealViewIdle();
+    }
+
+    private void dealViewIdle()
+    {
+        if (isViewIdle())
+        {
+            if (mIsDebug)
+                Log.i(getDebugTag(), "dealViewIdle isChecked:" + mIsChecked);
+
+            if (mIsChecked)
+            {
+                showCheckedView(true);
+                showNormalView(false);
+            } else
+            {
+                showCheckedView(false);
+                showNormalView(true);
+            }
+        }
+    }
+
+    private void showCheckedView(boolean show)
+    {
+        float alpha = show ? 1.0f : 0f;
+        if (mViewChecked.getAlpha() != alpha)
+            mViewChecked.setAlpha(alpha);
+    }
+
+    private void showNormalView(boolean show)
+    {
+        float alpha = show ? 1.0f : 0f;
+        if (mViewNormal.getAlpha() != alpha)
+            mViewNormal.setAlpha(alpha);
     }
 
     //----------SwitchButton implements start----------
