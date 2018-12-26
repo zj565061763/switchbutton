@@ -46,7 +46,11 @@ public class FSwitchButton extends BaseSwitchButton
                 @Override
                 protected void onScrollStart()
                 {
+                    if (mIsDebug)
+                        Log.i(getDebugTag(), "onScrollStart left:" + getViewThumb().getLeft());
+
                     setScrollState(ScrollState.Fling);
+                    ViewCompat.postInvalidateOnAnimation(FSwitchButton.this);
                 }
 
                 @Override
@@ -180,15 +184,7 @@ public class FSwitchButton extends BaseSwitchButton
     @Override
     protected boolean isViewIdle()
     {
-        final boolean checkScrollerFinished = getScroller().isFinished();
-        if (!checkScrollerFinished)
-            return false;
-
-        final boolean checkNotDragging = !getGestureManager().getTagHolder().isTagConsume();
-        if (!checkNotDragging)
-            return false;
-
-        return true;
+        return getScroller().isFinished() && !getGestureManager().getTagHolder().isTagConsume();
     }
 
     @Override
@@ -198,7 +194,7 @@ public class FSwitchButton extends BaseSwitchButton
     }
 
     @Override
-    protected boolean onSmoothSlide(int startLeft, int endLeft)
+    protected boolean onSmoothScroll(int startLeft, int endLeft)
     {
         return getScroller().scrollToX(startLeft, endLeft, -1);
     }

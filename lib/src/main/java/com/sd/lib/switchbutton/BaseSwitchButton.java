@@ -199,7 +199,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
      * @param endLeft
      * @return
      */
-    protected abstract boolean onSmoothSlide(int startLeft, int endLeft);
+    protected abstract boolean onSmoothScroll(int startLeft, int endLeft);
 
     /**
      * 根据状态刷新View
@@ -221,8 +221,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
 
             if (anim)
             {
-                if (onSmoothSlide(startLeft, endLeft))
-                    ViewCompat.postInvalidateOnAnimation(this);
+                onSmoothScroll(startLeft, endLeft);
             } else
             {
                 layoutInternal();
