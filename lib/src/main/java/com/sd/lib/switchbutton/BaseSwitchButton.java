@@ -202,17 +202,18 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
     protected abstract boolean onSmoothSlide(int startLeft, int endLeft);
 
     /**
-     * 根据状态改变view
+     * 根据状态刷新View
      *
+     * @param checked
      * @param anim
      */
-    private void updateViewByState(boolean anim)
+    private void updateViewByState(boolean checked, boolean anim)
     {
         final int startLeft = mViewThumb.getLeft();
-        final int endLeft = mIsChecked ? getLeftChecked() : getLeftNormal();
+        final int endLeft = checked ? getLeftChecked() : getLeftNormal();
 
         if (mIsDebug)
-            Log.i(getDebugTag(), "updateViewByState:" + startLeft + " -> " + endLeft + " anim:" + anim);
+            Log.i(getDebugTag(), "updateViewByState " + checked + ":" + startLeft + " -> " + endLeft + " anim:" + anim);
 
         if (startLeft != endLeft)
         {
@@ -437,7 +438,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
             }
         }
 
-        updateViewByState(anim);
+        updateViewByState(checked, anim);
         setIdleIfNeed();
 
         return changed;
