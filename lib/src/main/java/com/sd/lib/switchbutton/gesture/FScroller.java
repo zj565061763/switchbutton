@@ -32,11 +32,11 @@ public abstract class FScroller
     /**
      * 最大滚动时长
      */
-    private int mMaxScrollDuration = 600;
+    private int mMaxScrollDuration = 400;
     /**
      * 最小滚动时长
      */
-    private int mMinScrollDuration = 256;
+    private int mMinScrollDuration = 200;
 
     private int mLastX;
     private int mLastY;
@@ -98,6 +98,11 @@ public abstract class FScroller
     public final void setMinScrollDuration(int duration)
     {
         mMinScrollDuration = duration;
+    }
+
+    public final void setFriction(float friction)
+    {
+        mScrollerApi.setFriction(friction);
     }
 
     // scrollTo
@@ -269,25 +274,37 @@ public abstract class FScroller
      *
      * @param dx          x方向移动距离
      * @param dy          y方向移动距离
-     * @param maxDistance 最大可以移动距离
-     * @param maxDuration 最大时长
-     * @param minDuration 最小时长
+     * @param distanceMax 最大可以移动距离
+     * @param durationMax 最大时长
+     * @param durationMin 最小时长
      * @return
      */
-    public static int computeDuration(int dx, int dy, int maxDistance, int maxDuration, int minDuration)
+    public static int computeDuration(int dx, int dy, int distanceMax, int durationMax, int durationMin)
     {
-        maxDistance = Math.abs(maxDistance);
-        if (maxDistance == 0)
-            return minDuration;
+        durationMax = Math.abs(durationMax);
+        durationMin = Math.abs(durationMin);
+        distanceMax = Math.abs(distanceMax);
+
+        if (distanceMax == 0)
+            return durationMin;
+
+        if (durationMin > durationMax)
+            throw new IllegalArgumentException();
 
         final float distance = (float) Math.sqrt(Math.abs(dx * dx) + Math.abs(dy * dy));
-        final float disPercent = distance / maxDistance;
-        final int duration = (int) ((disPercent * minDuration) + minDuration);
-        return Math.min(duration, maxDuration);
+        if (distance == 0)
+            return 0;
+
+        final float disPercent = distance / distanceMax;
+        final int duration = (int) ((disPercent * durationMin) + durationMin);
+
+        return Math.min(duration, durationMax);
     }
 
     public interface ScrollerApi
     {
+        void setFriction(float friction);
+
         void startScroll(int startX, int startY, int dx, int dy, int duration);
 
         void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY);
@@ -315,6 +332,12 @@ public abstract class FScroller
         public SimpleScrollerApi(Context context, Interpolator interpolator)
         {
             mScroller = new Scroller(context, interpolator);
+        }
+
+        @Override
+        public void setFriction(float friction)
+        {
+            mScroller.setFriction(friction);
         }
 
         @Override
