@@ -340,15 +340,17 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
 
     private void layoutInternal()
     {
+        final boolean isViewIdle = isViewIdle();
+
         if (mIsDebug)
-            Log.i(getDebugTag(), "layoutInternal");
+            Log.i(getDebugTag(), "layoutInternal isViewIdle:" + isViewIdle);
 
         mViewNormal.layout(0, 0, mViewNormal.getMeasuredWidth(), mViewNormal.getMeasuredHeight());
         mViewChecked.layout(0, 0, mViewChecked.getMeasuredWidth(), mViewChecked.getMeasuredHeight());
 
         int left = 0;
         int top = mAttrModel.getMarginTop();
-        if (isViewIdle())
+        if (isViewIdle)
         {
             left = mIsChecked ? getLeftChecked() : getLeftNormal();
         } else
