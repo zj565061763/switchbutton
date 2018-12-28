@@ -24,7 +24,7 @@ import android.widget.Scroller;
  */
 public abstract class FScroller
 {
-    private final ScrollerApi mScrollerApi;
+    private ScrollerApi mScrollerApi;
     /**
      * 最大滚动距离
      */
@@ -42,9 +42,11 @@ public abstract class FScroller
     private int mLastY;
     private boolean mIsFinished = true;
 
+    private Callback mCallback;
+
     public FScroller(Context context)
     {
-        this(new SimpleScrollerApi(context));
+        this(context, null);
     }
 
     public FScroller(Context context, Interpolator interpolator)
@@ -54,10 +56,7 @@ public abstract class FScroller
 
     public FScroller(ScrollerApi scrollerApi)
     {
-        if (scrollerApi == null)
-            throw new NullPointerException();
-
-        mScrollerApi = scrollerApi;
+        setScrollerApi(scrollerApi);
     }
 
     /**
@@ -68,6 +67,29 @@ public abstract class FScroller
     public final boolean isFinished()
     {
         return mIsFinished;
+    }
+
+    /**
+     * 设置回调对象
+     *
+     * @param callback
+     */
+    public void setCallback(Callback callback)
+    {
+        mCallback = callback;
+    }
+
+    /**
+     * 设置api处理对象
+     *
+     * @param scrollerApi
+     */
+    public void setScrollerApi(ScrollerApi scrollerApi)
+    {
+        if (scrollerApi == null)
+            throw new NullPointerException();
+
+        mScrollerApi = scrollerApi;
     }
 
     /**
@@ -208,7 +230,7 @@ public abstract class FScroller
         {
             if (currX != mLastX || currY != mLastY)
             {
-                onScrollCompute(mLastX, mLastY, currX, currY);
+                onScrollerCompute(mLastX, mLastY, currX, currY);
             }
         }
 
@@ -241,33 +263,29 @@ public abstract class FScroller
             mIsFinished = finish;
 
             if (finish)
-                onScrollFinish(isAbort);
+                onScrollerFinish(isAbort);
             else
-                onScrollStart();
+                onScrollerStart();
         }
     }
 
-    /**
-     * 滚动开始回调
-     */
-    protected abstract void onScrollStart();
+    protected void onScrollerStart()
+    {
+        if (mCallback != null)
+            mCallback.onScrollerStart();
+    }
 
-    /**
-     * 调用{@link FScroller#computeScrollOffset()}回调
-     *
-     * @param lastX 上一次的x
-     * @param lastY 上一次的y
-     * @param currX 当前x
-     * @param currY 当前y
-     */
-    protected abstract void onScrollCompute(int lastX, int lastY, int currX, int currY);
+    protected void onScrollerCompute(int lastX, int lastY, int currX, int currY)
+    {
+        if (mCallback != null)
+            mCallback.onScrollerCompute(lastX, lastY, currX, currY);
+    }
 
-    /**
-     * 滚动结束回调
-     *
-     * @param isAbort
-     */
-    protected abstract void onScrollFinish(boolean isAbort);
+    protected void onScrollerFinish(boolean isAbort)
+    {
+        if (mCallback != null)
+            mCallback.onScrollerFinish(isAbort);
+    }
 
     /**
      * 计算时长
@@ -301,6 +319,31 @@ public abstract class FScroller
         return Math.min(duration, durationMax);
     }
 
+    public interface Callback
+    {
+        /**
+         * 开始回调
+         */
+        void onScrollerStart();
+
+        /**
+         * 调用{@link FScroller#computeScrollOffset()}方法后回调
+         *
+         * @param lastX
+         * @param lastY
+         * @param currX
+         * @param currY
+         */
+        void onScrollerCompute(int lastX, int lastY, int currX, int currY);
+
+        /**
+         * 结束回调
+         *
+         * @param isAbort
+         */
+        void onScrollerFinish(boolean isAbort);
+    }
+
     public interface ScrollerApi
     {
         void setFriction(float friction);
@@ -323,11 +366,6 @@ public abstract class FScroller
     private static class SimpleScrollerApi implements FScroller.ScrollerApi
     {
         private final Scroller mScroller;
-
-        public SimpleScrollerApi(Context context)
-        {
-            mScroller = new Scroller(context);
-        }
 
         public SimpleScrollerApi(Context context, Interpolator interpolator)
         {

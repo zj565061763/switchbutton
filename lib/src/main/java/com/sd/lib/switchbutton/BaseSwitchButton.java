@@ -261,17 +261,6 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
             mOnViewPositionChangeCallback.onViewPositionChanged(this);
     }
 
-    protected final void setIdleIfNeed()
-    {
-        if (isViewIdle() && mScrollState != ScrollState.Idle)
-        {
-            if (mIsDebug)
-                Log.i(getDebugTag(), "setIdleIfNeed success:" + mIsChecked);
-
-            setScrollState(ScrollState.Idle);
-        }
-    }
-
     /**
      * 设置滚动状态
      *
@@ -423,7 +412,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         final boolean changed = mIsChecked != checked;
 
         if (mIsDebug)
-            Log.e(getDebugTag(), "setChecked:" + mIsChecked + " -> " + checked);
+            Log.i(getDebugTag(), "setChecked:" + mIsChecked + " -> " + checked);
 
         if (mIsChecked != checked)
         {
@@ -438,7 +427,6 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         }
 
         updateViewByState(checked, anim);
-        setIdleIfNeed();
 
         return changed;
     }
