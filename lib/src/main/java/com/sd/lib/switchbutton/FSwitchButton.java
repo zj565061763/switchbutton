@@ -35,6 +35,14 @@ public class FSwitchButton extends BaseSwitchButton
         super(context, attrs);
     }
 
+    @Override
+    public void setDebug(boolean debug)
+    {
+        super.setDebug(debug);
+        if (mGestureManager != null)
+            mGestureManager.setDebug(debug);
+    }
+
     private FGestureManager getGestureManager()
     {
         if (mGestureManager == null)
@@ -137,6 +145,7 @@ public class FSwitchButton extends BaseSwitchButton
                     moveView(dx);
                 }
             });
+            mGestureManager.setDebug(mIsDebug);
             mGestureManager.getTagHolder().setCallback(new FGestureManager.TagHolder.Callback()
             {
                 @Override
