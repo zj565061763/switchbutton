@@ -137,6 +137,20 @@ public class FSwitchButton extends BaseSwitchButton
                     moveView(dx);
                 }
             });
+            mGestureManager.getTagHolder().setCallback(new FGestureManager.TagHolder.Callback()
+            {
+                @Override
+                public void onTagInterceptChanged(boolean tag)
+                {
+                    FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tag);
+                }
+
+                @Override
+                public void onTagConsumeChanged(boolean tag)
+                {
+                    FTouchHelper.requestDisallowInterceptTouchEvent(FSwitchButton.this, tag);
+                }
+            });
         }
         return mGestureManager;
     }
