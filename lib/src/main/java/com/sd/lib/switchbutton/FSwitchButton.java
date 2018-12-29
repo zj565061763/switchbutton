@@ -184,7 +184,7 @@ public class FSwitchButton extends BaseSwitchButton
     }
 
     @Override
-    protected boolean onSmoothScroll(int startLeft, int endLeft)
+    protected boolean smoothScroll(int startLeft, int endLeft)
     {
         return getGestureManager().getScroller().scrollToX(startLeft, endLeft, -1);
     }
