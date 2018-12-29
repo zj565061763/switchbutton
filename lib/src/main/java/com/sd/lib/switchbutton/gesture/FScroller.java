@@ -243,11 +243,13 @@ public abstract class FScroller
 
     /**
      * 停止滚动
+     *
+     * @return true-滚动被停止
      */
-    public final void abortAnimation()
+    public final boolean abortAnimation()
     {
         mScrollerApi.abortAnimation();
-        updateFinished(true);
+        return updateFinished(true);
     }
 
     private void updateFinished()
@@ -255,18 +257,20 @@ public abstract class FScroller
         updateFinished(false);
     }
 
-    private void updateFinished(boolean isAbort)
+    private boolean updateFinished(boolean isAbort)
     {
         final boolean finish = mScrollerApi.isFinished();
-        if (mIsFinished != finish)
-        {
-            mIsFinished = finish;
+        if (mIsFinished == finish)
+            return false;
 
-            if (finish)
-                onScrollerFinish(isAbort);
-            else
-                onScrollerStart();
-        }
+        mIsFinished = finish;
+
+        if (finish)
+            onScrollerFinish(isAbort);
+        else
+            onScrollerStart();
+
+        return true;
     }
 
     protected void onScrollerStart()

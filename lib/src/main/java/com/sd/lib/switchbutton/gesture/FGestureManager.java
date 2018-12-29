@@ -84,9 +84,15 @@ public class FGestureManager
                     Log.e(FGestureManager.class.getSimpleName(), "onScrollerFinish isAbort:" + isAbort);
 
                 if (mTagHolder.isTagConsume())
+                {
                     setState(State.Consume);
-                else
-                    postIdleRunnable();
+                } else
+                {
+                    if (isAbort)
+                        postIdleRunnable();
+                    else
+                        setState(State.Idle);
+                }
 
                 super.onScrollerFinish(isAbort);
             }
@@ -188,11 +194,17 @@ public class FGestureManager
                 Log.i(FGestureManager.class.getSimpleName(), "cancelConsumeEvent");
 
             getLifecycleInfo().setCancelConsumeEvent(true);
-            mTagHolder.reset();
 
             if (getScroller().isFinished())
+            {
+                /**
+                 * 调用取消消费事件方法之后，外部有可能立即调用滚动的方法变更状态为{@link State.Fling}
+                 * 所以此处延迟设置{@link State.Idle}状态
+                 */
                 postIdleRunnable();
+            }
 
+            mTagHolder.reset();
             mCallback.onCancelConsumeEvent();
         }
     }
@@ -271,11 +283,11 @@ public class FGestureManager
         mTagHolder.reset();
         mCallback.onEventFinish(getVelocityTracker(), event);
 
+        releaseVelocityTracker();
+        getLifecycleInfo().reset();
+
         if (mState == State.Consume)
             setState(State.Idle);
-
-        getLifecycleInfo().reset();
-        releaseVelocityTracker();
     }
 
     private final class IdleRunnable implements Runnable
