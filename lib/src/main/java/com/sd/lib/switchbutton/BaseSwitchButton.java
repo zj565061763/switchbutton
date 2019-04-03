@@ -428,7 +428,7 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
             }
         }
 
-        updateViewByState(checked, anim);
+        updateViewByState(mIsChecked, anim);
 
         return changed;
     }
