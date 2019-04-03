@@ -215,10 +215,9 @@ public abstract class BaseSwitchButton extends ViewGroup implements SwitchButton
         if (mIsDebug)
             Log.i(getDebugTag(), "updateViewByState " + checked + ":" + startLeft + " -> " + endLeft + " anim:" + anim);
 
+        abortAnimation();
         if (startLeft != endLeft)
         {
-            abortAnimation();
-
             if (anim)
             {
                 smoothScroll(startLeft, endLeft);
