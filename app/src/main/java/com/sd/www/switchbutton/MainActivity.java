@@ -1,9 +1,10 @@
 package com.sd.www.switchbutton;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sd.lib.switchbutton.FSwitchButton;
 import com.sd.lib.switchbutton.SwitchButton;

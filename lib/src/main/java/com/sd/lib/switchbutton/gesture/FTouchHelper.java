@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2017 Sunday (https://github.com/zj565061763)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.sd.lib.switchbutton.gesture;
 
 import android.content.Context;
@@ -23,7 +8,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -40,28 +25,24 @@ public class FTouchHelper
     private float mDownX;
     private float mDownY;
 
-    private Direction mDirection = Direction.None;
-
     /**
      * 处理触摸事件
      *
-     * @param ev
+     * @param event
      */
-    public void processTouchEvent(MotionEvent ev)
+    public void processTouchEvent(MotionEvent event)
     {
         mLastX = mCurrentX;
         mLastY = mCurrentY;
 
-        mCurrentX = ev.getRawX();
-        mCurrentY = ev.getRawY();
+        mCurrentX = event.getRawX();
+        mCurrentY = event.getRawY();
 
-        final int aciton = ev.getAction();
-        switch (aciton)
+        switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
                 mDownX = mCurrentX;
                 mDownY = mCurrentY;
-                setDirection(Direction.None);
                 break;
             default:
                 break;
@@ -209,117 +190,6 @@ public class FTouchHelper
 
     //---------- Degree End ----------
 
-    //---------- Direction Start ----------
-
-    /**
-     * 保存当前移动方向
-     *
-     * @param touchSlop 最小移动距离
-     * @return
-     */
-    public boolean saveDirection(final int touchSlop)
-    {
-        if (mDirection != Direction.None)
-            return false;
-
-        final float dx = getDeltaXFromDown();
-        final float dy = getDeltaYFromDown();
-
-        final float dxAbs = Math.abs(dx);
-        final float dyAbs = Math.abs(dy);
-
-        final float deltaMax = Math.max(dxAbs, dyAbs);
-        if (deltaMax == 0 || deltaMax < touchSlop)
-            return false;
-
-        if (dxAbs > dyAbs)
-        {
-            // horizontal
-            if (dx < 0)
-                setDirection(Direction.MoveLeft);
-            else
-                setDirection(Direction.MoveRight);
-        } else
-        {
-            // vertical
-            if (dy < 0)
-                setDirection(Direction.MoveTop);
-            else
-                setDirection(Direction.MoveBottom);
-        }
-
-        return true;
-    }
-
-    /**
-     * 保存水平方向
-     *
-     * @param touchSlop 最小移动距离
-     * @return
-     */
-    public boolean saveDirectionHorizontal(final int touchSlop)
-    {
-        if (mDirection == Direction.MoveLeft || mDirection == Direction.MoveRight)
-            return false;
-
-        final float dx = getDeltaXFromDown();
-        if (dx == 0)
-            return false;
-
-        if (Math.abs(dx) < touchSlop)
-            return false;
-
-        if (dx < 0)
-            setDirection(Direction.MoveLeft);
-        else
-            setDirection(Direction.MoveRight);
-
-        return true;
-    }
-
-    /**
-     * 保存竖直方向
-     *
-     * @param touchSlop 最小移动距离
-     * @return
-     */
-    public boolean saveDirectionVertical(final int touchSlop)
-    {
-        if (mDirection == Direction.MoveTop || mDirection == Direction.MoveBottom)
-            return false;
-
-        final float dy = getDeltaYFromDown();
-        if (dy == 0)
-            return false;
-
-        if (Math.abs(dy) < touchSlop)
-            return false;
-
-        if (dy < 0)
-            setDirection(Direction.MoveTop);
-        else
-            setDirection(Direction.MoveBottom);
-
-        return true;
-    }
-
-    private void setDirection(Direction direction)
-    {
-        mDirection = direction;
-    }
-
-    /**
-     * 返回已保存的移动方向
-     *
-     * @return
-     */
-    public Direction getDirection()
-    {
-        return mDirection;
-    }
-
-    //---------- Direction End ----------
-
     /**
      * 是否是点击事件
      *
@@ -424,16 +294,14 @@ public class FTouchHelper
      */
     public static List<View> findChildrenUnder(ViewGroup parent, int x, int y)
     {
-        final List<View> list = new ArrayList<>(2);
+        final List<View> list = new LinkedList<>();
 
         final int count = parent.getChildCount();
         for (int i = count - 1; i >= 0; i--)
         {
             final View child = parent.getChildAt(i);
             if (isViewUnder(child, x, y))
-            {
                 list.add(child);
-            }
         }
         return list;
     }
@@ -455,17 +323,11 @@ public class FTouchHelper
         if (list.isEmpty())
             return null;
 
-        View target = null;
+        View target = list.remove(0);
         for (View item : list)
         {
-            if (target == null)
-            {
+            if (item.getZ() > target.getZ())
                 target = item;
-            } else
-            {
-                if (item.getZ() > target.getZ())
-                    target = item;
-            }
         }
 
         return target;
@@ -516,27 +378,4 @@ public class FTouchHelper
     }
 
     //----------static method end----------
-
-    public StringBuilder getDebugInfo()
-    {
-        final StringBuilder sb = new StringBuilder("\r\n")
-                .append("Down:").append(mDownX).append(",").append(mDownY).append("\r\n")
-                .append("Current:").append(mCurrentX).append(",").append(mCurrentY).append("\r\n")
-
-                .append("Delta from down:").append(getDeltaXFromDown()).append(",").append(getDeltaYFromDown()).append("\r\n")
-                .append("Delta from last:").append(getDeltaX()).append(",").append(getDeltaY()).append("\r\n")
-
-                .append("Degree from down:").append(getDegreeXFromDown()).append(",").append(getDegreeYFromDown()).append("\r\n")
-                .append("Degree from last:").append(getDegreeX()).append(",").append(getDegreeY()).append("\r\n");
-        return sb;
-    }
-
-    public enum Direction
-    {
-        None,
-        MoveLeft,
-        MoveTop,
-        MoveRight,
-        MoveBottom
-    }
 }
